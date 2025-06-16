@@ -43,11 +43,18 @@
 
 <div align="center">
 
-| Dashboard | Balance Card | Quick Actions | Services Menu |
-|-----------|--------------|---------------|---------------|
-| ![Dashboard](assets/screenshots/dashboard.png) | ![Balance](assets/screenshots/balance.png) | ![Actions](assets/screenshots/actions.png) | ![Services](assets/screenshots/services.png) |
+| Dashboard Screen | Add Money Flow | Send Money Feature |
+|------------------|----------------|-------------------|
+| ![Dashboard](assets/screenshots/dashboard.png) | ![Add Money](assets/screenshots/add_money.png) | ![Send Money](assets/screenshots/send_money.png) |
+| Modern Material 3 dashboard with neon blue theme | Seamless money addition with multiple payment options | Quick and secure money transfer interface |
 
 </div>
+
+### 🎨 **Design Highlights in Screenshots:**
+- **Dark Theme**: All screens optimized for low-light usage with neon accents
+- **Material 3 Components**: Cards, buttons, and inputs following latest design guidelines  
+- **Neon Blue Branding**: Consistent #00E5FF color scheme throughout the app
+- **Intuitive UX**: Clean layouts with proper spacing and visual hierarchy
 
 ---
 
