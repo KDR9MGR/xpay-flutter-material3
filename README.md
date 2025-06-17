@@ -46,6 +46,23 @@
 - 📊 **Transaction History** - Comprehensive transaction tracking
 - 🔔 **Push Notifications** - Real-time payment notifications
 
+## 📱 Screenshots
+
+<div align="center">
+
+| Dashboard Screen | Add Money Flow | Send Money Feature |
+|------------------|----------------|-------------------|
+| ![Dashboard](assets/screenshots/dashboard.png) | ![Add Money](assets/screenshots/add_money.png) | ![Send Money](assets/screenshots/send_money.png) |
+| Modern Material 3 dashboard with neon blue theme | Seamless money addition with multiple payment options | Quick and secure money transfer interface |
+
+</div>
+
+### 🎨 **Design Highlights in Screenshots:**
+- **Dark Theme**: All screens optimized for low-light usage with neon accents
+- **Material 3 Components**: Cards, buttons, and inputs following latest design guidelines  
+- **Neon Blue Branding**: Consistent #00E5FF color scheme throughout the app
+- **Intuitive UX**: Clean layouts with proper spacing and visual hierarchy
+
 ## 🏗️ Architecture
 
 ### **State Management**
@@ -87,8 +104,8 @@ lib/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/xpay-flutter.git
-   cd xpay-flutter
+   git clone https://github.com/KDR9MGR/xpay-flutter-material3.git
+   cd xpay-flutter-material3
    ```
 
 2. **Install dependencies**
@@ -219,7 +236,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 📧 Email: support@xpay.com
 - 💬 Discord: [Join our community](https://discord.gg/xpay)
 - 📖 Documentation: [docs.xpay.com](https://docs.xpay.com)
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/xpay-flutter/issues)
+- 🐛 Issues: [GitHub Issues](https://github.com/KDR9MGR/xpay-flutter-material3/issues)
 
 ---
 
