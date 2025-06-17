@@ -15,7 +15,7 @@ class NavigationDrawerWidget extends StatelessWidget {
     final controller = Get.put(DashboardController());
     return Drawer(
       child: Container(
-        color: CustomColor.secondaryColor,
+        color: CustomColor.sidebarColor,
         child: _allItemListView(context, controller),
       ),
     );

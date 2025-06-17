@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:xpay/utils/utils.dart';
 import 'package:xpay/widgets/inputs/multiline_text_input_widget.dart';
@@ -26,10 +27,32 @@ class RequestMoneyScreen extends StatefulWidget {
   State<RequestMoneyScreen> createState() => _RequestMoneyScreenState();
 }
 
-class _RequestMoneyScreenState extends State<RequestMoneyScreen> {
+class _RequestMoneyScreenState extends State<RequestMoneyScreen>
+    with TickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
-
   late final WalletViewModel? _walletViewModel;
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _walletViewModel = Provider.of<WalletViewModel>(context, listen: false);
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,28 +64,43 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen> {
         toolbarHeight: Dimensions.defaultAppBarHeight,
         title: Text(
           Strings.requestMoney.tr,
-          style: CustomStyle.commonTextTitleWhite,
+          style: CustomStyle.commonTextTitleWhite.copyWith(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
+          ),
         ),
         appBar: AppBar(),
-        backgroundColor: CustomColor.primaryColor,
+        backgroundColor: CustomColor.appBarColor,
         autoLeading: false,
-        elevation: 1,
-        appbarColor: CustomColor.secondaryColor,
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.white,
-            size: Dimensions.iconSizeDefault * 1.4,
+        elevation: 0,
+        appbarColor: CustomColor.appBarColor,
+        leading: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.white.withOpacity(0.2)),
+          ),
+          child: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 20,
+            ),
           ),
         ),
       ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: _bodyWidget(context, controller),
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: _bodyWidget(context, controller),
+        ),
       ),
     );
   }
@@ -74,17 +112,11 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen> {
       children: [
         _infoInputWidget(context, controller),
         _noteWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize,
-        ),
+        SizedBox(height: Dimensions.heightSize),
         _walletInfoWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
         _buttonWidget(controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
       ],
     );
   }
@@ -92,105 +124,222 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen> {
   _infoInputWidget(BuildContext context, RequestMoneyController controller) {
     return Obx(() {
       return Container(
-        padding: const EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: CustomColor.secondaryColor,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(Dimensions.radius * 2),
-            bottomRight: Radius.circular(Dimensions.radius * 2),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              CustomColor.surfaceColor.withOpacity(0.9),
+              CustomColor.surfaceColor.withOpacity(0.7),
+            ],
           ),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
         ),
         child: Form(
           key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              TextLabelWidget(text: Strings.yourWallet.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              DropDownInputWidget(
-                items: controller.walletList,
-                color: CustomColor.primaryColor.withOpacity(0.1),
-                hintText: Strings.selectTermHint.tr,
-                value: controller.walletName.value,
-                onChanged: (value) {
-                  controller.walletName.value = value!;
-                },
-              ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+              // Header with icon
+              Row(
                 children: [
-                  TextLabelWidget(text: Strings.requestTo.tr),
-                  SizedBox(
-                    height: Dimensions.heightSize,
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          CustomColor.primaryColor,
+                          CustomColor.appBarColor,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: CustomColor.primaryColor.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Ionicons.card_outline,
+                      color: Colors.white,
+                      size: 24,
+                    ),
                   ),
-                  SecondaryTextInputWidget(
-                    controller: controller.requestToController,
-                    validator: MultiValidator([
-                      RequiredValidator(errorText: 'Enter an email address'),
-                      EmailValidator(errorText: 'Enter a valid email address')
-                    ]),
-                    hintText: 'adsent@gmail.com',
-                    color: CustomColor.secondaryColor,
-                  ),
-                  SizedBox(
-                    height: Dimensions.heightSize * 0.3,
-                  ),
-                  Text(
-                    Strings.validUserForTransaction.tr,
-                    style: TextStyle(
-                      fontSize: Dimensions.smallestTextSize * 0.8,
-                      fontWeight: FontWeight.w200,
-                      color: const Color(0xff00bb38).withOpacity(0.8),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Request Money',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          'Request funds from others',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.7),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
+              const SizedBox(height: 32),
+
+              // Wallet Selection
+              _buildModernLabel('Your Wallet'),
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                ),
+                child: DropDownInputWidget(
+                  items: controller.walletList,
+                  color: Colors.transparent,
+                  hintText: Strings.selectTermHint.tr,
+                  value: controller.walletName.value,
+                  onChanged: (value) {
+                    controller.walletName.value = value!;
+                  },
+                ),
               ),
-              TextLabelWidget(text: Strings.amountToRequest.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
+              const SizedBox(height: 24),
+
+              // Request To Email
+              _buildModernLabel('Request To'),
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                ),
+                child: SecondaryTextInputWidget(
+                  controller: controller.requestToController,
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: 'Enter an email address'),
+                    EmailValidator(errorText: 'Enter a valid email address')
+                  ]),
+                  hintText: 'Enter email address',
+                  color: Colors.transparent,
+                  suffixIcon: Ionicons.mail_outline,
+                  keyboardType: TextInputType.emailAddress,
+                ),
               ),
-              AmountInputWidget(
-                hintText: '0.00',
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                validator: MultiValidator([
-                  RequiredValidator(errorText: 'Please enter an amount'),
-                  MinValueValidator(100, errorText: 'Minimum amount is 100')
-                ]),
-                controller: controller.amountController,
-                color: CustomColor.secondaryColor,
-                suffixIcon: _amountButton(context, controller),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Icon(
+                    Ionicons.checkmark_circle,
+                    color: CustomColor.successColor,
+                    size: 16,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    Strings.validUserForTransaction.tr,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: CustomColor.successColor,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
+              const SizedBox(height: 24),
+
+              // Amount Input
+              _buildModernLabel('Amount to Request'),
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                ),
+                child: AmountInputWidget(
+                  hintText: '0.00',
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: 'Please enter an amount'),
+                    MinValueValidator(100, errorText: 'Minimum amount is 100')
+                  ]),
+                  controller: controller.amountController,
+                  color: Colors.transparent,
+                  suffixIcon: _amountButton(context, controller),
+                ),
               ),
-              Text(
-                '${Strings.limit}: 1.00 -  100,000.00 USD',
-                style: TextStyle(
-                    fontSize: Dimensions.smallestTextSize * 0.8,
-                    fontWeight: FontWeight.w200,
-                    color: Colors.white.withOpacity(0.4)),
+              const SizedBox(height: 16),
+
+              // Limit and charge info
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.03),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white.withOpacity(0.05)),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Ionicons.information_circle_outline,
+                          color: Colors.white.withOpacity(0.6),
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${Strings.limit}: 100.00 - 100,000.00 USD',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(
+                          Ionicons.card_outline,
+                          color: Colors.white.withOpacity(0.6),
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${Strings.charge.tr}: 2.00 USD + 1%',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(
-                height: Dimensions.heightSize * 0.5,
-              ),
-              Text(
-                '${Strings.charge.tr}: 2.00 USD + 1%',
-                style: TextStyle(
-                    fontSize: Dimensions.smallestTextSize * 0.8,
-                    fontWeight: FontWeight.w200,
-                    color: Colors.white.withOpacity(0.4)),
-              )
             ],
           ),
         ),
@@ -198,15 +347,51 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen> {
     });
   }
 
+  Widget _buildModernLabel(String text) {
+    return Row(
+      children: [
+        Container(
+          width: 4,
+          height: 16,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [CustomColor.primaryColor, CustomColor.appBarColor],
+            ),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ],
+    );
+  }
+
   _amountButton(BuildContext context, RequestMoneyController controller) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.20,
       decoration: BoxDecoration(
-        color: CustomColor.primaryColor,
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(Dimensions.radius),
-          bottomRight: Radius.circular(Dimensions.radius),
+        gradient: LinearGradient(
+          colors: [CustomColor.primaryColor, CustomColor.appBarColor],
         ),
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(16),
+          bottomRight: Radius.circular(16),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: CustomColor.primaryColor.withOpacity(0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -215,7 +400,7 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen> {
             controller.walletName.value,
             style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
               fontSize: Dimensions.mediumTextSize,
             ),
           )
@@ -226,39 +411,54 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen> {
 
   //  Button widget
   _buttonWidget(RequestMoneyController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: PrimaryButton(
-        title: Strings.requestNow.tr,
-        onPressed: () async {
-          if (formKey.currentState!.validate()) {
-            try {
-              Utils.showLoadingDialog(context);
-              await _walletViewModel!.requestMoney(
-                  controller.requestToController.text.trim(),
-                  double.parse(controller.amountController.text.trim()),
-                  controller.walletName.value,
-                  controller.optionalNoteController.text.trim().isEmpty
-                      ? ''
-                      : controller.optionalNoteController.text.trim());
-              if (context.mounted) {
-                Navigator.pop(context);
-                Utils.showDialogMessage(
-                    context, 'Success', 'Your request has been sent!');
-                controller.requestToController.clear();
-                controller.amountController.clear();
-                controller.optionalNoteController.clear();
-              }
-            } catch (error) {
-              if (context.mounted) {
-                Navigator.pop(context);
-                Utils.showDialogMessage(
-                    context, 'Error', 'Error requesting money: $error');
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [CustomColor.primaryColor, CustomColor.appBarColor],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: CustomColor.primaryColor.withOpacity(0.4),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: PrimaryButton(
+          title: Strings.requestNow.tr,
+          onPressed: () async {
+            if (formKey.currentState!.validate()) {
+              try {
+                Utils.showLoadingDialog(context);
+                await _walletViewModel!.requestMoney(
+                    controller.requestToController.text.trim(),
+                    double.parse(controller.amountController.text.trim()),
+                    controller.walletName.value,
+                    controller.optionalNoteController.text.trim().isEmpty
+                        ? ''
+                        : controller.optionalNoteController.text.trim());
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  Utils.showDialogMessage(
+                      context, 'Success', 'Your request has been sent!');
+                  controller.requestToController.clear();
+                  controller.amountController.clear();
+                  controller.optionalNoteController.clear();
+                }
+              } catch (error) {
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  Utils.showDialogMessage(
+                      context, 'Error', 'Error requesting money: $error');
+                }
               }
             }
-          }
-        },
-        borderColorName: CustomColor.primaryColor,
+          },
+          borderColorName: Colors.transparent,
+        ),
       ),
     );
   }
@@ -266,7 +466,27 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen> {
   _walletInfoWidget(BuildContext context, RequestMoneyController controller) {
     return Obx(() {
       return Container(
-        margin: const EdgeInsets.only(top: 15, left: 10, right: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              CustomColor.surfaceColor.withOpacity(0.8),
+              CustomColor.surfaceColor.withOpacity(0.6),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
         child: RequestMoneyWalletInfoWidget(
           wallet: controller.walletName.value,
           merchant: controller.requestToController.text.isEmpty
@@ -288,32 +508,69 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen> {
 
   _noteWidget(BuildContext context, RequestMoneyController controller) {
     return Container(
-      margin: const EdgeInsets.only(top: 20, left: 10, right: 10),
-      padding: const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Dimensions.radius * 2),
-        color: const Color(0xff011526),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            CustomColor.surfaceColor.withOpacity(0.8),
+            CustomColor.surfaceColor.withOpacity(0.6),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextLabelWidget(text: Strings.note.tr),
-          SizedBox(
-            height: Dimensions.heightSize,
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      CustomColor.primaryColor.withOpacity(0.8),
+                      CustomColor.appBarColor.withOpacity(0.8),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Ionicons.create_outline,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              _buildModernLabel('Add Note (Optional)'),
+            ],
           ),
-          MultiLineTextFieldInputWidget(
-            controller: controller.optionalNoteController,
-            hintText: Strings.optional.tr,
-            color: CustomColor.secondaryColor,
-            keyboardType: TextInputType.multiline,
+          const SizedBox(height: 16),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.white.withOpacity(0.1)),
+            ),
+            child: MultiLineTextFieldInputWidget(
+              controller: controller.optionalNoteController,
+              hintText: 'Enter additional notes or payment reference...',
+              color: Colors.transparent,
+              keyboardType: TextInputType.multiline,
+            ),
           ),
         ],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _walletViewModel = Provider.of<WalletViewModel>(context, listen: false);
   }
 }

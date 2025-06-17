@@ -8,10 +8,10 @@ class PrimaryButton extends StatelessWidget {
     Key? key,
     required this.title,
     required this.onPressed,
-    this.borderColorName = CustomColor.primaryColor,
+    this.borderColorName = CustomColor.appBarColor,
     this.borderWidth = 0,
     this.height,
-    this.buttonColor = CustomColor.primaryColor,
+    this.buttonColor = CustomColor.appBarColor,
     this.buttonTextColor = Colors.white,
   }) : super(key: key);
   final String title;

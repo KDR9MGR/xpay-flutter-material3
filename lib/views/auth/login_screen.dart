@@ -36,12 +36,16 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final controller = Get.put(AuthController());
     return Scaffold(
-      backgroundColor: CustomColor.screenBGColor,
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: _bodyWidget(context, controller),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: CustomColor.primaryGradient,
+        ),
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: _bodyWidget(context, controller),
+          ),
         ),
       ),
     );

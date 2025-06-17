@@ -1,296 +1,232 @@
-# 💰 XPay - Modern Flutter Payment App
+# 💳 XPay - Modern Flutter Payment App
 
 <div align="center">
 
-![XPay Logo](https://img.shields.io/badge/XPay-Payment%20App-00E5FF?style=for-the-badge&logo=flutter&logoColor=white)
-![Flutter](https://img.shields.io/badge/Flutter-3.19.4-02569B?style=for-the-badge&logo=flutter&logoColor=white)
-![Material 3](https://img.shields.io/badge/Material%203-Enabled-00E5FF?style=for-the-badge&logo=material-design&logoColor=white)
-![Firebase](https://img.shields.io/badge/Firebase-Integrated-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
+![Material Design](https://img.shields.io/badge/Material%20Design-757575?style=for-the-badge&logo=material-design&logoColor=white)
 
-**A cutting-edge Flutter payment application featuring Material 3 design, neon blue aesthetics, and comprehensive financial services.**
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Flutter Version](https://img.shields.io/badge/Flutter-3.0+-blue.svg)](https://flutter.dev/)
+[![Dart Version](https://img.shields.io/badge/Dart-2.17+-blue.svg)](https://dart.dev/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-[🚀 Features](#-features) • [📱 Screenshots](#-screenshots) • [🛠️ Installation](#️-installation) • [🎨 Design](#-design-system) • [🔧 Tech Stack](#-tech-stack)
+**A modern, feature-rich Flutter payment application with Material 3 design and glassmorphism effects**
+
+[Features](#-features) • [Screenshots](#-screenshots) • [Installation](#-installation) • [Architecture](#-architecture) • [Contributing](#-contributing)
 
 </div>
-
----
 
 ## ✨ Features
 
-### 🏦 **Core Payment Services**
-- 💳 **Wallet Management** - Secure digital wallet with real-time balance tracking
-- 💰 **Add Money** - Multiple payment gateways for easy top-ups
-- 📤 **Send Money** - Instant transfers to contacts and accounts
-- 💸 **Money Out** - Withdraw funds to bank accounts
-- 🔄 **Currency Exchange** - Multi-currency support with live rates
-
-### 📱 **Smart Features**
-- 📷 **QR Code Scanner** - Quick payment processing via QR codes
-- 🧾 **Digital Receipts** - Transaction history and invoice generation
-- 🎫 **Voucher System** - Create and redeem digital vouchers
-- 🔔 **Real-time Notifications** - Instant transaction alerts
-- 🔐 **Biometric Security** - Fingerprint and face recognition
+### 💰 **Core Payment Features**
+- 🏦 **Multi-Wallet Management** - Support for multiple currencies and payment methods
+- 💸 **Money Transfer** - Send money to other users instantly
+- 💳 **Add Money** - Top up wallet balance with credit/debit cards
+- 🏧 **Money Out** - Withdraw funds through agent network
+- 💱 **Currency Exchange** - Real-time currency conversion
+- 📱 **QR Code Payments** - Scan and pay with QR codes
+- 🧾 **Invoice Generation** - Create and manage invoices
+- 🎫 **Voucher System** - Create and redeem vouchers
 
 ### 🎨 **Modern UI/UX**
-- 🌙 **Dark Theme** - Eye-friendly dark mode with neon accents
-- ⚡ **Material 3 Design** - Latest Google design system implementation
-- 🎯 **Intuitive Navigation** - Seamless user experience
+- 🌟 **Material 3 Design** - Latest Material Design guidelines
+- ✨ **Glassmorphism Effects** - Modern transparent card designs
+- 🎭 **Smooth Animations** - 60fps animations with fade-in effects
+- 🌙 **Dark Theme** - Professional dark theme with neon accents
 - 📱 **Responsive Design** - Optimized for all screen sizes
+- 🎯 **Intuitive Navigation** - Clean and user-friendly interface
 
----
+### 🔧 **Technical Features**
+- 🔥 **Firebase Integration** - Real-time database and authentication
+- 🔄 **GetX State Management** - Reactive state management
+- 🌐 **Multi-language Support** - Arabic and English localization
+- 🔐 **Secure Authentication** - PIN-based and biometric authentication
+- 📊 **Transaction History** - Comprehensive transaction tracking
+- 🔔 **Push Notifications** - Real-time payment notifications
 
-## 📱 Screenshots
+## 🏗️ Architecture
 
-<div align="center">
+### **State Management**
+- **GetX** - Reactive state management with dependency injection
+- **Provider** - User data and wallet management
+- **Observable Controllers** - Real-time UI updates
 
-| Dashboard | Balance Card | Quick Actions | Services Menu |
-|-----------|--------------|---------------|---------------|
-| ![Dashboard](assets/screenshots/dashboard.png) | ![Balance](assets/screenshots/balance.png) | ![Actions](assets/screenshots/actions.png) | ![Services](assets/screenshots/services.png) |
-
-</div>
-
----
-
-## 🛠️ Installation
-
-### Prerequisites
-- Flutter SDK 3.19.4 or higher
-- Dart SDK 2.19.4 or higher
-- Android Studio / VS Code
-- Firebase account (for backend services)
-
-### Quick Start
-
-```bash
-# Clone the repository
-git clone https://github.com/Technogeekpro/xpay-app.git
-cd xpay-app
-
-# Install dependencies
-flutter pub get
-
-# Configure Firebase (see Firebase Setup section)
-# Add your google-services.json (Android) and GoogleService-Info.plist (iOS)
-
-# Run the app
-flutter run
+### **Project Structure**
+```
+lib/
+├── 📁 controller/          # Business logic controllers
+├── 📁 data/               # Data models and entities
+├── 📁 routes/             # App routing configuration
+├── 📁 utils/              # Utilities and constants
+│   ├── custom_color.dart  # App color scheme
+│   ├── custom_style.dart  # Typography and styles
+│   └── dimensions.dart    # Responsive dimensions
+├── 📁 views/              # UI screens and pages
+│   ├── 📁 auth/          # Authentication screens
+│   ├── 📁 dashboard/     # Dashboard and home
+│   ├── 📁 add_money/     # Add money functionality
+│   ├── 📁 transfer_money/ # Money transfer
+│   └── 📁 settings/      # App settings
+└── 📁 widgets/            # Reusable UI components
+    ├── 📁 buttons/       # Custom buttons
+    ├── 📁 inputs/        # Form inputs
+    └── 📁 cards/         # Card components
 ```
 
-### Firebase Setup
+## 🚀 Installation
 
-1. **Create a Firebase Project**
-   - Go to [Firebase Console](https://console.firebase.google.com/)
-   - Create a new project or use existing one
+### **Prerequisites**
+- Flutter SDK (3.0+)
+- Dart SDK (2.17+)
+- Android Studio / VS Code
+- Firebase account
 
-2. **Add Android App**
+### **Setup Steps**
+
+1. **Clone the repository**
    ```bash
-   # Add your Android package name: com.example.xpay
-   # Download google-services.json
-   # Place in android/app/
+   git clone https://github.com/yourusername/xpay-flutter.git
+   cd xpay-flutter
    ```
 
-3. **Add iOS App**
+2. **Install dependencies**
    ```bash
-   # Add your iOS bundle ID: com.example.xpay
-   # Download GoogleService-Info.plist
-   # Place in ios/Runner/
+   flutter pub get
    ```
 
-4. **Enable Services**
-   - Authentication (Email/Password, Phone)
-   - Firestore Database
-   - Cloud Storage
-   - Cloud Functions (optional)
+3. **Firebase Configuration**
+   - Create a new Firebase project
+   - Add your `google-services.json` (Android) and `GoogleService-Info.plist` (iOS)
+   - Enable Authentication and Firestore
 
----
+4. **Run the application**
+   ```bash
+   flutter run
+   ```
 
 ## 🎨 Design System
 
-### Color Palette
+### **Color Palette**
+- **Primary**: `#0854F8` - Modern blue for primary actions
+- **Secondary**: `#465ACA` - Sidebar and secondary elements
+- **Success**: `#00E676` - Success states and confirmations
+- **Background**: `#000E19` - Deep dark background
+- **Surface**: `#001A2E` - Card and surface backgrounds
 
-| Color | Hex | Usage |
-|-------|-----|-------|
-| 🔵 **Primary** | `#00E5FF` | Main actions, highlights |
-| 🟢 **Secondary** | `#03DAC6` | Accent elements |
-| ⚫ **Background** | `#000000` | App background |
-| 🔘 **Surface** | `#121212` | Cards, elevated elements |
-| ⚪ **On Primary** | `#000000` | Text on primary color |
-| 🔗 **Outline** | `#2D2D2D` | Borders, dividers |
+### **Typography**
+- **Headings**: Roboto Bold (18-24px)
+- **Body**: Roboto Medium (14-16px)
+- **Captions**: Roboto Regular (12px)
 
-### Typography
-- **Primary Font**: Josefin Sans
-- **Weights**: 400 (Regular), 500 (Medium), 600 (Semi-Bold), 700 (Bold)
-- **Scale**: Following Material 3 type scale
+## 📱 Key Screens
 
-### Components
-- **Cards**: 16px border radius, subtle neon borders
-- **Buttons**: 12px border radius, elevated design
-- **Icons**: Outlined style with 24px size
-- **Spacing**: 8px grid system
+### **Dashboard**
+- Modern glassmorphism design with gradient overlays
+- Quick action cards with color-coded themes
+- Real-time balance display with growth indicators
+- Featured services carousel
 
----
+### **Payment Screens**
+- Clean form layouts with modern text fields
+- Real-time validation and feedback
+- Smooth transitions and animations
+- Secure payment processing
 
-## 🔧 Tech Stack
+### **Settings & Profile**
+- Comprehensive user management
+- Security settings and preferences
+- Multi-language support
+- Theme customization
 
-### **Frontend**
-- **Flutter** - Cross-platform framework
-- **Material 3** - Google's latest design system
-- **GetX** - State management and routing
-- **Provider** - State management for user data
-- **flutter_screenutil** - Responsive design
+## 🔒 Security Features
 
-### **Backend & Services**
-- **Firebase Auth** - User authentication
-- **Cloud Firestore** - Real-time database
-- **Firebase Storage** - File storage
-- **Cloud Functions** - Server-side logic
+- 🔐 **PIN Authentication** - Secure 6-digit PIN system
+- 👆 **Biometric Support** - Fingerprint and face recognition
+- 🔒 **Data Encryption** - End-to-end encryption for sensitive data
+- 🛡️ **Secure Storage** - Encrypted local storage for credentials
+- 🔍 **Transaction Verification** - Multi-step verification process
 
-### **Key Dependencies**
-```yaml
-dependencies:
-  flutter: sdk: flutter
-  get: ^4.6.6                    # State management
-  provider: ^6.1.2               # State management
-  firebase_core: ^3.1.1          # Firebase core
-  firebase_auth: ^5.1.1          # Authentication
-  cloud_firestore: ^5.0.2        # Database
-  google_fonts: ^6.2.1           # Typography
-  flutter_screenutil: ^5.9.3     # Responsive design
-  qr_code_scanner_plus: ^2.0.10+1 # QR scanning
-  image_picker: ^1.1.2           # Image selection
+## 🌍 Localization
+
+Currently supported languages:
+- 🇺🇸 **English** - Primary language
+- 🇸🇦 **Arabic** - RTL support included
+
+## 🧪 Testing
+
+```bash
+# Run unit tests
+flutter test
+
+# Run integration tests
+flutter test integration_test/
+
+# Generate coverage report
+flutter test --coverage
 ```
 
----
+## 📦 Dependencies
 
-## 📁 Project Structure
+### **Core Dependencies**
+- `flutter` - UI framework
+- `get` - State management and routing
+- `provider` - State management
+- `firebase_core` - Firebase integration
+- `firebase_auth` - Authentication
+- `cloud_firestore` - Database
 
-```
-lib/
-├── binding/              # GetX bindings
-├── controller/           # Business logic controllers
-├── data/                # Data models and repositories
-├── routes/              # App routing configuration
-├── utils/               # Utilities and constants
-│   ├── custom_color.dart     # Color scheme
-│   ├── custom_style.dart     # Text styles
-│   ├── dimensions.dart       # Spacing constants
-│   └── strings.dart          # String constants
-├── views/               # UI screens
-│   ├── dashboard/            # Dashboard screens
-│   ├── auth/                 # Authentication screens
-│   ├── add_money/            # Add money flow
-│   ├── transfer_money/       # Transfer screens
-│   └── ...                   # Other feature screens
-├── widgets/             # Reusable UI components
-│   ├── dashboard_option_widget.dart
-│   ├── primary_appbar.dart
-│   └── ...
-└── main.dart           # App entry point
-```
-
----
-
-## 🚀 Features in Detail
-
-### 💳 Wallet Management
-- **Multi-currency Support**: USD, EUR, GBP, INR
-- **Real-time Balance**: Live balance updates
-- **Transaction History**: Detailed transaction logs
-- **Security**: Biometric authentication
-
-### 📱 Payment Methods
-- **Bank Transfer**: Direct bank account integration
-- **Credit/Debit Cards**: Secure card processing
-- **Digital Wallets**: PayPal, Google Pay integration
-- **Cryptocurrency**: Bitcoin and Ethereum support (coming soon)
-
-### 🔐 Security Features
-- **End-to-End Encryption**: All transactions encrypted
-- **Two-Factor Authentication**: SMS and app-based 2FA
-- **Fraud Detection**: AI-powered fraud prevention
-- **PCI DSS Compliant**: Industry-standard security
-
----
-
-## 🌟 Design Highlights
-
-### Material 3 Implementation
-- ✅ **Dynamic Color**: Adaptive color schemes
-- ✅ **Motion**: Smooth animations and transitions
-- ✅ **Typography**: Readable and accessible fonts
-- ✅ **Accessibility**: Screen reader and high contrast support
-
-### Neon Aesthetic
-- 🎨 **Vibrant Colors**: Eye-catching neon blue theme
-- 🌙 **Dark Mode**: Optimized for low-light usage
-- ✨ **Subtle Glows**: Elegant neon accent effects
-- 🎯 **High Contrast**: Perfect readability
-
----
-
-## 📊 Performance
-
-- ⚡ **Fast Loading**: Optimized for quick startup
-- 📱 **Smooth Animations**: 60fps UI performance
-- 💾 **Efficient Storage**: Minimal memory footprint
-- 🔋 **Battery Optimized**: Low power consumption
-
----
+### **UI Dependencies**
+- `ionicons` - Modern icon set
+- `form_field_validator` - Form validation
+- `flutter_localizations` - Internationalization
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-### Development Setup
-```bash
-# Fork the repository
-# Clone your fork
-git clone https://github.com/YOUR_USERNAME/xpay-app.git
+### **Development Workflow**
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-# Create a feature branch
-git checkout -b feature/amazing-feature
-
-# Make your changes
-# Commit and push
-git commit -m "Add amazing feature"
-git push origin feature/amazing-feature
-
-# Create a Pull Request
-```
-
----
+### **Code Style**
+- Follow [Dart Style Guide](https://dart.dev/guides/language/effective-dart/style)
+- Use meaningful variable and function names
+- Add comments for complex business logic
+- Maintain consistent formatting
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
+## 👥 Authors
 
-## 👨‍💻 Author
-
-**Arbaz Kdr** - Flutter Developer
-- 🌐 Website: [www.arbazkdr.tk](http://www.arbazkdr.tk)
-- 📧 GitHub: [@Technogeekpro](https://github.com/Technogeekpro)
-- 📍 Location: Mumbai, India
-
----
+- **Your Name** - *Initial work* - [@yourusername](https://github.com/yourusername)
 
 ## 🙏 Acknowledgments
 
-- 🎨 **Material Design Team** - For the amazing Material 3 design system
-- 🔥 **Firebase Team** - For the robust backend services
-- 💙 **Flutter Community** - For the excellent framework and support
-- 🎯 **GetX Community** - For the powerful state management solution
+- Flutter team for the amazing framework
+- Material Design team for design guidelines
+- Firebase team for backend services
+- Community contributors and testers
+
+## 📞 Support
+
+- 📧 Email: support@xpay.com
+- 💬 Discord: [Join our community](https://discord.gg/xpay)
+- 📖 Documentation: [docs.xpay.com](https://docs.xpay.com)
+- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/xpay-flutter/issues)
 
 ---
 
 <div align="center">
 
-**Made with ❤️ and Flutter**
+**⭐ Star this repository if you found it helpful!**
 
-![Footer](https://img.shields.io/badge/Built%20with-Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
-![Material 3](https://img.shields.io/badge/Designed%20with-Material%203-00E5FF?style=for-the-badge&logo=material-design&logoColor=white)
-
-⭐ **Star this repo if you find it helpful!** ⭐
+Made with ❤️ by the XPay Team
 
 </div>

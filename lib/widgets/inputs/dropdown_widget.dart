@@ -60,13 +60,21 @@ class _DropDownInputWidgetState extends State<DropDownInputWidget> {
               child: DropdownButton<String>(
                 hint: Text(
                   widget.hintText,
-                  style: CustomStyle.hintTextStyle,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.5),
+                    fontSize: 16,
+                  ),
+                ),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
                 isExpanded: true,
                 icon: Icon(
                   Icons.keyboard_arrow_down,
-                  color: Colors.white.withOpacity(0.5),
-                  size: Dimensions.iconSizeDefault * 1.5,
+                  color: Colors.white.withOpacity(0.7),
+                  size: 24,
                 ),
                 value: widget.value,
                 items: widget.items.map(buildMenuItem).toList(),
@@ -85,9 +93,9 @@ class _DropDownInputWidgetState extends State<DropDownInputWidget> {
         child: Text(
           item,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.5),
-            fontSize: Dimensions.smallestTextSize,
-            fontWeight: FontWeight.w600,
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
           ),
         ),
       );

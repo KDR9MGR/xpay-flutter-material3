@@ -15,7 +15,6 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(SettingsController());
     return Scaffold(
-      backgroundColor: CustomColor.screenBGColor,
       appBar: PrimaryAppBar(
         appbarSize: Dimensions.defaultAppBarHeight,
         toolbarHeight: Dimensions.defaultAppBarHeight,
@@ -24,10 +23,10 @@ class SettingsScreen extends StatelessWidget {
           style: CustomStyle.commonTextTitleWhite,
         ),
         appBar: AppBar(),
-        backgroundColor: CustomColor.primaryColor,
+        backgroundColor: CustomColor.appBarColor,
         autoLeading: false,
-        elevation: 1,
-        appbarColor: CustomColor.secondaryColor,
+        elevation: 0,
+        appbarColor: CustomColor.appBarColor,
         leading: IconButton(
           onPressed: () {
             Get.back();
@@ -39,10 +38,15 @@ class SettingsScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: _bodyWidget(context, controller),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: CustomColor.primaryGradient,
+        ),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: _bodyWidget(context, controller),
+        ),
       ),
     );
   }

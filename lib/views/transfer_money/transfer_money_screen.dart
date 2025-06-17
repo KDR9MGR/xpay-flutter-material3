@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:xpay/controller/transfer_money_controller.dart';
 import 'package:xpay/widgets/inputs/text_label_widget.dart';
 
@@ -7,6 +9,7 @@ import '../../utils/custom_color.dart';
 import '../../utils/custom_style.dart';
 import '../../utils/dimensions.dart';
 import '../../utils/strings.dart';
+import '../../utils/utils.dart';
 import '../../widgets/buttons/primary_button.dart';
 import '../../widgets/inputs/amount_input_widget.dart';
 import '../../widgets/inputs/dropdown_widget.dart';
@@ -14,11 +17,39 @@ import '../../widgets/inputs/secondary_text_input_widget.dart';
 import '../../widgets/primary_appbar.dart';
 import '../../widgets/wallet_info_widget.dart';
 
-class TransferMoneyScreen extends StatelessWidget {
+class TransferMoneyScreen extends StatefulWidget {
   TransferMoneyScreen({Key? key}) : super(key: key);
 
+  @override
+  State<TransferMoneyScreen> createState() => _TransferMoneyScreenState();
+}
+
+class _TransferMoneyScreenState extends State<TransferMoneyScreen>
+    with TickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
-  final controller = Get.put(TransferMoneyController());
+  late TransferMoneyController controller;
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(TransferMoneyController());
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,147 +60,282 @@ class TransferMoneyScreen extends StatelessWidget {
         toolbarHeight: Dimensions.defaultAppBarHeight,
         title: Text(
           Strings.transferMoneyTitle.tr,
-          style: CustomStyle.commonTextTitleWhite,
+          style: CustomStyle.commonTextTitleWhite.copyWith(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
+          ),
         ),
         appBar: AppBar(),
-        backgroundColor: CustomColor.primaryColor,
+        backgroundColor: CustomColor.appBarColor,
         autoLeading: false,
-        elevation: 1,
-        appbarColor: CustomColor.secondaryColor,
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.white,
-            size: Dimensions.iconSizeDefault * 1.4,
+        elevation: 0,
+        appbarColor: CustomColor.appBarColor,
+        leading: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.white.withOpacity(0.2)),
+          ),
+          child: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 20,
+            ),
           ),
         ),
       ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: _bodyWidget(context, controller),
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: _bodyWidget(context),
+        ),
       ),
     );
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, TransferMoneyController controller) {
+  _bodyWidget(BuildContext context) {
     return ListView(
       shrinkWrap: true,
       children: [
-        _infoInputWidget(context, controller),
-        _walletInfoWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
-        _buttonWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        _infoInputWidget(context),
+        _walletInfoWidget(context),
+        SizedBox(height: Dimensions.heightSize * 2),
+        _buttonWidget(context),
+        SizedBox(height: Dimensions.heightSize * 2),
       ],
     );
   }
 
-  _infoInputWidget(BuildContext context, TransferMoneyController controller) {
+  _infoInputWidget(BuildContext context) {
     return Obx(() {
       return Container(
-        padding: const EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: CustomColor.secondaryColor,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(Dimensions.radius * 2),
-            bottomRight: Radius.circular(Dimensions.radius * 2),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              CustomColor.surfaceColor.withOpacity(0.9),
+              CustomColor.surfaceColor.withOpacity(0.7),
+            ],
           ),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
         ),
         child: Form(
           key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              TextLabelWidget(text: Strings.yourWallet.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              DropDownInputWidget(
-                items: controller.walletList,
-                color: CustomColor.primaryColor.withOpacity(0.1),
-                hintText: Strings.selectTermHint.tr,
-                value: controller.walletName.value,
-                onChanged: (value) {
-                  controller.walletName.value = value!;
-                },
-              ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+              // Header with icon
+              Row(
                 children: [
-                  TextLabelWidget(text: Strings.receiverUsernameOrEmail.tr),
-                  SizedBox(
-                    height: Dimensions.heightSize,
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          CustomColor.primaryColor,
+                          CustomColor.appBarColor,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: CustomColor.primaryColor.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Ionicons.send,
+                      color: Colors.white,
+                      size: 24,
+                    ),
                   ),
-                  SecondaryTextInputWidget(
-                    controller: controller.receiverUsernameOrEmailController,
-                    hintText: Strings.receiverUsernameOrEmailHint.tr,
-                    color: CustomColor.secondaryColor,
-                    suffixIcon: Icons.photo_camera,
-                    onTap: () {
-                      controller.navigateToTransferMoneyScanQrCodeScreen();
-                    },
-                  ),
-                  SizedBox(
-                    height: Dimensions.heightSize * 0.3,
-                  ),
-                  Text(
-                    Strings.validUserForTransaction.tr,
-                    style: TextStyle(
-                      fontSize: Dimensions.smallestTextSize * 0.8,
-                      fontWeight: FontWeight.w200,
-                      color: const Color(0xff00bb38).withOpacity(0.8),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Send Money',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          'Transfer funds securely',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.7),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
+              const SizedBox(height: 32),
+
+              // Wallet Selection
+              _buildModernLabel('Your Wallet'),
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                ),
+                child: DropDownInputWidget(
+                  items: controller.walletList,
+                  color: Colors.transparent,
+                  hintText: Strings.selectTermHint.tr,
+                  value: controller.walletName.value,
+                  onChanged: (value) {
+                    controller.walletName.value = value!;
+                  },
+                ),
               ),
-              TextLabelWidget(text: Strings.amount.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
+              const SizedBox(height: 24),
+
+              // Recipient Email
+              _buildModernLabel('Recipient Email'),
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                ),
+                child: SecondaryTextInputWidget(
+                  controller: controller.receiverUsernameOrEmailController,
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: 'Enter recipient email'),
+                    EmailValidator(errorText: 'Enter a valid email address')
+                  ]),
+                  hintText: 'Enter recipient email address',
+                  color: Colors.transparent,
+                  suffixIcon: Ionicons.qr_code_outline,
+                  keyboardType: TextInputType.emailAddress,
+                  onTap: () {
+                    controller.navigateToTransferMoneyScanQrCodeScreen();
+                  },
+                ),
               ),
-              AmountInputWidget(
-                hintText: '0.00',
-                controller: controller.amountController,
-                color: CustomColor.secondaryColor,
-                suffixIcon: _amountButton(context, controller),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Icon(
+                    Ionicons.checkmark_circle,
+                    color: CustomColor.successColor,
+                    size: 16,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    Strings.validUserForTransaction.tr,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: CustomColor.successColor,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
+              const SizedBox(height: 24),
+
+              // Amount Input
+              _buildModernLabel('Amount'),
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                ),
+                child: AmountInputWidget(
+                  hintText: '0.00',
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: 'Please enter an amount'),
+                    MinValueValidator(1, errorText: 'Minimum amount is 1.00')
+                  ]),
+                  controller: controller.amountController,
+                  color: Colors.transparent,
+                  suffixIcon: _amountButton(context),
+                ),
               ),
-              Text(
-                '${Strings.limit}: 1.00 -  100,000.00 USD',
-                style: TextStyle(
-                    fontSize: Dimensions.smallestTextSize * 0.8,
-                    fontWeight: FontWeight.w200,
-                    color: Colors.white.withOpacity(0.4)),
+              const SizedBox(height: 16),
+
+              // Limit and charge info
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.03),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white.withOpacity(0.05)),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Ionicons.information_circle_outline,
+                          color: Colors.white.withOpacity(0.6),
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${Strings.limit}: 1.00 - 100,000.00 USD',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(
+                          Ionicons.card_outline,
+                          color: Colors.white.withOpacity(0.6),
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${Strings.charge.tr}: 2.00 USD + 1%',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(
-                height: Dimensions.heightSize * 0.5,
-              ),
-              Text(
-                '${Strings.charge.tr}: 2.00 USD + 1%',
-                style: TextStyle(
-                    fontSize: Dimensions.smallestTextSize * 0.8,
-                    fontWeight: FontWeight.w200,
-                    color: Colors.white.withOpacity(0.4)),
-              )
             ],
           ),
         ),
@@ -177,16 +343,52 @@ class TransferMoneyScreen extends StatelessWidget {
     });
   }
 
-  _amountButton(BuildContext context, TransferMoneyController controller) {
+  Widget _buildModernLabel(String text) {
+    return Row(
+      children: [
+        Container(
+          width: 4,
+          height: 16,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [CustomColor.primaryColor, CustomColor.appBarColor],
+            ),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ],
+    );
+  }
+
+  _amountButton(BuildContext context) {
     return Obx(() {
       return Container(
         width: MediaQuery.of(context).size.width * 0.20,
         decoration: BoxDecoration(
-          color: CustomColor.primaryColor,
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(Dimensions.radius),
-            bottomRight: Radius.circular(Dimensions.radius),
+          gradient: LinearGradient(
+            colors: [CustomColor.primaryColor, CustomColor.appBarColor],
           ),
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(16),
+            bottomRight: Radius.circular(16),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: CustomColor.primaryColor.withOpacity(0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -195,7 +397,7 @@ class TransferMoneyScreen extends StatelessWidget {
               controller.walletName.value,
               style: TextStyle(
                 color: Colors.white,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 fontSize: Dimensions.mediumTextSize,
               ),
             )
@@ -206,34 +408,74 @@ class TransferMoneyScreen extends StatelessWidget {
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context, TransferMoneyController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: PrimaryButton(
-        title: Strings.transferNow.tr,
-        onPressed: () {
-          controller.navigateToConfirmTransferMoneyScreen();
-        },
-        borderColorName: CustomColor.primaryColor,
+  _buttonWidget(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [CustomColor.primaryColor, CustomColor.appBarColor],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: CustomColor.primaryColor.withOpacity(0.4),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: PrimaryButton(
+          title: Strings.transferNow.tr,
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              controller.navigateToConfirmTransferMoneyScreen();
+            }
+          },
+          borderColorName: Colors.transparent,
+        ),
       ),
     );
   }
 
-  _walletInfoWidget(BuildContext context, TransferMoneyController controller) {
+  _walletInfoWidget(BuildContext context) {
     return Obx(() {
       return Container(
-        margin: const EdgeInsets.only(top: 15, left: 10, right: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              CustomColor.surfaceColor.withOpacity(0.8),
+              CustomColor.surfaceColor.withOpacity(0.6),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
         child: WalletInfoWidget(
           wallet: controller.walletName.value,
           recipient: controller.receiverUsernameOrEmailController.text.isEmpty
               ? 'adsent@gmail.com'
               : controller.receiverUsernameOrEmailController.text,
-          transferAmount:
-              '${controller.amountController.text} ${controller.walletName.value}',
-          totalCharge:
-              '${controller.calculateCharge(double.parse(controller.amountController.text))} ${controller.walletName.value}',
-          payableAmount:
-              '${double.parse(controller.amountController.text) + controller.charge.value} ${controller.walletName.value}',
+          transferAmount: controller.amountController.text.isEmpty
+              ? '0 ${controller.walletName.value}'
+              : '${controller.amountController.text} ${controller.walletName.value}',
+          totalCharge: controller.amountController.text.isEmpty
+              ? '0 ${controller.walletName.value}'
+              : '${controller.calculateCharge(double.tryParse(controller.amountController.text) ?? 0)} ${controller.walletName.value}',
+          payableAmount: controller.amountController.text.isEmpty
+              ? '0 ${controller.walletName.value}'
+              : '${(double.tryParse(controller.amountController.text) ?? 0) + controller.charge.value} ${controller.walletName.value}',
         ),
       );
     });

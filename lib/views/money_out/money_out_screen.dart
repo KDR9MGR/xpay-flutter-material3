@@ -27,12 +27,35 @@ class MoneyOutScreen extends StatefulWidget {
   State<MoneyOutScreen> createState() => _MoneyOutScreenState();
 }
 
-class _MoneyOutScreenState extends State<MoneyOutScreen> {
+class _MoneyOutScreenState extends State<MoneyOutScreen>
+    with TickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
-
   final controller = Get.put(MoneyOutController());
   late final WalletViewModel? _walletViewModel;
   late final UserProvider _userProvider;
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _walletViewModel = Provider.of<WalletViewModel>(context, listen: false);
+    _userProvider = Provider.of<UserProvider>(context, listen: false);
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,160 +66,321 @@ class _MoneyOutScreenState extends State<MoneyOutScreen> {
         toolbarHeight: Dimensions.defaultAppBarHeight,
         title: Text(
           Strings.moneyOut.tr,
-          style: CustomStyle.commonTextTitleWhite,
+          style: CustomStyle.commonTextTitleWhite.copyWith(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
+          ),
         ),
         appBar: AppBar(),
-        backgroundColor: CustomColor.primaryColor,
+        backgroundColor: CustomColor.appBarColor,
         autoLeading: false,
-        elevation: 1,
-        appbarColor: CustomColor.secondaryColor,
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.white,
-            size: Dimensions.iconSizeDefault * 1.4,
+        elevation: 0,
+        appbarColor: CustomColor.appBarColor,
+        leading: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.white.withOpacity(0.2)),
+          ),
+          child: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 20,
+            ),
           ),
         ),
       ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: _bodyWidget(context, controller),
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: _bodyWidget(context),
+        ),
       ),
     );
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, MoneyOutController controller) {
+  _bodyWidget(BuildContext context) {
     return ListView(
       shrinkWrap: true,
       children: [
-        _infoInputWidget(context, controller),
-        _walletInfoWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
-        _buttonWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        _infoInputWidget(context),
+        _walletInfoWidget(context),
+        SizedBox(height: Dimensions.heightSize * 2),
+        _buttonWidget(context),
+        SizedBox(height: Dimensions.heightSize * 2),
       ],
     );
   }
 
-  _infoInputWidget(BuildContext context, MoneyOutController controller) {
+  _infoInputWidget(BuildContext context) {
     return Obx(() {
       return Container(
-        padding: const EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: CustomColor.surfaceColor,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(Dimensions.radius * 2),
-            bottomRight: Radius.circular(Dimensions.radius * 2),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              CustomColor.surfaceColor.withOpacity(0.9),
+              CustomColor.surfaceColor.withOpacity(0.7),
+            ],
           ),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
         ),
         child: Form(
           key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              TextLabelWidget(text: Strings.yourWallet.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              DropDownInputWidget(
-                items: controller.walletList,
-                color: CustomColor.primaryColor.withOpacity(0.1),
-                hintText: Strings.selectTermHint.tr,
-                value: controller.walletName.value,
-                onChanged: (value) {
-                  controller.walletName.value = value!;
-                },
-              ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+              // Header with icon
+              Row(
                 children: [
-                  TextLabelWidget(text: Strings.agentUsernameOrEmail.tr),
-                  SizedBox(
-                    height: Dimensions.heightSize,
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          CustomColor.primaryColor,
+                          CustomColor.appBarColor,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: CustomColor.primaryColor.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Ionicons.arrow_up_circle_outline,
+                      color: Colors.white,
+                      size: 24,
+                    ),
                   ),
-                  SecondaryTextInputWidget(
-                    controller: controller.agentUsernameOrEmailController,
-                    hintText: Strings.agentUsernameOrEmail.tr,
-                    validator: MultiValidator([
-                      RequiredValidator(
-                          errorText: 'Please enter an email address'),
-                      EmailValidator(
-                          errorText: 'Please enter a valid email address')
-                    ]),
-                    color: CustomColor.surfaceColor,
-                    keyboardType: TextInputType.emailAddress,
-                    suffixIcon: Ionicons.mail_outline,
-
-                    onTap: () {
-                      controller.navigateToMoneyOutScanQrCodeScreen();
-                    },
-                  ),
-                  SizedBox(
-                    height: Dimensions.heightSize * 0.3,
-                  ),
-                  Text(
-                    Strings.validUserForMoneyOut.tr,
-                    style: TextStyle(
-                      fontSize: Dimensions.smallestTextSize * 0.8,
-                      fontWeight: FontWeight.w200,
-                      color: const Color(0xff00bb38).withOpacity(0.8),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Money Out',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          'Withdraw funds to agent',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.7),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
+              const SizedBox(height: 32),
+
+              // Wallet Selection
+              _buildModernLabel('Your Wallet'),
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                ),
+                child: DropDownInputWidget(
+                  items: controller.walletList,
+                  color: Colors.transparent,
+                  hintText: Strings.selectTermHint.tr,
+                  value: controller.walletName.value,
+                  onChanged: (value) {
+                    controller.walletName.value = value!;
+                  },
+                ),
               ),
-              TextLabelWidget(text: Strings.amount.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
+              const SizedBox(height: 24),
+
+              // Agent Email
+              _buildModernLabel('Agent Email'),
+              const SizedBox(height: 12),
+                             Container(
+                 decoration: BoxDecoration(
+                   color: Colors.white.withOpacity(0.05),
+                   borderRadius: BorderRadius.circular(16),
+                   border: Border.all(color: Colors.white.withOpacity(0.1)),
+                 ),
+                 child: TextFormField(
+                   controller: controller.agentUsernameOrEmailController,
+                   keyboardType: TextInputType.emailAddress,
+                   style: TextStyle(
+                     color: Colors.white,
+                     fontSize: 16,
+                     fontWeight: FontWeight.w500,
+                   ),
+                   validator: MultiValidator([
+                     RequiredValidator(errorText: 'Please enter an email address'),
+                     EmailValidator(errorText: 'Please enter a valid email address')
+                   ]),
+                   decoration: InputDecoration(
+                     hintText: 'Enter agent email address',
+                     hintStyle: TextStyle(
+                       color: Colors.white.withOpacity(0.5),
+                       fontSize: 16,
+                     ),
+                     border: InputBorder.none,
+                     contentPadding: const EdgeInsets.all(20),
+                     suffixIcon: GestureDetector(
+                       onTap: () {
+                         controller.navigateToMoneyOutScanQrCodeScreen();
+                       },
+                       child: Container(
+                         margin: const EdgeInsets.all(12),
+                         padding: const EdgeInsets.all(8),
+                         decoration: BoxDecoration(
+                           color: Colors.white.withOpacity(0.1),
+                           borderRadius: BorderRadius.circular(8),
+                         ),
+                         child: Icon(
+                           Ionicons.qr_code_outline,
+                           color: Colors.white.withOpacity(0.8),
+                           size: 20,
+                         ),
+                       ),
+                     ),
+                   ),
+                 ),
+               ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Icon(
+                    Ionicons.checkmark_circle,
+                    color: CustomColor.successColor,
+                    size: 16,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    Strings.validUserForMoneyOut.tr,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: CustomColor.successColor,
+                    ),
+                  ),
+                ],
               ),
-              AmountInputWidget(
-                hintText: '0.00',
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                validator: MultiValidator([
-                  RequiredValidator(errorText: 'Please enter an amount'),
-                  MinValueValidator(100, errorText: 'Minimum amount is 100')
-                ]),
-                controller: controller.amountController,
-                color: CustomColor.surfaceColor,
-                suffixIcon: _amountButton(context, controller),
+              const SizedBox(height: 24),
+
+              // Amount Input
+              _buildModernLabel('Amount'),
+              const SizedBox(height: 12),
+                             Container(
+                 decoration: BoxDecoration(
+                   color: Colors.white.withOpacity(0.05),
+                   borderRadius: BorderRadius.circular(16),
+                   border: Border.all(color: Colors.white.withOpacity(0.1)),
+                 ),
+                 child: TextFormField(
+                   controller: controller.amountController,
+                   keyboardType: TextInputType.numberWithOptions(decimal: true),
+                   style: TextStyle(
+                     color: Colors.white,
+                     fontSize: 18,
+                     fontWeight: FontWeight.w600,
+                   ),
+                   validator: MultiValidator([
+                     RequiredValidator(errorText: 'Please enter an amount'),
+                     MinValueValidator(100, errorText: 'Minimum amount is 100')
+                   ]),
+                   decoration: InputDecoration(
+                     hintText: '0.00',
+                     hintStyle: TextStyle(
+                       color: Colors.white.withOpacity(0.5),
+                       fontSize: 18,
+                     ),
+                     border: InputBorder.none,
+                     contentPadding: const EdgeInsets.all(20),
+                     suffixIcon: _amountButton(context),
+                   ),
+                 ),
+               ),
+              const SizedBox(height: 16),
+
+              // Limit and charge info
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.03),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white.withOpacity(0.05)),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Ionicons.information_circle_outline,
+                          color: Colors.white.withOpacity(0.6),
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${Strings.limit.tr}: 100.00 - 100,000.00 USD',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(
+                          Ionicons.card_outline,
+                          color: Colors.white.withOpacity(0.6),
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${Strings.charge.tr}: 2.00 USD + 1%',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              Text(
-                '${Strings.limit.tr}: 1.00 -  100,000.00 USD',
-                style: TextStyle(
-                    fontSize: Dimensions.smallestTextSize * 0.8,
-                    fontWeight: FontWeight.w200,
-                    color: Colors.white.withOpacity(0.4)),
-              ),
-              SizedBox(
-                height: Dimensions.heightSize * 0.5,
-              ),
-              Text(
-                '${Strings.charge.tr}: 2.00 USD + 1%',
-                style: TextStyle(
-                    fontSize: Dimensions.smallestTextSize * 0.8,
-                    fontWeight: FontWeight.w200,
-                    color: Colors.white.withOpacity(0.4)),
-              )
             ],
           ),
         ),
@@ -204,16 +388,52 @@ class _MoneyOutScreenState extends State<MoneyOutScreen> {
     });
   }
 
-  _amountButton(BuildContext context, MoneyOutController controller) {
+  Widget _buildModernLabel(String text) {
+    return Row(
+      children: [
+        Container(
+          width: 4,
+          height: 16,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [CustomColor.primaryColor, CustomColor.appBarColor],
+            ),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ],
+    );
+  }
+
+  _amountButton(BuildContext context) {
     return Obx(() {
       return Container(
         width: MediaQuery.of(context).size.width * 0.20,
         decoration: BoxDecoration(
-          color: CustomColor.primaryColor,
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(Dimensions.radius),
-            bottomRight: Radius.circular(Dimensions.radius),
+          gradient: LinearGradient(
+            colors: [CustomColor.primaryColor, CustomColor.appBarColor],
           ),
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(16),
+            bottomRight: Radius.circular(16),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: CustomColor.primaryColor.withOpacity(0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +442,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen> {
               controller.walletName.value,
               style: TextStyle(
                 color: Colors.white,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 fontSize: Dimensions.mediumTextSize,
               ),
             )
@@ -233,42 +453,77 @@ class _MoneyOutScreenState extends State<MoneyOutScreen> {
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context, MoneyOutController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: PrimaryButton(
-        title: Strings.moneyOut.tr,
-        onPressed: () async {
-          if (formKey.currentState!.validate()) {
-            Utils.showLoadingDialog(context);
-            try {
-              await _walletViewModel!.sendMoneyToUser(
-                  controller.agentUsernameOrEmailController.text.trim(),
-                  double.parse(controller.amountController.text.trim()),
-                  controller.walletName.value);
-              await _userProvider.fetchUserDetails();
-              if (context.mounted) {
-                Navigator.pop(context);
-                Utils.showDialogMessage(
-                    context, 'Success', 'Money has been sent successfully!');
-                controller.amountController.clear();
-                controller.agentUsernameOrEmailController.clear();
+  _buttonWidget(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [CustomColor.primaryColor, CustomColor.appBarColor],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: CustomColor.primaryColor.withOpacity(0.4),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: PrimaryButton(
+          title: Strings.moneyOut.tr,
+          onPressed: () async {
+            if (formKey.currentState!.validate()) {
+              Utils.showLoadingDialog(context);
+              try {
+                await _walletViewModel!.sendMoneyToUser(
+                    controller.agentUsernameOrEmailController.text.trim(),
+                    double.parse(controller.amountController.text.trim()),
+                    controller.walletName.value);
+                await _userProvider.fetchUserDetails();
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  Utils.showDialogMessage(
+                      context, 'Success', 'Money has been sent successfully!');
+                  controller.amountController.clear();
+                  controller.agentUsernameOrEmailController.clear();
+                }
+              } catch (e) {
+                Navigator.pop(context); // Dismiss loading dialog on error
+                Utils.showDialogMessage(context, 'Error', '$e');
               }
-            } catch (e) {
-              Navigator.pop(context); // Dismiss loading dialog on error
-              Utils.showDialogMessage(context, 'Error', '$e');
             }
-          }
-        },
-        borderColorName: CustomColor.primaryColor,
+          },
+          borderColorName: Colors.transparent,
+        ),
       ),
     );
   }
 
-  _walletInfoWidget(BuildContext context, MoneyOutController controller) {
+  _walletInfoWidget(BuildContext context) {
     return Obx(() {
       return Container(
-        margin: const EdgeInsets.only(top: 15, left: 10, right: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              CustomColor.surfaceColor.withOpacity(0.8),
+              CustomColor.surfaceColor.withOpacity(0.6),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
         child: MoneyOutWalletInfoWidget(
           wallet: controller.walletName.value,
           agent: controller.agentUsernameOrEmailController.text.isEmpty
@@ -283,12 +538,5 @@ class _MoneyOutScreenState extends State<MoneyOutScreen> {
         ),
       );
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _walletViewModel = Provider.of<WalletViewModel>(context, listen: false);
-    _userProvider = Provider.of<UserProvider>(context, listen: false);
   }
 }

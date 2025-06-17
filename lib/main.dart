@@ -59,10 +59,11 @@ class MyApp extends StatelessWidget {
           ),
           scaffoldBackgroundColor: CustomColor.screenBGColor,
           appBarTheme: AppBarTheme(
-            backgroundColor: CustomColor.primaryColor,
-            foregroundColor: CustomColor.onPrimaryTextColor,
+            backgroundColor: CustomColor.appBarColor,
+            foregroundColor: CustomColor.primaryTextColor,
             elevation: 0,
             centerTitle: true,
+            systemOverlayStyle: SystemUiOverlayStyle.light,
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(

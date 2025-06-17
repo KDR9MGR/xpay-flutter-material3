@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:xpay/controller/add_money_controller.dart';
 import 'package:xpay/utils/utils.dart';
@@ -25,12 +26,35 @@ class AddMoneyMoneyScreen extends StatefulWidget {
   State<AddMoneyMoneyScreen> createState() => _AddMoneyMoneyScreenState();
 }
 
-class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen> {
+class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
+    with TickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
-
   final controller = Get.put(AddMoneyController());
   late final WalletViewModel? _walletViewModel;
   late final UserProvider _userProvider;
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _walletViewModel = Provider.of<WalletViewModel>(context, listen: false);
+    _userProvider = Provider.of<UserProvider>(context, listen: false);
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,141 +65,271 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen> {
         toolbarHeight: Dimensions.defaultAppBarHeight,
         title: Text(
           Strings.addMoney.tr,
-          style: CustomStyle.commonTextTitleWhite,
+          style: CustomStyle.commonTextTitleWhite.copyWith(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
+          ),
         ),
         appBar: AppBar(),
-        backgroundColor: CustomColor.primaryColor,
+        backgroundColor: CustomColor.appBarColor,
         autoLeading: false,
-        elevation: 1,
-        appbarColor: CustomColor.secondaryColor,
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.white,
-            size: Dimensions.iconSizeDefault * 1.4,
+        elevation: 0,
+        appbarColor: CustomColor.appBarColor,
+        leading: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.white.withOpacity(0.2)),
+          ),
+          child: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 20,
+            ),
           ),
         ),
       ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: _bodyWidget(context, controller),
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: _bodyWidget(context),
+        ),
       ),
     );
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, AddMoneyController controller) {
+  _bodyWidget(BuildContext context) {
     return ListView(
       shrinkWrap: true,
       children: [
-        _infoInputWidget(context, controller),
-        _walletInfoWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
-        _buttonWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        _infoInputWidget(context),
+        _walletInfoWidget(context),
+        SizedBox(height: Dimensions.heightSize * 2),
+        _buttonWidget(context),
+        SizedBox(height: Dimensions.heightSize * 2),
       ],
     );
   }
 
-  _infoInputWidget(BuildContext context, AddMoneyController controller) {
+  _infoInputWidget(BuildContext context) {
     return Obx(() {
       return Container(
-        padding: const EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: CustomColor.secondaryColor,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(Dimensions.radius * 2),
-            bottomRight: Radius.circular(Dimensions.radius * 2),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              CustomColor.surfaceColor.withOpacity(0.9),
+              CustomColor.surfaceColor.withOpacity(0.7),
+            ],
           ),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
         ),
         child: Form(
           key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              TextLabelWidget(text: Strings.yourWallet.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              DropDownInputWidget(
-                items: controller.walletList,
-                color: CustomColor.primaryColor.withOpacity(0.1),
-                hintText: Strings.selectTermHint.tr,
-                value: controller.walletName.value,
-                onChanged: (value) {
-                  controller.walletName.value = value!;
-                },
-              ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+              // Header with icon
+              Row(
                 children: [
-                  TextLabelWidget(text: Strings.gateway.tr),
-                  SizedBox(
-                    height: Dimensions.heightSize,
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          CustomColor.successColor,
+                          Colors.green.shade400,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: CustomColor.successColor.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Ionicons.add_circle_outline,
+                      color: Colors.white,
+                      size: 24,
+                    ),
                   ),
-                  DropDownInputWidget(
-                    items: controller.gatewayList,
-                    color: CustomColor.primaryColor.withOpacity(0.1),
-                    hintText: Strings.selectTermHint.tr,
-                    value: controller.gatewayName.value,
-                    onChanged: (value) {
-                      controller.gatewayName.value = value!;
-                    },
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Add Money',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          'Top up your wallet balance',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.7),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
+              const SizedBox(height: 32),
+
+              // Wallet Selection
+              _buildModernLabel('Your Wallet'),
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                ),
+                child: DropDownInputWidget(
+                  items: controller.walletList,
+                  color: Colors.transparent,
+                  hintText: Strings.selectTermHint.tr,
+                  value: controller.walletName.value,
+                  onChanged: (value) {
+                    controller.walletName.value = value!;
+                  },
+                ),
               ),
-              TextLabelWidget(text: Strings.amount.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
+              const SizedBox(height: 24),
+
+              // Gateway Selection
+              _buildModernLabel('Payment Gateway'),
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                ),
+                child: DropDownInputWidget(
+                  items: controller.gatewayList,
+                  color: Colors.transparent,
+                  hintText: Strings.selectTermHint.tr,
+                  value: controller.gatewayName.value,
+                  onChanged: (value) {
+                    controller.gatewayName.value = value!;
+                  },
+                ),
               ),
-              AmountInputWidget(
-                hintText: '0.00',
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                validator: MultiValidator([
-                  RequiredValidator(errorText: 'Please enter an amount'),
-                  MinValueValidator(100, errorText: 'Minimum amount is 100')
-                ]),
-                controller: controller.amountController,
-                color: CustomColor.secondaryColor,
-                suffixIcon: _amountButton(context, controller),
+              const SizedBox(height: 24),
+
+              // Amount Input
+              _buildModernLabel('Amount'),
+              const SizedBox(height: 12),
+                             Container(
+                 decoration: BoxDecoration(
+                   color: Colors.white.withOpacity(0.05),
+                   borderRadius: BorderRadius.circular(16),
+                   border: Border.all(color: Colors.white.withOpacity(0.1)),
+                 ),
+                 child: TextFormField(
+                   controller: controller.amountController,
+                   keyboardType: TextInputType.numberWithOptions(decimal: true),
+                   style: TextStyle(
+                     color: Colors.white,
+                     fontSize: 18,
+                     fontWeight: FontWeight.w600,
+                   ),
+                   validator: MultiValidator([
+                     RequiredValidator(errorText: 'Please enter an amount'),
+                     MinValueValidator(100, errorText: 'Minimum amount is 100')
+                   ]),
+                   decoration: InputDecoration(
+                     hintText: '0.00',
+                     hintStyle: TextStyle(
+                       color: Colors.white.withOpacity(0.5),
+                       fontSize: 18,
+                     ),
+                     border: InputBorder.none,
+                     contentPadding: const EdgeInsets.all(20),
+                     suffixIcon: _amountButton(context),
+                   ),
+                 ),
+               ),
+              const SizedBox(height: 16),
+
+              // Limit and charge info
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.03),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white.withOpacity(0.05)),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Ionicons.information_circle_outline,
+                          color: Colors.white.withOpacity(0.6),
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${Strings.limit.tr}: 100.00 - 100,000.00 USD',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(
+                          Ionicons.card_outline,
+                          color: Colors.white.withOpacity(0.6),
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${Strings.charge.tr}: 2.00 USD + 1%',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
-              Text(
-                '${Strings.limit.tr}: 1.00 -  100,000.00 USD',
-                style: TextStyle(
-                    fontSize: Dimensions.smallestTextSize * 0.8,
-                    fontWeight: FontWeight.w200,
-                    color: Colors.white.withOpacity(0.4)),
-              ),
-              SizedBox(
-                height: Dimensions.heightSize * 0.5,
-              ),
-              Text(
-                '${Strings.charge.tr}: 2.00 USD + 1%',
-                style: TextStyle(
-                    fontSize: Dimensions.smallestTextSize * 0.8,
-                    fontWeight: FontWeight.w200,
-                    color: Colors.white.withOpacity(0.4)),
-              )
             ],
           ),
         ),
@@ -183,16 +337,52 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen> {
     });
   }
 
-  _amountButton(BuildContext context, AddMoneyController controller) {
+  Widget _buildModernLabel(String text) {
+    return Row(
+      children: [
+        Container(
+          width: 4,
+          height: 16,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [CustomColor.successColor, Colors.green.shade400],
+            ),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ],
+    );
+  }
+
+  _amountButton(BuildContext context) {
     return Obx(() {
       return Container(
         width: MediaQuery.of(context).size.width * 0.20,
         decoration: BoxDecoration(
-          color: CustomColor.primaryColor,
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(Dimensions.radius),
-            bottomRight: Radius.circular(Dimensions.radius),
+          gradient: LinearGradient(
+            colors: [CustomColor.successColor, Colors.green.shade400],
           ),
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(16),
+            bottomRight: Radius.circular(16),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: CustomColor.successColor.withOpacity(0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -201,7 +391,7 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen> {
               controller.walletName.value,
               style: TextStyle(
                 color: Colors.white,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 fontSize: Dimensions.mediumTextSize,
               ),
             )
@@ -212,25 +402,60 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen> {
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context, AddMoneyController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: PrimaryButton(
-        title: Strings.addMoney.tr,
-        onPressed: () async {
-          if (formKey.currentState!.validate()) {
-            _showCardDetailsDialog(context, _walletViewModel!);
-          }
-        },
-        borderColorName: CustomColor.primaryColor,
+  _buttonWidget(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [CustomColor.successColor, Colors.green.shade400],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: CustomColor.successColor.withOpacity(0.4),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: PrimaryButton(
+          title: Strings.addMoney.tr,
+          onPressed: () async {
+            if (formKey.currentState!.validate()) {
+              _showCardDetailsDialog(context, _walletViewModel!);
+            }
+          },
+          borderColorName: Colors.transparent,
+        ),
       ),
     );
   }
 
-  _walletInfoWidget(BuildContext context, AddMoneyController controller) {
+  _walletInfoWidget(BuildContext context) {
     return Obx(() {
       return Container(
-        margin: const EdgeInsets.only(top: 15, left: 10, right: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              CustomColor.surfaceColor.withOpacity(0.8),
+              CustomColor.surfaceColor.withOpacity(0.6),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
         child: AddMoneyWalletInfoWidget(
           wallet: controller.walletName.value,
           gateWay: controller.gatewayName.value,
@@ -257,16 +482,46 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen> {
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: Text('Enter Card Details'),
+          backgroundColor: CustomColor.surfaceColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [CustomColor.successColor, Colors.green.shade400],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Ionicons.card_outline,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Enter Card Details',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
           content: Form(
             key: formKey,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextFormField(
+                  _buildModernTextField(
                     controller: cardNumberController,
-                    decoration: InputDecoration(labelText: 'Card Number'),
+                    labelText: 'Card Number',
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -278,10 +533,10 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen> {
                       return null;
                     },
                   ),
-                  TextFormField(
+                  const SizedBox(height: 16),
+                  _buildModernTextField(
                     controller: expiryDateController,
-                    decoration:
-                        InputDecoration(labelText: 'Expiry Date (MM/YY)'),
+                    labelText: 'Expiry Date (MM/YY)',
                     keyboardType: TextInputType.datetime,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -294,9 +549,10 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen> {
                       return null;
                     },
                   ),
-                  TextFormField(
+                  const SizedBox(height: 16),
+                  _buildModernTextField(
                     controller: cvvController,
-                    decoration: InputDecoration(labelText: 'CVV'),
+                    labelText: 'CVV',
                     keyboardType: TextInputType.number,
                     obscureText: true,
                     validator: (value) {
@@ -309,9 +565,10 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen> {
                       return null;
                     },
                   ),
-                  TextFormField(
+                  const SizedBox(height: 16),
+                  _buildModernTextField(
                     controller: cardHolderNameController,
-                    decoration: InputDecoration(labelText: 'Cardholder Name'),
+                    labelText: 'Cardholder Name',
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter cardholder name';
@@ -328,38 +585,62 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Cancel'),
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Colors.white.withOpacity(0.7)),
+              ),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                if (formKey.currentState!.validate()) {
-                  Navigator.pop(context); // Close the dialog
-                  Utils.showLoadingDialog(context);
-                  try {
-                    await walletViewModel.addMoney(
-                        double.parse(controller.amountController.text.trim()),
-                        controller.walletName.value);
-                    await _userProvider.fetchUserDetails();
-                    if (context.mounted) {
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [CustomColor.successColor, Colors.green.shade400],
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: () async {
+                  if (formKey.currentState!.validate()) {
+                    Navigator.pop(context); // Close the dialog
+                    Utils.showLoadingDialog(context);
+                    try {
+                      await walletViewModel.addMoney(
+                          double.parse(controller.amountController.text.trim()),
+                          controller.walletName.value);
+                      await _userProvider.fetchUserDetails();
+                      if (context.mounted) {
+                        Navigator.pop(context); // Close the loading dialog
+                        Utils.showDialogMessage(
+                          context,
+                          'Success',
+                          'Amount has been added to wallet!',
+                        );
+                        controller.amountController.clear();
+                      }
+                    } catch (error) {
                       Navigator.pop(context); // Close the loading dialog
                       Utils.showDialogMessage(
                         context,
-                        'Success',
-                        'Amount has been added to wallet!',
+                        'Error',
+                        'Something went wrong: $error',
                       );
-                      controller.amountController.clear();
                     }
-                  } catch (error) {
-                    Navigator.pop(context); // Close the loading dialog
-                    Utils.showDialogMessage(
-                      context,
-                      'Error',
-                      'Something went wrong: $error',
-                    );
                   }
-                }
-              },
-              child: Text('Submit'),
+                },
+                child: Text(
+                  'Submit',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
             ),
           ],
         );
@@ -367,10 +648,32 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _walletViewModel = Provider.of<WalletViewModel>(context, listen: false);
-    _userProvider = Provider.of<UserProvider>(context, listen: false);
+  Widget _buildModernTextField({
+    required TextEditingController controller,
+    required String labelText,
+    TextInputType? keyboardType,
+    bool obscureText = false,
+    String? Function(String?)? validator,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
+      ),
+      child: TextFormField(
+        controller: controller,
+        keyboardType: keyboardType,
+        obscureText: obscureText,
+        validator: validator,
+        style: TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          labelText: labelText,
+          labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.all(16),
+        ),
+      ),
+    );
   }
 }
