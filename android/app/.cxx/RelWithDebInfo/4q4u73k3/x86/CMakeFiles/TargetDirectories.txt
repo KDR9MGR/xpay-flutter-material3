@@ -1,0 +1,2 @@
+/Users/abdulrazak/Documents/Apps/xpay-flutter-material3/android/app/.cxx/RelWithDebInfo/4q4u73k3/x86/CMakeFiles/edit_cache.dir
+/Users/abdulrazak/Documents/Apps/xpay-flutter-material3/android/app/.cxx/RelWithDebInfo/4q4u73k3/x86/CMakeFiles/rebuild_cache.dir
