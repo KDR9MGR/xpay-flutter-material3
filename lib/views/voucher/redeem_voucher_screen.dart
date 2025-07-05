@@ -12,7 +12,7 @@ import '../../widgets/inputs/secondary_text_input_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class RedeemVoucherScreen extends StatelessWidget {
-  RedeemVoucherScreen({Key? key}) : super(key: key);
+  RedeemVoucherScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
 

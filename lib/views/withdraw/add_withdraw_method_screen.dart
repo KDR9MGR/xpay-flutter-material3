@@ -13,7 +13,7 @@ import '../../widgets/inputs/secondary_text_input_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class AddWithdrawMethodScreen extends StatelessWidget {
-  AddWithdrawMethodScreen({Key? key}) : super(key: key);
+  AddWithdrawMethodScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
 

@@ -10,7 +10,7 @@ import '../../widgets/notification_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class IndexScreen extends StatelessWidget {
-  const IndexScreen({Key? key}) : super(key: key);
+  const IndexScreen({super.key});
 
   @override
   Widget build(BuildContext context) => DefaultTabController(

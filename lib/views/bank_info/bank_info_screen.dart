@@ -9,7 +9,7 @@ import 'package:xpay/utils/strings.dart';
 import 'package:xpay/widgets/primary_appbar.dart';
 
 class BankInfoScreen extends StatelessWidget {
-  const BankInfoScreen({Key? key}) : super(key: key);
+  const BankInfoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +45,8 @@ class BankInfoScreen extends StatelessWidget {
         onPressed: () {
           _showAddBankAccountDialog(context, bankAccountsController);
         },
-        child: const Icon(Icons.add),
         backgroundColor: CustomColor.primaryColor,
+        child: const Icon(Icons.add),
       ),
     );
   }

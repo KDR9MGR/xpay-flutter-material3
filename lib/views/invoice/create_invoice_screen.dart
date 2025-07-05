@@ -14,7 +14,7 @@ import '../../widgets/inputs/secondary_text_input_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class CreateInvoiceScreen extends StatelessWidget {
-  CreateInvoiceScreen({Key? key}) : super(key: key);
+  CreateInvoiceScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
   final invoiceFormKey = GlobalKey<FormState>();

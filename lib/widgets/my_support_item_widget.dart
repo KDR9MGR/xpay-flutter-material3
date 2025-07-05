@@ -6,7 +6,7 @@ import '../utils/dimensions.dart';
 // transaction card widget
 class MySupportTicketsItemWidget extends StatelessWidget {
   const MySupportTicketsItemWidget({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.title,
     required this.dateAndTime,
@@ -14,7 +14,7 @@ class MySupportTicketsItemWidget extends StatelessWidget {
     required this.isSolved,
     required this.isRejected,
     required this.transactionNumber,
-  }) : super(key: key);
+  });
   final String imagePath;
   final String title;
   final String dateAndTime;

@@ -15,7 +15,7 @@ import '../../widgets/request_to_me_item_widget.dart';
 import '../auth/wallet_view_model.dart';
 
 class RequestToMeScreen extends StatefulWidget {
-  RequestToMeScreen({Key? key}) : super(key: key);
+  const RequestToMeScreen({super.key});
 
   @override
   State<RequestToMeScreen> createState() => _RequestToMeScreenState();

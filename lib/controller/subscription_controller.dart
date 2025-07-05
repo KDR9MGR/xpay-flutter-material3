@@ -48,24 +48,56 @@ class SubscriptionController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _initializeSubscriptionData();
+    // Check platform payment availability immediately (this doesn't require network)
     _checkPlatformPaymentAvailability();
+    
+    // Delay other initialization to ensure user authentication is ready
+    Future.delayed(Duration(milliseconds: 500), () {
+      _initializeSubscriptionData();
+    });
   }
 
   // Initialize subscription data
   Future<void> _initializeSubscriptionData() async {
     _isLoading.value = true;
     try {
-      if (useMoovPayments) {
-        await _loadMoovAccountId();
+      print('Initializing subscription data...');
+      
+      // Only try to load account IDs if user is authenticated
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        if (useMoovPayments) {
+          await _loadMoovAccountId();
+        } else {
+          await _loadCustomerId();
+        }
+        
+        // These methods should not fail the entire initialization
+        try {
+          await _checkSubscriptionStatus();
+        } catch (e) {
+          print('Warning: Could not check subscription status: $e');
+        }
+        
+        try {
+          await _loadSubscriptions();
+        } catch (e) {
+          print('Warning: Could not load subscriptions: $e');
+        }
+        
+        try {
+          await _loadPaymentMethods();
+        } catch (e) {
+          print('Warning: Could not load payment methods: $e');
+        }
       } else {
-        await _loadCustomerId();
+        print('User not authenticated, skipping account initialization');
       }
-      await _checkSubscriptionStatus();
-      await _loadSubscriptions();
-      await _loadPaymentMethods();
+      
+      print('Subscription data initialization completed');
     } catch (e) {
-      print('Error initializing subscription data: $e');
+      print('Error during subscription initialization: $e');
+      // Don't show error to user - they can still use the app
     } finally {
       _isLoading.value = false;
     }
@@ -86,7 +118,7 @@ class SubscriptionController extends GetxController {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
-        Get.snackbar('Error', 'Please log in to access subscription features');
+        print('User not authenticated, skipping Moov account creation');
         return;
       }
 
@@ -96,61 +128,79 @@ class SubscriptionController extends GetxController {
 
       if (userDoc.exists && userDoc.data()?['moovAccountId'] != null) {
         _moovAccountId.value = userDoc.data()!['moovAccountId'];
+        print('Loaded existing Moov account ID: ${_moovAccountId.value}');
       } else {
-        // Get user data for account creation
-        String email = user.email ?? 'user@example.com';
-        String firstName = 'User';
-        String lastName = '';
-        
-        // If user document exists, get name from there
-        if (userDoc.exists) {
-          final userData = userDoc.data()!;
-          firstName = userData['firstName'] ?? 'User';
-          lastName = userData['lastName'] ?? '';
-          email = userData['email'] ?? user.email ?? 'user@example.com';
-        } else {
-          // Parse display name if available
-          if (user.displayName != null && user.displayName!.isNotEmpty) {
-            final nameParts = user.displayName!.split(' ');
-            firstName = nameParts.first;
-            if (nameParts.length > 1) {
-              lastName = nameParts.sublist(1).join(' ');
-            }
-          }
-        }
-
-        // Create new Moov account
-        final accountResult = await _moovService.createAccount(
-          email: email,
-          firstName: firstName,
-          lastName: lastName,
-          phone: user.phoneNumber,
-          userId: user.uid,
-        );
-        
-        if (accountResult != null && accountResult['success'] == true) {
-          _moovAccountId.value = accountResult['accountId'];
-          // Save account ID to Firestore
-          if (userDoc.exists) {
-            await userDocRef.update({'moovAccountId': _moovAccountId.value});
-          } else {
-            // Create new user document if it doesn't exist
-            await userDocRef.set({
-              'userId': user.uid,
-              'email': email,
-              'firstName': firstName,
-              'lastName': lastName,
-              'moovAccountId': _moovAccountId.value,
-              'createdAt': FieldValue.serverTimestamp(),
-            });
-          }
-        } else {
-          throw Exception('Failed to create Moov account: ${accountResult?['error']}');
+        // Try to create new Moov account, but don't fail if it doesn't work
+        try {
+          await _createMoovAccount(user, userDocRef, userDoc);
+        } catch (e) {
+          print('Warning: Could not create Moov account: $e');
+          // Continue without Moov account - user can still use other features
         }
       }
     } catch (e) {
       print('Error loading Moov account ID: $e');
-      Get.snackbar('Error', 'Failed to initialize payment system. Please try again.');
+      // Don't throw error - allow app to continue
+    }
+  }
+
+  // Separate method to create Moov account
+  Future<void> _createMoovAccount(User user, DocumentReference userDocRef, DocumentSnapshot userDoc) async {
+    // Get user data for account creation
+    String email = user.email ?? 'user@example.com';
+    String firstName = 'User';
+    String lastName = '';
+    
+    // If user document exists, get name from there
+    if (userDoc.exists) {
+      final userData = userDoc.data() as Map<String, dynamic>?;
+      if (userData != null) {
+        firstName = userData['firstName'] ?? 'User';
+        lastName = userData['lastName'] ?? '';
+        email = userData['email'] ?? user.email ?? 'user@example.com';
+      }
+    } else {
+      // Parse display name if available
+      if (user.displayName != null && user.displayName!.isNotEmpty) {
+        final nameParts = user.displayName!.split(' ');
+        firstName = nameParts.first;
+        if (nameParts.length > 1) {
+          lastName = nameParts.sublist(1).join(' ');
+        }
+      }
+    }
+
+    print('Creating Moov account for user: $email');
+    
+    // Create new Moov account
+    final accountResult = await _moovService.createAccount(
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      phone: user.phoneNumber,
+      userId: user.uid,
+    );
+    
+    if (accountResult != null && accountResult['success'] == true) {
+      _moovAccountId.value = accountResult['accountId'];
+      print('Created Moov account: ${_moovAccountId.value}');
+      
+      // Save account ID to Firestore
+      if (userDoc.exists) {
+        await userDocRef.update({'moovAccountId': _moovAccountId.value});
+      } else {
+        // Create new user document if it doesn't exist
+        await userDocRef.set({
+          'userId': user.uid,
+          'email': email,
+          'firstName': firstName,
+          'lastName': lastName,
+          'moovAccountId': _moovAccountId.value,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } else {
+      throw Exception('Failed to create Moov account: ${accountResult?['error'] ?? 'Unknown error'}');
     }
   }
 
@@ -453,8 +503,6 @@ class SubscriptionController extends GetxController {
     }
   }
 
-
-
   // Navigate to subscription screen
   void navigateToSubscriptions() {
     Get.toNamed(Routes.subscriptionScreen);
@@ -468,5 +516,117 @@ class SubscriptionController extends GetxController {
   // Refresh all data
   Future<void> refreshData() async {
     await _initializeSubscriptionData();
+  }
+
+  // Process Google Pay subscription
+  Future<void> processGooglePaySubscription() async {
+    if (!_googlePayAvailable.value) {
+      Get.snackbar('Error', 'Google Pay is not available on this device');
+      return;
+    }
+
+    _isLoading.value = true;
+    try {
+      final plan = singlePlan;
+      if (plan == null) {
+        Get.snackbar('Error', 'Subscription plan not found');
+        return;
+      }
+
+      // Generate subscription ID
+      final subscriptionId = 'sub_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(1000)}';
+
+      // Process Google Pay payment
+      final paymentResult = await PlatformPaymentService.processGooglePaySubscription(
+        amount: plan['price'].toDouble(),
+        currency: plan['currency'],
+        subscriptionId: subscriptionId,
+      );
+
+      if (paymentResult != null && paymentResult['success'] == true) {
+        // Store subscription in Firestore
+        await _storeSubscriptionData({
+          'subscriptionId': subscriptionId,
+          'planId': singlePlanId,
+          'status': 'active',
+          'amount': plan['price'],
+          'currency': plan['currency'],
+          'interval': plan['interval'],
+          'userId': FirebaseAuth.instance.currentUser?.uid,
+          'moovAccountId': _moovAccountId.value,
+          'paymentMethod': 'google_pay',
+          'createdAt': FieldValue.serverTimestamp(),
+          'currentPeriodStart': DateTime.now(),
+          'currentPeriodEnd': DateTime.now().add(Duration(days: 30)),
+        });
+
+        await _initializeSubscriptionData(); // Refresh data
+        Get.back(); // Go back to previous screen
+        Get.snackbar('Success', 'Welcome to Super Payments! 🎉');
+      } else {
+        Get.snackbar('Error', 'Google Pay payment failed. Please try again.');
+      }
+    } catch (e) {
+      print('Error processing Google Pay subscription: $e');
+      Get.snackbar('Error', 'Failed to process Google Pay payment: $e');
+    } finally {
+      _isLoading.value = false;
+    }
+  }
+
+  // Process Apple Pay subscription
+  Future<void> processApplePaySubscription() async {
+    if (!_applePayAvailable.value) {
+      Get.snackbar('Error', 'Apple Pay is not available on this device');
+      return;
+    }
+
+    _isLoading.value = true;
+    try {
+      final plan = singlePlan;
+      if (plan == null) {
+        Get.snackbar('Error', 'Subscription plan not found');
+        return;
+      }
+
+      // Generate subscription ID
+      final subscriptionId = 'sub_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(1000)}';
+
+      // Process Apple Pay payment
+      final paymentResult = await PlatformPaymentService.processApplePaySubscription(
+        amount: plan['price'].toDouble(),
+        currency: plan['currency'],
+        subscriptionId: subscriptionId,
+      );
+
+      if (paymentResult != null && paymentResult['success'] == true) {
+        // Store subscription in Firestore
+        await _storeSubscriptionData({
+          'subscriptionId': subscriptionId,
+          'planId': singlePlanId,
+          'status': 'active',
+          'amount': plan['price'],
+          'currency': plan['currency'],
+          'interval': plan['interval'],
+          'userId': FirebaseAuth.instance.currentUser?.uid,
+          'moovAccountId': _moovAccountId.value,
+          'paymentMethod': 'apple_pay',
+          'createdAt': FieldValue.serverTimestamp(),
+          'currentPeriodStart': DateTime.now(),
+          'currentPeriodEnd': DateTime.now().add(Duration(days: 30)),
+        });
+
+        await _initializeSubscriptionData(); // Refresh data
+        Get.back(); // Go back to previous screen
+        Get.snackbar('Success', 'Welcome to Super Payments! 🎉');
+      } else {
+        Get.snackbar('Error', 'Apple Pay payment failed. Please try again.');
+      }
+    } catch (e) {
+      print('Error processing Apple Pay subscription: $e');
+      Get.snackbar('Error', 'Failed to process Apple Pay payment: $e');
+    } finally {
+      _isLoading.value = false;
+    }
   }
 } 

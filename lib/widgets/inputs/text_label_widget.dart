@@ -6,8 +6,7 @@ class TextLabelWidget extends StatelessWidget {
   final String text;
 
   const TextLabelWidget(
-      {Key? key, required this.text, this.color = Colors.white})
-      : super(key: key);
+      {super.key, required this.text, this.color = Colors.white});
   final Color? color;
 
   @override

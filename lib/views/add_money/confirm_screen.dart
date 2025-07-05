@@ -9,7 +9,7 @@ import '../../../../utils/strings.dart';
 import '../../controller/add_money_controller.dart';
 
 class ConfirmAddMoneyScreen extends StatelessWidget {
-  ConfirmAddMoneyScreen({Key? key}) : super(key: key);
+  ConfirmAddMoneyScreen({super.key});
   final dynamicPasswordFormKey = GlobalKey<FormState>();
 
   @override

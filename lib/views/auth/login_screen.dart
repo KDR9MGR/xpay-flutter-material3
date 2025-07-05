@@ -20,7 +20,7 @@ import '../../widgets/auth_nav_bar.dart';
 import '../../widgets/inputs/pin_and_password_input_widget.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -159,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
             validator: MultiValidator([
               RequiredValidator(errorText: 'Please enter an email address'),
               EmailValidator(errorText: 'Please enter a valid email address')
-            ]),
+            ]).call,
             color: CustomColor.secondaryColor,
           ),
           SizedBox(
@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   max: 16,
                   errorText:
                       'Password should be minimum 6 and max 16 characters')
-            ]),
+            ]).call,
             borderColor: CustomColor.primaryColor,
             color: CustomColor.secondaryColor,
           ),

@@ -6,13 +6,13 @@ import '../utils/dimensions.dart';
 // transaction card widget
 class AddMoneyHistoryItemWidget extends StatelessWidget {
   const AddMoneyHistoryItemWidget({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.title,
     required this.dateAndTime,
     required this.subTitle,
     required this.amount,
-  }) : super(key: key);
+  });
   final String imagePath;
   final String title;
   final String dateAndTime;

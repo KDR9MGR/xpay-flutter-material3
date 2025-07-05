@@ -6,13 +6,13 @@ import '../utils/dimensions.dart';
 // transaction card widget
 class WithdrawMethodItemWidget extends StatelessWidget {
   const WithdrawMethodItemWidget({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.title,
     required this.charge,
     required this.limit,
     required this.onTap,
-  }) : super(key: key);
+  });
   final String imagePath;
   final String title;
   final String limit;

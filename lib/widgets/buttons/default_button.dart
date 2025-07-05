@@ -4,8 +4,7 @@ import '../../utils/custom_color.dart';
 import '../../utils/custom_style.dart';
 
 class DefaultButton extends StatelessWidget {
-  const DefaultButton({Key? key, required this.title, required this.onPressed})
-      : super(key: key);
+  const DefaultButton({super.key, required this.title, required this.onPressed});
   final String title;
   final VoidCallback onPressed;
 

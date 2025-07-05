@@ -32,8 +32,15 @@ class StripeService {
 
   // Initialize Stripe
   static Future<void> init() async {
-    Stripe.publishableKey = StripeConfig.publishableKey;
-    await Stripe.instance.applySettings();
+    try {
+      print('Initializing Stripe service...');
+      Stripe.publishableKey = StripeConfig.publishableKey;
+      await Stripe.instance.applySettings();
+      print('Stripe service initialized successfully');
+    } catch (e) {
+      print('Error initializing Stripe service: $e');
+      // Don't throw error - allow app to continue without Stripe
+    }
   }
 
   // Helper method to get current user ID

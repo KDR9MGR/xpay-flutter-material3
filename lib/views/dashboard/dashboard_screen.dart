@@ -14,7 +14,7 @@ import '../../widgets/navigation_drawer_widget.dart';
 import '../../widgets/slider_widget.dart';
 
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();

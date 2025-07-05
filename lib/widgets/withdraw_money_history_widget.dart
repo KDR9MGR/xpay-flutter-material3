@@ -6,13 +6,13 @@ import '../utils/dimensions.dart';
 // transaction card widget
 class WithdrawHistoryItemWidget extends StatelessWidget {
   const WithdrawHistoryItemWidget({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.title,
     required this.dateAndTime,
     required this.subTitle,
     required this.amount,
-  }) : super(key: key);
+  });
   final String imagePath;
   final String title;
   final String dateAndTime;

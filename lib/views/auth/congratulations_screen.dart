@@ -9,7 +9,7 @@ import '../../utils/strings.dart';
 import '../../widgets/buttons/primary_button.dart';
 
 class CongratulationsScreen extends StatelessWidget {
-  const CongratulationsScreen({Key? key}) : super(key: key);
+  const CongratulationsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

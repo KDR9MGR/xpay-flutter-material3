@@ -13,7 +13,7 @@ import '../../widgets/primary_appbar.dart';
 import '../../widgets/size_widget.dart';
 
 class ChangeLanguageScreen extends StatelessWidget {
-  ChangeLanguageScreen({Key? key}) : super(key: key);
+  ChangeLanguageScreen({super.key});
 
   final _controller = Get.put(SettingsController());
 

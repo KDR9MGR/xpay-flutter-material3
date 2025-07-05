@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class IconBoxButton extends StatelessWidget {
   const IconBoxButton({
-    Key? key,
+    super.key,
     required this.icon,
     this.onPressed,
-  }) : super(key: key);
+  });
   final IconData icon;
   final VoidCallback? onPressed;
 

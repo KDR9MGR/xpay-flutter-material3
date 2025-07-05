@@ -18,7 +18,7 @@ class MultiLineTextFieldInputWidget extends StatelessWidget {
   final VoidCallback? onTap;
 
   const MultiLineTextFieldInputWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hintText,
     this.keyboardType,
@@ -29,7 +29,7 @@ class MultiLineTextFieldInputWidget extends StatelessWidget {
     this.borderColor = CustomColor.primaryColor,
     this.suffixIcon,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

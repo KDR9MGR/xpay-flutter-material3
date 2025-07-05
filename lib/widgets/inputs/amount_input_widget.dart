@@ -18,7 +18,7 @@ class AmountInputWidget extends StatelessWidget {
   final VoidCallback? onTap;
 
   const AmountInputWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hintText,
     this.keyboardType = TextInputType.number,
@@ -30,7 +30,7 @@ class AmountInputWidget extends StatelessWidget {
     this.borderColor = CustomColor.primaryColor,
     this.suffixIcon,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

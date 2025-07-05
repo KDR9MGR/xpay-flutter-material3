@@ -1,8 +1,9 @@
 class MoovConfig {
-  // Moov API credentials
-  static const String apiKey = 'stGOlQhih6BdxYhV';
+  // Moov API credentials - Use environment variables in production
+  static String get apiKey => const String.fromEnvironment('MOOV_API_KEY', defaultValue: 'stGOlQhih6BdxYhV');
   static const String baseUrl = 'https://api.moov.io';
-  static const bool isProduction = false; // Set to true for production
+  static const bool isProduction = true;
+  static const bool testMode = false;
   
   // Subscription details
   static const Map<String, Map<String, dynamic>> subscriptionPlans = {
@@ -28,7 +29,7 @@ class MoovConfig {
   
   // Google Pay configuration
   static const Map<String, dynamic> googlePayConfig = {
-    'environment': 'TEST', // Change to 'PRODUCTION' for live
+    'environment': 'PRODUCTION',
     'apiVersion': 2,
     'apiVersionMinor': 0,
     'allowedPaymentMethods': [
@@ -42,20 +43,20 @@ class MoovConfig {
           'type': 'PAYMENT_GATEWAY',
           'parameters': {
             'gateway': 'moov',
-            'gatewayMerchantId': 'your_moov_merchant_id'
+            'gatewayMerchantId': String.fromEnvironment('MOOV_MERCHANT_ID')
           }
         }
       }
     ],
     'merchantInfo': {
-      'merchantId': '12345678901234567890',
+      'merchantId': String.fromEnvironment('GOOGLE_PAY_MERCHANT_ID'),
       'merchantName': 'XPay Digital Payments'
     }
   };
   
   // Apple Pay configuration
   static const Map<String, dynamic> applePayConfig = {
-    'merchantIdentifier': 'merchant.com.getdigitalpayments.xpay',
+    'merchantIdentifier': String.fromEnvironment('APPLE_PAY_MERCHANT_ID', defaultValue: 'merchant.com.getdigitalpayments.xpay'),
     'displayName': 'XPay Digital Payments',
     'countryCode': 'US',
     'currencyCode': 'USD',

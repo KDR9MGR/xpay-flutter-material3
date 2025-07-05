@@ -9,7 +9,7 @@ import '../../../../utils/dimensions.dart';
 import '../../../../utils/strings.dart';
 
 class ConfirmCreateVoucherCodeOutScreen extends StatelessWidget {
-  ConfirmCreateVoucherCodeOutScreen({Key? key}) : super(key: key);
+  ConfirmCreateVoucherCodeOutScreen({super.key});
   final dynamicPasswordFormKey = GlobalKey<FormState>();
 
   @override

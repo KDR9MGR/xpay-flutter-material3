@@ -15,7 +15,7 @@ import '../../widgets/make_payment_wallet_info_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class MakePaymentScreen extends StatelessWidget {
-  MakePaymentScreen({Key? key}) : super(key: key);
+  MakePaymentScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
   final controller = Get.put(PaymentController());

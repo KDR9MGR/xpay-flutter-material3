@@ -14,7 +14,7 @@ import '../../widgets/inputs/dropdown_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class CreateVoucherScreen extends StatelessWidget {
-  CreateVoucherScreen({Key? key}) : super(key: key);
+  CreateVoucherScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
 

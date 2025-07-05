@@ -9,11 +9,11 @@ class SuperFastAnimatedBackground extends StatefulWidget {
   final BorderRadius? borderRadius;
   
   const SuperFastAnimatedBackground({
-    Key? key,
+    super.key,
     required this.child,
     this.height = 200,
     this.borderRadius,
-  }) : super(key: key);
+  });
 
   @override
   State<SuperFastAnimatedBackground> createState() => _SuperFastAnimatedBackgroundState();
@@ -135,10 +135,10 @@ class VideoBackgroundWidget extends StatefulWidget {
   final Widget child;
   
   const VideoBackgroundWidget({
-    Key? key,
+    super.key,
     required this.videoPath,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   State<VideoBackgroundWidget> createState() => _VideoBackgroundWidgetState();
@@ -261,10 +261,10 @@ class SimpleVideoWidget extends StatefulWidget {
   final BorderRadius? borderRadius;
   
   const SimpleVideoWidget({
-    Key? key,
+    super.key,
     this.height = 200,
     this.borderRadius,
-  }) : super(key: key);
+  });
 
   @override
   State<SimpleVideoWidget> createState() => _SimpleVideoWidgetState();
@@ -431,10 +431,10 @@ class YouTubeVideoWidget extends StatefulWidget {
   final BorderRadius? borderRadius;
   
   const YouTubeVideoWidget({
-    Key? key,
+    super.key,
     this.height = 200,
     this.borderRadius,
-  }) : super(key: key);
+  });
 
   @override
   State<YouTubeVideoWidget> createState() => _YouTubeVideoWidgetState();

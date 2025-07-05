@@ -12,7 +12,7 @@ import '../../widgets/inputs/text_label_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class CreateSupportTicketScreen extends StatelessWidget {
-  CreateSupportTicketScreen({Key? key}) : super(key: key);
+  CreateSupportTicketScreen({super.key});
   final formKey = GlobalKey<FormState>();
 
   @override

@@ -16,7 +16,7 @@ class PinAndPasswordInputWidget extends StatefulWidget {
   final Color borderColor;
 
   const PinAndPasswordInputWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hintText,
     this.keyboardType,
@@ -26,7 +26,7 @@ class PinAndPasswordInputWidget extends StatefulWidget {
     this.enabledBorderWidth = 2,
     this.color = Colors.white,
     this.borderColor = CustomColor.primaryColor,
-  }) : super(key: key);
+  });
 
   @override
   PinAndPasswordInputWidgetState createState() =>

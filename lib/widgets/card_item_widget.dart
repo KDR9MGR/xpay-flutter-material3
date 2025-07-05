@@ -7,11 +7,10 @@ import '../utils/strings.dart';
 
 class CardItemWidget extends StatelessWidget {
   const CardItemWidget(
-      {Key? key,
+      {super.key,
       required this.cardNumber,
       required this.isSelected,
-      this.onTap})
-      : super(key: key);
+      this.onTap});
 
   final String cardNumber;
   final bool isSelected;

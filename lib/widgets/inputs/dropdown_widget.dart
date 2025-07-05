@@ -17,7 +17,7 @@ class DropDownInputWidget extends StatefulWidget {
   final double width;
 
   const DropDownInputWidget({
-    Key? key,
+    super.key,
     required this.hintText,
     this.readOnly = false,
     this.focusedBorderWidth = 1,
@@ -28,7 +28,7 @@ class DropDownInputWidget extends StatefulWidget {
     required this.onChanged,
     this.value,
     this.width = double.infinity,
-  }) : super(key: key);
+  });
 
   @override
   State<DropDownInputWidget> createState() => _DropDownInputWidgetState();

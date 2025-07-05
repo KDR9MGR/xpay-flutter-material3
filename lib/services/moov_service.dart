@@ -1,8 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:io';
-import 'package:get/get.dart';
 import '../config/moov_config.dart';
 
 class MoovService {
@@ -38,7 +35,23 @@ class MoovService {
     String? phone,
     required String userId,
   }) async {
+    // In test mode, return a mock account ID
+    if (MoovConfig.testMode) {
+      print('Test mode: Creating mock Moov account for: $email');
+      await Future.delayed(Duration(milliseconds: 500)); // Simulate network delay
+      return {
+        'success': true,
+        'accountId': 'test_account_${userId.substring(0, 8)}',
+        'data': {
+          'accountID': 'test_account_${userId.substring(0, 8)}',
+          'status': 'active',
+        },
+      };
+    }
+    
     try {
+      print('Creating Moov account for: $email');
+      
       final response = await http.post(
         Uri.parse('$_baseUrl/accounts'),
         headers: _headers,
@@ -63,27 +76,40 @@ class MoovService {
           'capabilities': ['transfers', 'send-funds', 'collect-funds'],
           'foreignId': userId,
         }),
-      );
+      ).timeout(Duration(seconds: 10)); // Add timeout
 
+      print('Moov API response: ${response.statusCode}');
+      
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = jsonDecode(response.body);
+        print('Moov account created successfully: ${data['accountID']}');
         return {
           'success': true,
           'accountId': data['accountID'],
           'data': data,
         };
       } else {
-        print('Error creating account: ${response.statusCode} - ${response.body}');
+        print('Moov API error: ${response.statusCode} - ${response.body}');
         return {
           'success': false,
-          'error': 'Failed to create account: ${response.reasonPhrase}',
+          'error': 'API Error: ${response.statusCode} - ${response.reasonPhrase}',
         };
       }
     } catch (e) {
       print('Error creating Moov account: $e');
+      String errorMessage = 'Network error';
+      
+      if (e.toString().contains('TimeoutException')) {
+        errorMessage = 'Request timeout - please check your internet connection';
+      } else if (e.toString().contains('SocketException')) {
+        errorMessage = 'Network connection failed';
+      } else if (e.toString().contains('FormatException')) {
+        errorMessage = 'Invalid response format';
+      }
+      
       return {
         'success': false,
-        'error': 'Network error: $e',
+        'error': errorMessage,
       };
     }
   }

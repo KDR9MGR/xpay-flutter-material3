@@ -11,7 +11,7 @@ import '../../widgets/onboard/onboard_content_widget.dart';
 import '../../widgets/size_widget.dart';
 
 class OnboardScreen extends StatelessWidget {
-  const OnboardScreen({Key? key}) : super(key: key);
+  const OnboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class OnboardScreen extends StatelessWidget {
             SizedBox(
               height: MediaQuery.of(context).size.height / 1.4,
               child: PageView.builder(
-                onPageChanged: controller.selectedPageIndex,
+                onPageChanged: controller.selectedPageIndex.call,
                 controller: controller.pageController,
                 itemCount: onBoardModePages.length,
                 itemBuilder: (context, index) => OnboardContentWidget(

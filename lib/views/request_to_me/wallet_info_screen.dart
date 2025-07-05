@@ -10,7 +10,7 @@ import '../../widgets/buttons/primary_button.dart';
 import '../../widgets/primary_appbar.dart';
 
 class RequestToMeWalletInfoScreen extends StatelessWidget {
-  RequestToMeWalletInfoScreen({Key? key}) : super(key: key);
+  RequestToMeWalletInfoScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
 

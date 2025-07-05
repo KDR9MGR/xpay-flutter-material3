@@ -6,7 +6,7 @@ import '../utils/dimensions.dart';
 import '../utils/strings.dart';
 
 class SliderWidget extends StatelessWidget {
-  const SliderWidget({Key? key}) : super(key: key);
+  const SliderWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

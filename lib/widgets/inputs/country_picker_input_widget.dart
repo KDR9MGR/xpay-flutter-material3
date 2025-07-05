@@ -8,12 +8,12 @@ import '../../utils/dimensions.dart';
 
 class ProfileCountryCodePickerWidget extends StatelessWidget {
   const ProfileCountryCodePickerWidget({
-    Key? key,
+    super.key,
     required this.hintText,
     required this.controller,
     this.keyboardType,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   final String hintText;
   final TextEditingController controller;

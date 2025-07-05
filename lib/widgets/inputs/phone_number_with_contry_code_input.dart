@@ -12,11 +12,10 @@ class PhoneNumberWithCountryCodeInput extends StatelessWidget {
   final bool? readOnly;
   final TextEditingController controller;
 
-  const PhoneNumberWithCountryCodeInput({Key? key,
+  const PhoneNumberWithCountryCodeInput({super.key,
     this.validator,
     this.readOnly = false,
-    required this.controller})
-      : super(key: key);
+    required this.controller});
 
   @override
   Widget build(BuildContext context) {

@@ -7,13 +7,13 @@ import '../utils/strings.dart';
 
 class MoneyOutWalletInfoWidget extends StatelessWidget {
   const MoneyOutWalletInfoWidget({
-    Key? key,
+    super.key,
     required this.agent,
     required this.wallet,
     required this.transferAmount,
     required this.totalCharge,
     required this.payableAmount,
-  }) : super(key: key);
+  });
 
   final String agent;
   final String wallet;

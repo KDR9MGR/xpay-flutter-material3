@@ -11,7 +11,7 @@ import '../../utils/strings.dart';
 import '../../widgets/auth_nav_bar.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({Key? key}) : super(key: key);
+  const OtpScreen({super.key});
 
   @override
   OtpScreenState createState() => OtpScreenState();
@@ -116,7 +116,7 @@ class OtpScreenState extends State<OtpScreen> {
             height: Dimensions.heightSize,
           ),
           Text(
-            Strings.otpInfoMessage.tr + 'demouser@gmail.com',
+            '${Strings.otpInfoMessage.tr}demouser@gmail.com',
             style: TextStyle(
               color: CustomColor.primaryTextColor.withValues(alpha: 0.6),
               fontSize: Dimensions.mediumTextSize,

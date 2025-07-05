@@ -15,7 +15,7 @@ import '../../utils/strings.dart';
 import '../../widgets/auth_nav_bar.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
-  const ForgetPasswordScreen({Key? key}) : super(key: key);
+  const ForgetPasswordScreen({super.key});
 
   @override
   ForgetPasswordScreenState createState() => ForgetPasswordScreenState();
@@ -88,7 +88,7 @@ class ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               validator: MultiValidator([
                 RequiredValidator(errorText: 'Please enter an email address'),
                 EmailValidator(errorText: 'Please enter a valid email address')
-              ]),
+              ]).call,
               hintText: Strings.enterEmailHint.tr,
               borderColor: CustomColor.primaryColor,
               color: CustomColor.secondaryColor,

@@ -6,13 +6,13 @@ import '../utils/dimensions.dart';
 // transaction card widget
 class InvoiceItemWidget extends StatelessWidget {
   const InvoiceItemWidget({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.title,
     required this.dateAndTime,
     required this.subTitle,
     required this.isPaid,
-  }) : super(key: key);
+  });
   final String imagePath;
   final String title;
   final String dateAndTime;

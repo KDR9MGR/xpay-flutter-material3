@@ -12,7 +12,7 @@ import '../../utils/strings.dart';
 import '../../widgets/auth_nav_bar.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({Key? key}) : super(key: key);
+  const ResetPasswordScreen({super.key});
 
   @override
   ResetPasswordScreenState createState() => ResetPasswordScreenState();

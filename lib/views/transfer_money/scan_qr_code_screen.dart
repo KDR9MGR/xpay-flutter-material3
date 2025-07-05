@@ -11,7 +11,7 @@ import '../../utils/strings.dart';
 import '../../widgets/primary_appbar.dart';
 
 class TransferMoneyScanQrCodeScreen extends StatefulWidget {
-  const TransferMoneyScanQrCodeScreen({Key? key}) : super(key: key);
+  const TransferMoneyScanQrCodeScreen({super.key});
 
   @override
   TransferMoneyScanQrCodeScreenState createState() =>

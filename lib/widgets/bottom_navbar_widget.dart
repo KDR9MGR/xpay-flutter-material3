@@ -7,8 +7,8 @@ import '../../utils/strings.dart';
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final controller = Get.find<NavigationController>();
 
   @override

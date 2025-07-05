@@ -7,14 +7,14 @@ import '../utils/strings.dart';
 
 class RequestMoneyWalletInfoWidget extends StatelessWidget {
   const RequestMoneyWalletInfoWidget({
-    Key? key,
+    super.key,
     required this.merchant,
     required this.wallet,
     required this.transferAmount,
     required this.totalCharge,
     required this.youWillGet,
     required this.note,
-  }) : super(key: key);
+  });
 
   final String merchant;
   final String wallet;

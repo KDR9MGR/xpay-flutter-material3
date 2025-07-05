@@ -6,13 +6,13 @@ import '../utils/dimensions.dart';
 // transaction card widget
 class VoucherItemWidget extends StatelessWidget {
   const VoucherItemWidget({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.title,
     required this.dateAndTime,
     required this.subTitle,
     required this.isUsed,
-  }) : super(key: key);
+  });
   final String imagePath;
   final String title;
   final String dateAndTime;

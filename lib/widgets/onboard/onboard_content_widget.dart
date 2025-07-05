@@ -6,10 +6,10 @@ import '../../utils/custom_style.dart';
 
 class OnboardContentWidget extends StatelessWidget {
   const OnboardContentWidget({
-    Key? key,
+    super.key,
     required this.image,
     required this.title,
-  }) : super(key: key);
+  });
 
   final String image, title;
 

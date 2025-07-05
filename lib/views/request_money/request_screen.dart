@@ -21,7 +21,7 @@ import '../../widgets/request_money_wallet_info_widget.dart';
 import '../auth/wallet_view_model.dart';
 
 class RequestMoneyScreen extends StatefulWidget {
-  RequestMoneyScreen({Key? key}) : super(key: key);
+  const RequestMoneyScreen({super.key});
 
   @override
   State<RequestMoneyScreen> createState() => _RequestMoneyScreenState();
@@ -239,7 +239,7 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
                   validator: MultiValidator([
                     RequiredValidator(errorText: 'Enter an email address'),
                     EmailValidator(errorText: 'Enter a valid email address')
-                  ]),
+                  ]).call,
                   hintText: 'Enter email address',
                   color: Colors.transparent,
                   suffixIcon: Ionicons.mail_outline,
@@ -282,7 +282,7 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
                   validator: MultiValidator([
                     RequiredValidator(errorText: 'Please enter an amount'),
                     MinValueValidator(5, errorText: 'Minimum amount is 5')
-                  ]),
+                  ]).call,
                   controller: controller.amountController,
                   color: Colors.transparent,
                   suffixIcon: _amountButton(context, controller),

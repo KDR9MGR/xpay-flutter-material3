@@ -18,7 +18,7 @@ import '../../widgets/primary_appbar.dart';
 import '../../widgets/wallet_info_widget.dart';
 
 class TransferMoneyScreen extends StatefulWidget {
-  TransferMoneyScreen({Key? key}) : super(key: key);
+  const TransferMoneyScreen({super.key});
 
   @override
   State<TransferMoneyScreen> createState() => _TransferMoneyScreenState();
@@ -233,7 +233,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
                   validator: MultiValidator([
                     RequiredValidator(errorText: 'Enter receiver email'),
                     EmailValidator(errorText: 'Enter a valid email address')
-                  ]),
+                  ]).call,
                   hintText: 'Enter receiver email address',
                   color: Colors.transparent,
                   suffixIcon: Ionicons.qr_code_outline,
@@ -280,7 +280,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
                     MinValueValidator(5, errorText: 'Minimum amount is 5.00'),
                     MaxValueValidator(2500,
                         errorText: 'Maximum amount is 2500.00')
-                  ]),
+                  ]).call,
                   controller: controller.amountController,
                   color: Colors.transparent,
                   suffixIcon: _amountButton(context),

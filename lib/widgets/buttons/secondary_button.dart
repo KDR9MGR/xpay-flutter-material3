@@ -5,12 +5,12 @@ import '../../utils/dimensions.dart';
 
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
-    Key? key,
+    super.key,
     required this.title,
     required this.onPressed,
     required this.borderColorName,
     required this.borderWidth,
-  }) : super(key: key);
+  });
   final String title;
   final VoidCallback onPressed;
   final Color borderColorName;

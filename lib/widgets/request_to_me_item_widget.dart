@@ -6,7 +6,7 @@ import '../utils/dimensions.dart';
 // transaction card widget
 class RequestToMeItemWidget extends StatelessWidget {
   const RequestToMeItemWidget({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.title,
     required this.dateAndTime,
@@ -15,7 +15,7 @@ class RequestToMeItemWidget extends StatelessWidget {
     required this.isRejected,
     required this.isCanceled,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final String imagePath;
   final String title;

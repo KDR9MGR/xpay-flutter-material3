@@ -7,12 +7,12 @@ import '../utils/strings.dart';
 
 class CurrencyExchangeInfoWidget extends StatelessWidget {
   const CurrencyExchangeInfoWidget({
-    Key? key,
+    super.key,
     required this.fromCurrency,
     required this.toCurrency,
     required this.fromCurrencyAmount,
     required this.toCurrencyAmount,
-  }) : super(key: key);
+  });
 
   final String fromCurrency;
   final String toCurrency;

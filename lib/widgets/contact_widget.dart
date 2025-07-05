@@ -7,11 +7,11 @@ import '../utils/strings.dart';
 
 class ContactWidget extends StatelessWidget {
   const ContactWidget({
-    Key? key,
+    super.key,
     required this.personName,
     required this.phoneNumber,
     required this.isFavorite,
-  }) : super(key: key);
+  });
   final String personName;
   final String phoneNumber;
   final bool isFavorite;

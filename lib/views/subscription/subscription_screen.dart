@@ -3,14 +3,12 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import '../../controller/subscription_controller.dart';
-import '../../services/platform_payment_service.dart';
 import '../../utils/custom_color.dart';
 import '../../utils/custom_style.dart';
 import '../../utils/dimensions.dart';
-import '../../widgets/buttons/primary_button.dart';
 
 class SubscriptionScreen extends StatelessWidget {
-  const SubscriptionScreen({Key? key}) : super(key: key);
+  const SubscriptionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +151,7 @@ class SubscriptionScreen extends StatelessWidget {
         color: CustomColor.surfaceColor,
         borderRadius: BorderRadius.circular(Dimensions.radius * 2),
         border: Border.all(
-          color: CustomColor.primaryColor.withOpacity(0.3),
+          color: CustomColor.primaryColor.withValues(alpha: 0.3),
           width: 1,
         ),
         boxShadow: [
@@ -210,7 +208,7 @@ class SubscriptionScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(Dimensions.defaultPaddingSize * 0.8),
             decoration: BoxDecoration(
-              color: CustomColor.primaryColor.withOpacity(0.1),
+              color: CustomColor.primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(Dimensions.radius),
             ),
             child: Row(
@@ -392,7 +390,7 @@ class SubscriptionScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            )).toList(),
+            )),
           ],
         ],
       ),
@@ -468,7 +466,7 @@ class SubscriptionScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            )).toList(),
+            )),
           ],
         ],
       ),
@@ -486,13 +484,13 @@ class SubscriptionScreen extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            CustomColor.primaryColor.withOpacity(0.1),
-            CustomColor.secondaryColor.withOpacity(0.05),
+            CustomColor.primaryColor.withValues(alpha: 0.1),
+            CustomColor.secondaryColor.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(Dimensions.radius * 2),
         border: Border.all(
-          color: CustomColor.primaryColor.withOpacity(0.2),
+          color: CustomColor.primaryColor.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -505,7 +503,7 @@ class SubscriptionScreen extends StatelessWidget {
           ),
           SizedBox(height: Dimensions.heightSize * 2),
           Text(
-            plan?['name'] ?? 'Upgrade to Premium',
+            plan?['name'] ?? 'Super Payments',
             style: CustomStyle.commonLargeTextTitleWhite.copyWith(
               fontSize: Dimensions.largeTextSize + 2,
             ),
@@ -513,7 +511,7 @@ class SubscriptionScreen extends StatelessWidget {
           ),
           SizedBox(height: Dimensions.heightSize),
           Text(
-            plan?['description'] ?? 'Unlock all premium features',
+            plan?['description'] ?? 'Get Coupons, Brand Deals and Discounts on various brands',
             style: CustomStyle.commonSubTextTitle,
             textAlign: TextAlign.center,
           ),
@@ -576,37 +574,53 @@ class SubscriptionScreen extends StatelessWidget {
             SizedBox(height: Dimensions.heightSize * 2),
           ],
           
-          // Payment options
+          // Payment options - Google Pay and Apple Pay ONLY
           if (!isLoading) ...[
-            // Platform payment button (Google Pay / Apple Pay)
-            if (controller.googlePayAvailable || controller.applePayAvailable) ...[
-              PlatformPaymentService.getPlatformPaymentButton(
-                onPressed: () => controller.subscribeToPremium(),
-                amount: plan?['price']?.toDouble() ?? 1.99,
-                currency: plan?['currency'] ?? 'USD',
-              ),
-              SizedBox(height: Dimensions.heightSize),
-              Text(
-                'or',
-                style: CustomStyle.commonSubTextTitle,
-                textAlign: TextAlign.center,
-              ),
+            // Google Pay button (Android)
+            if (controller.googlePayAvailable) ...[
+              _buildGooglePayButton(controller, plan),
               SizedBox(height: Dimensions.heightSize),
             ],
             
-            // Regular subscription button
-            SizedBox(
-              width: double.infinity,
-              child: PrimaryButton(
-                title: controller.useMoovPayments 
-                  ? 'Subscribe with Card'
-                  : 'Subscribe for \$${plan?['price'] ?? 1.99}/${plan?['interval'] ?? 'month'}',
-                onPressed: () => controller.useMoovPayments 
-                  ? controller.navigateToSubscriptionPlans()
-                  : controller.subscribeToPremium(),
-                borderColorName: CustomColor.primaryColor,
+            // Apple Pay button (iOS)
+            if (controller.applePayAvailable) ...[
+              _buildApplePayButton(controller, plan),
+              SizedBox(height: Dimensions.heightSize),
+            ],
+            
+            // No payment method available message
+            if (!controller.googlePayAvailable && !controller.applePayAvailable) ...[
+              Container(
+                padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
+                decoration: BoxDecoration(
+                  color: Colors.orange.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(Dimensions.radius),
+                  border: Border.all(color: Colors.orange),
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.payment_outlined,
+                      color: Colors.orange,
+                      size: 32.r,
+                    ),
+                    SizedBox(height: Dimensions.heightSize),
+                    Text(
+                      'Payment Not Available',
+                      style: CustomStyle.commonTextTitle.copyWith(
+                        color: Colors.orange,
+                      ),
+                    ),
+                    SizedBox(height: Dimensions.heightSize * 0.5),
+                    Text(
+                      'Google Pay or Apple Pay is required for subscriptions. Please ensure you have a payment method set up in your device settings.',
+                      style: CustomStyle.commonSubTextTitle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           ] else ...[
             // Loading state
             Container(
@@ -626,7 +640,7 @@ class SubscriptionScreen extends StatelessWidget {
           
           SizedBox(height: Dimensions.heightSize),
           Text(
-            'Powered by Moov.io payments',
+            'Secure payments powered by Moov.io',
             style: CustomStyle.commonSubTextTitle.copyWith(
               fontSize: Dimensions.smallTextSize - 2,
               color: Colors.grey,
@@ -634,6 +648,81 @@ class SubscriptionScreen extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildGooglePayButton(SubscriptionController controller, Map<String, dynamic>? plan) {
+    return SizedBox(
+      width: double.infinity,
+      height: 50.h,
+      child: ElevatedButton(
+        onPressed: () => controller.processGooglePaySubscription(),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Dimensions.radius),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/google_pay_logo.png',
+              height: 24.h,
+              width: 24.w,
+              errorBuilder: (context, error, stackTrace) => Icon(
+                Icons.payment,
+                color: Colors.white,
+                size: 24.r,
+              ),
+            ),
+            SizedBox(width: Dimensions.widthSize),
+            Text(
+              'Pay with Google Pay',
+              style: CustomStyle.commonTextTitle.copyWith(
+                color: Colors.white,
+                fontSize: Dimensions.mediumTextSize,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildApplePayButton(SubscriptionController controller, Map<String, dynamic>? plan) {
+    return SizedBox(
+      width: double.infinity,
+      height: 50.h,
+      child: ElevatedButton(
+        onPressed: () => controller.processApplePaySubscription(),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Dimensions.radius),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.apple,
+              color: Colors.white,
+              size: 24.r,
+            ),
+            SizedBox(width: Dimensions.widthSize),
+            Text(
+              'Pay with Apple Pay',
+              style: CustomStyle.commonTextTitle.copyWith(
+                color: Colors.white,
+                fontSize: Dimensions.mediumTextSize,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

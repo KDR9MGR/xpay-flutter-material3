@@ -259,8 +259,6 @@ class LocalString extends Translations {
           Strings.status: English.status,
           Strings.attachments: English.attachments,
           Strings.fillTheInfo: English.fillTheInfo,
-
-          // Strings.appName: English.appName,
         },
         //Spanish
         'sp_SP': {

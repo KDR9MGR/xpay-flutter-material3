@@ -148,10 +148,6 @@ class DashboardController extends GetxController {
     Get.toNamed(Routes.verifyAccountScreen);
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   Future<void> signOut() async {
     try {

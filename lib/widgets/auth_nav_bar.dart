@@ -6,10 +6,10 @@ import '../utils/dimensions.dart';
 
 class AuthNavBarWidget extends StatelessWidget {
   const AuthNavBarWidget({
-    Key? key,
+    super.key,
     required this.title,
     this.onPressed,
-  }) : super(key: key);
+  });
   final String title;
   final VoidCallback? onPressed;
 

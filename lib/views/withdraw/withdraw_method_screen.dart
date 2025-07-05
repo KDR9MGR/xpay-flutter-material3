@@ -10,7 +10,7 @@ import '../../widgets/primary_appbar.dart';
 import '../../widgets/withdraw_method_widget.dart';
 
 class WithdrawScreen extends StatelessWidget {
-  WithdrawScreen({Key? key}) : super(key: key);
+  WithdrawScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
 

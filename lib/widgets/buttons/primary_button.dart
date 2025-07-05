@@ -5,7 +5,7 @@ import '../../utils/custom_color.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
-    Key? key,
+    super.key,
     required this.title,
     required this.onPressed,
     this.borderColorName = CustomColor.appBarColor,
@@ -13,7 +13,7 @@ class PrimaryButton extends StatelessWidget {
     this.height,
     this.buttonColor = CustomColor.appBarColor,
     this.buttonTextColor = Colors.white,
-  }) : super(key: key);
+  });
   final String title;
   final VoidCallback onPressed;
   final Color borderColorName;

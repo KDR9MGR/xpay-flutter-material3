@@ -18,7 +18,7 @@ class SecondaryTextInputWidget extends StatelessWidget {
   final VoidCallback? onTap;
 
   const SecondaryTextInputWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hintText,
     this.keyboardType,
@@ -30,7 +30,7 @@ class SecondaryTextInputWidget extends StatelessWidget {
     this.borderColor = CustomColor.primaryColor,
     this.suffixIcon,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

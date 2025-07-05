@@ -22,7 +22,7 @@ import '../../widgets/snackbar/custom_snackbar.dart';
 import '../auth/user_provider.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
-  UpdateProfileScreen({Key? key}) : super(key: key);
+  const UpdateProfileScreen({super.key});
 
   @override
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
@@ -182,7 +182,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             TextLabelWidget(text: Strings.address.tr),
             TextFieldInputWidget(
               validator:
-                  RequiredValidator(errorText: 'Please enter an address'),
+                  RequiredValidator(errorText: 'Please enter an address').call,
               controller: controller.addressController,
               hintText: Strings.addressHint.tr,
               borderColor: CustomColor.primaryColor,
@@ -200,7 +200,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       TextLabelWidget(text: Strings.state.tr),
                       TextFieldInputWidget(
                         validator: RequiredValidator(
-                            errorText: 'Please enter a State'),
+                            errorText: 'Please enter a State').call,
                         controller: controller.stateController,
                         hintText: Strings.state.tr,
                         borderColor: CustomColor.primaryColor,
@@ -219,7 +219,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       TextLabelWidget(text: Strings.city.tr),
                       TextFieldInputWidget(
                         validator:
-                            RequiredValidator(errorText: 'Please enter a City'),
+                            RequiredValidator(errorText: 'Please enter a City').call,
                         controller: controller.cityController,
                         hintText: Strings.city.tr,
                         borderColor: CustomColor.primaryColor,
@@ -240,7 +240,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   controller: controller.zipController,
                   keyboardType: TextInputType.number,
                   validator:
-                      RequiredValidator(errorText: 'Please enter a ZIP CODE'),
+                      RequiredValidator(errorText: 'Please enter a ZIP CODE').call,
                   hintText: Strings.zip.tr,
                   borderColor: CustomColor.primaryColor,
                   color: CustomColor.secondaryColor,

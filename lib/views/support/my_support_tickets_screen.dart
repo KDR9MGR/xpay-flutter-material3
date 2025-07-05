@@ -10,7 +10,7 @@ import '../../widgets/my_support_item_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class MySupportTickets extends StatelessWidget {
-  MySupportTickets({Key? key}) : super(key: key);
+  MySupportTickets({super.key});
 
   final formKey = GlobalKey<FormState>();
 

@@ -8,7 +8,7 @@ import '../utils/custom_color.dart';
 import '../utils/strings.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
-  const NavigationDrawerWidget({Key? key}) : super(key: key);
+  const NavigationDrawerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

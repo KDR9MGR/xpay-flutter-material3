@@ -11,7 +11,7 @@ import '../../widgets/copy_id_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class TwoFaSecurity extends StatelessWidget {
-  TwoFaSecurity({Key? key}) : super(key: key);
+  TwoFaSecurity({super.key});
 
   final copyIdController = TextEditingController();
 

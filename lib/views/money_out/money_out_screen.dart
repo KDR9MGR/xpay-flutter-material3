@@ -21,7 +21,7 @@ import '../../widgets/money_out_wallet_info_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class MoneyOutScreen extends StatefulWidget {
-  MoneyOutScreen({Key? key}) : super(key: key);
+  const MoneyOutScreen({super.key});
 
   @override
   State<MoneyOutScreen> createState() => _MoneyOutScreenState();
@@ -245,7 +245,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
                    validator: MultiValidator([
                      RequiredValidator(errorText: 'Please enter an email address'),
                      EmailValidator(errorText: 'Please enter a valid email address')
-                   ]),
+                   ]).call,
                    decoration: InputDecoration(
                      hintText: 'Enter receiver email address',
                      hintStyle: TextStyle(
@@ -316,7 +316,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
                    validator: MultiValidator([
                      RequiredValidator(errorText: 'Please enter an amount'),
                      MinValueValidator(5, errorText: 'Minimum amount is 5')
-                   ]),
+                   ]).call,
                    decoration: InputDecoration(
                      hintText: '0.00',
                      hintStyle: TextStyle(

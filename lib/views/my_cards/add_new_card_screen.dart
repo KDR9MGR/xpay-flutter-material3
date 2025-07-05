@@ -10,7 +10,7 @@ import 'package:xpay/widgets/inputs/text_field_input_widget.dart';
 import 'package:xpay/widgets/primary_appbar.dart';
 
 class AddNewCardScreen extends StatefulWidget {
-  const AddNewCardScreen({Key? key}) : super(key: key);
+  const AddNewCardScreen({super.key});
 
   @override
   State<AddNewCardScreen> createState() => _AddNewCardScreenState();

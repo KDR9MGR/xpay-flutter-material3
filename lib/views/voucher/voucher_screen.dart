@@ -10,7 +10,7 @@ import '../../widgets/primary_appbar.dart';
 import '../../widgets/voucher_item_widget.dart';
 
 class VoucherScreen extends StatelessWidget {
-  VoucherScreen({Key? key}) : super(key: key);
+  VoucherScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
 

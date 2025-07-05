@@ -16,7 +16,7 @@ class NumberInputWidget extends StatelessWidget {
   final Color borderColor;
 
   const NumberInputWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hintText,
     this.keyboardType,
@@ -25,7 +25,7 @@ class NumberInputWidget extends StatelessWidget {
     this.enabledBorderWidth = 2,
     this.color = Colors.white,
     this.borderColor = CustomColor.primaryColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

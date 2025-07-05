@@ -5,7 +5,7 @@ import '../utils/dimensions.dart';
 
 class TransactionsItemWidget extends StatelessWidget {
   const TransactionsItemWidget({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.title,
     required this.dateAndTime,
@@ -13,7 +13,7 @@ class TransactionsItemWidget extends StatelessWidget {
     required this.transactionId,
     required this.amount,
     required this.isMoneyOut,
-  }) : super(key: key);
+  });
   final String imagePath;
   final String title;
   final String dateAndTime;

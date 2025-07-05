@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -11,39 +10,53 @@ class PlatformPaymentService {
   // Initialize platform payment services
   static Future<void> init() async {
     try {
+      print('Initializing Platform Payment Service...');
+      
       if (Platform.isAndroid) {
         await _initializeGooglePay();
+        print('Google Pay initialization completed');
       } else if (Platform.isIOS) {
         await _initializeApplePay();
+        print('Apple Pay initialization completed');
+      } else {
+        print('Platform not supported for native payments');
       }
-      print('Platform payment service initialized');
+      
+      print('Platform payment service initialized successfully');
     } catch (e) {
       print('Error initializing platform payment service: $e');
+      // Don't throw error - allow app to continue without native payments
     }
   }
 
   // Initialize Google Pay
   static Future<void> _initializeGooglePay() async {
     try {
+      print('Initializing Google Pay...');
       await _channel.invokeMethod('initializeGooglePay', {
         'environment': MoovConfig.googlePayConfig['environment'],
         'merchantInfo': MoovConfig.googlePayConfig['merchantInfo'],
       });
+      print('Google Pay initialized successfully');
     } catch (e) {
       print('Error initializing Google Pay: $e');
+      // Don't throw - Google Pay might not be available
     }
   }
 
   // Initialize Apple Pay
   static Future<void> _initializeApplePay() async {
     try {
+      print('Initializing Apple Pay...');
       await _channel.invokeMethod('initializeApplePay', {
         'merchantIdentifier': MoovConfig.applePayConfig['merchantIdentifier'],
         'countryCode': MoovConfig.applePayConfig['countryCode'],
         'currencyCode': MoovConfig.applePayConfig['currencyCode'],
       });
+      print('Apple Pay initialized successfully');
     } catch (e) {
       print('Error initializing Apple Pay: $e');
+      // Don't throw - Apple Pay might not be available
     }
   }
 
@@ -233,7 +246,7 @@ class PlatformPaymentService {
     required double amount,
     required String currency,
   }) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 50,
       child: ElevatedButton(
@@ -287,7 +300,7 @@ class PlatformPaymentService {
     required double amount,
     required String currency,
   }) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 50,
       child: ElevatedButton(

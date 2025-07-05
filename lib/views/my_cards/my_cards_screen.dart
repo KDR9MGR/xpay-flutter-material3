@@ -10,7 +10,7 @@ import 'package:xpay/utils/strings.dart';
 import 'package:xpay/widgets/primary_appbar.dart';
 
 class MyCardsScreen extends StatelessWidget {
-  const MyCardsScreen({Key? key}) : super(key: key);
+  const MyCardsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +46,8 @@ class MyCardsScreen extends StatelessWidget {
         onPressed: () {
           Get.toNamed(Routes.addNewCardScreen);
         },
-        child: const Icon(Icons.add),
         backgroundColor: CustomColor.primaryColor,
+        child: const Icon(Icons.add),
       ),
     );
   }

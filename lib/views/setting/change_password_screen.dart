@@ -15,7 +15,7 @@ import '../../utils/utils.dart'; // Assume Utils class handles dialogs
 import '../../widgets/primary_appbar.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  const ChangePasswordScreen({Key? key}) : super(key: key);
+  const ChangePasswordScreen({super.key});
 
   @override
   ChangePasswordScreenState createState() => ChangePasswordScreenState();

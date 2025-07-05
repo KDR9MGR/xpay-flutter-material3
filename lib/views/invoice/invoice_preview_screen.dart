@@ -11,7 +11,7 @@ import '../../widgets/inputs/text_label_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class InvoicePreviewScreen extends StatelessWidget {
-  InvoicePreviewScreen({Key? key}) : super(key: key);
+  InvoicePreviewScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
 

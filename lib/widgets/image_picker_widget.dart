@@ -12,7 +12,7 @@ import '../../utils/dimensions.dart';
 import '../../utils/strings.dart';
 
 class ImagePickerWidget extends StatelessWidget {
-  ImagePickerWidget({Key? key}) : super(key: key);
+  ImagePickerWidget({super.key});
 
   final controller = Get.put(InputImageController());
 

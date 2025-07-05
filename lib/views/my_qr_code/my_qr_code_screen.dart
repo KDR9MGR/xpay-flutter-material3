@@ -10,7 +10,7 @@ import '../../widgets/buttons/primary_button.dart';
 import '../../widgets/primary_appbar.dart';
 
 class MyQrCodeScreen extends StatelessWidget {
-  const MyQrCodeScreen({Key? key}) : super(key: key);
+  const MyQrCodeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

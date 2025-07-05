@@ -16,42 +16,111 @@ import 'controller/subscription_controller.dart';
 import 'services/stripe_service.dart';
 import 'services/moov_service.dart';
 import 'services/platform_payment_service.dart';
-import 'views/splash_screen/splash_screen.dart';
 
 import 'utils/custom_color.dart';
 import 'utils/strings.dart';
 import 'views/auth/user_provider.dart';
 
 void main() async {
-  // Locking Device Orientation
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  await GetStorage.init(); // initializing getStorage
-  // Initialize Stripe
-  await StripeService.init();
-  // Initialize Moov
-  await MoovService.init();
-  // Initialize Platform Payment Service
-  await PlatformPaymentService.init();
-  // Initialize controllers
-  Get.put(AuthController());
-  Get.put(SubscriptionController());
-  // main app
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider<LoginViewModel>(
-        create: (context) => LoginViewModel()),
-    ChangeNotifierProvider(create: (_) => UserProvider()),
-    ChangeNotifierProvider(create: (_) => WalletViewModel())
-  ], child: const MyApp()));
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+    
+    // Initialize Firebase first
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    
+    // Lock Device Orientation
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    
+    // Initialize storage
+    await GetStorage.init();
+    
+    // Initialize Platform Payment Service (Primary for subscriptions)
+    bool platformPaymentInitialized = false;
+    try {
+      await PlatformPaymentService.init();
+      platformPaymentInitialized = true;
+      print('Platform Payment Service initialized successfully');
+    } catch (e) {
+      print('Error initializing Platform Payment Service: $e');
+    }
+    
+    // Initialize Moov (Primary backend)
+    bool moovInitialized = false;
+    try {
+      await MoovService.init();
+      moovInitialized = true;
+      print('Moov initialized successfully');
+    } catch (e) {
+      print('Error initializing Moov: $e');
+    }
+    
+    // Initialize Stripe (Fallback only)
+    bool stripeInitialized = false;
+    try {
+      await StripeService.init();
+      stripeInitialized = true;
+      print('Stripe initialized successfully (fallback)');
+    } catch (e) {
+      print('Error initializing Stripe: $e');
+    }
+    
+    // Check if at least one payment service is available
+    if (!platformPaymentInitialized && !moovInitialized && !stripeInitialized) {
+      print('Warning: No payment services initialized successfully');
+    }
+    
+    // Initialize controllers
+    Get.put(AuthController());
+    
+    // Initialize subscription controller with error handling
+    try {
+      Get.put(SubscriptionController());
+      print('Subscription controller initialized');
+    } catch (e) {
+      print('Warning: Subscription controller initialization failed: $e');
+      // App can still work without subscription controller
+    }
+    
+    // Run the app
+    runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider<LoginViewModel>(create: (context) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => WalletViewModel())
+      ],
+      child: const MyApp(),
+    ));
+  } catch (e) {
+    print('Error during app initialization: $e');
+    // Run a minimal app that shows the error
+    runApp(MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.error_outline, size: 64, color: Colors.red),
+              SizedBox(height: 16),
+              Text('App Initialization Error', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              SizedBox(height: 8),
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text('$e', textAlign: TextAlign.center),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ));
+  }
 }
 
 // This widget is the root of your application.
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -116,14 +185,13 @@ class MyApp extends StatelessWidget {
         builder: (context, widget) {
           ScreenUtil.init(context);
           return MediaQuery(
-              data: MediaQuery.of(context)
-                  .copyWith(textScaler: TextScaler.linear(1.0)),
-              child: widget!);
+            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
+            child: widget!,
+          );
         },
         translations: LocalString(),
-        locale: Locale('en', 'US'),
+        locale: const Locale('en', 'US'),
         fallbackLocale: const Locale('en', 'US'),
-        home: const SplashScreen(),
       ),
     );
   }

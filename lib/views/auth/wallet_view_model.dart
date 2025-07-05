@@ -204,7 +204,7 @@ class WalletViewModel extends BaseViewModel {
       notifyListeners();
     } catch (e) {
       print('Error sending money: $e');
-      throw e; // Rethrow the error to handle it in the calling function
+      rethrow; // Rethrow the error to handle it in the calling function
     }
   }
 
@@ -269,7 +269,7 @@ class WalletViewModel extends BaseViewModel {
       print('Money request sent successfully');
     } catch (e) {
       print('Error requesting money: $e');
-      throw e; // Rethrow the error to handle it in the calling function
+      rethrow; // Rethrow the error to handle it in the calling function
     }
   }
 

@@ -6,10 +6,9 @@ import '../../config/stripe_config.dart';
 import '../../utils/custom_color.dart';
 import '../../utils/custom_style.dart';
 import '../../utils/dimensions.dart';
-import '../../widgets/buttons/primary_button.dart';
 
 class SubscriptionPlansScreen extends StatelessWidget {
-  const SubscriptionPlansScreen({Key? key}) : super(key: key);
+  const SubscriptionPlansScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +63,7 @@ class SubscriptionPlansScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(Dimensions.radius * 2),
         boxShadow: [
           BoxShadow(
-            color: CustomColor.primaryColor.withOpacity(0.3),
+            color: CustomColor.primaryColor.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -89,7 +88,7 @@ class SubscriptionPlansScreen extends StatelessWidget {
           Text(
             'Get access to all premium features for just \$1.99/month',
             style: CustomStyle.commonSubTextTitle.copyWith(
-              color: CustomColor.primaryTextColor.withOpacity(0.9),
+              color: CustomColor.primaryTextColor.withValues(alpha: 0.9),
             ),
             textAlign: TextAlign.center,
           ),
@@ -113,7 +112,7 @@ class SubscriptionPlansScreen extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: CustomColor.primaryColor.withOpacity(0.1),
+            color: CustomColor.primaryColor.withValues(alpha: 0.1),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -203,7 +202,7 @@ class SubscriptionPlansScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(Dimensions.defaultPaddingSize * 0.8),
             decoration: BoxDecoration(
-              color: CustomColor.primaryColor.withOpacity(0.1),
+              color: CustomColor.primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(Dimensions.radius),
             ),
             child: Row(
@@ -246,7 +245,7 @@ class SubscriptionPlansScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(Dimensions.radius * 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -299,13 +298,132 @@ class SubscriptionPlansScreen extends StatelessWidget {
   }
 
   _subscribeButtonWidget(SubscriptionController controller) {
-    return Container(
-      width: double.infinity,
-      child: PrimaryButton(
-        title: 'Subscribe for \$1.99/month',
-        onPressed: () => controller.subscribeToPremium(),
-        borderColorName: CustomColor.primaryColor,
-      ),
+    return Column(
+      children: [
+        // Google Pay button (Android)
+        if (controller.googlePayAvailable) ...[
+          SizedBox(
+            width: double.infinity,
+            height: 50.h,
+            child: ElevatedButton(
+              onPressed: () => controller.processGooglePaySubscription(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Dimensions.radius),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/google_pay_logo.png',
+                    height: 24.h,
+                    width: 24.w,
+                    errorBuilder: (context, error, stackTrace) => Icon(
+                      Icons.payment,
+                      color: Colors.white,
+                      size: 24.r,
+                    ),
+                  ),
+                  SizedBox(width: Dimensions.widthSize),
+                  Text(
+                    'Pay with Google Pay',
+                    style: CustomStyle.commonTextTitle.copyWith(
+                      color: Colors.white,
+                      fontSize: Dimensions.mediumTextSize,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: Dimensions.heightSize),
+        ],
+        
+        // Apple Pay button (iOS)
+        if (controller.applePayAvailable) ...[
+          SizedBox(
+            width: double.infinity,
+            height: 50.h,
+            child: ElevatedButton(
+              onPressed: () => controller.processApplePaySubscription(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Dimensions.radius),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.apple,
+                    color: Colors.white,
+                    size: 24.r,
+                  ),
+                  SizedBox(width: Dimensions.widthSize),
+                  Text(
+                    'Pay with Apple Pay',
+                    style: CustomStyle.commonTextTitle.copyWith(
+                      color: Colors.white,
+                      fontSize: Dimensions.mediumTextSize,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: Dimensions.heightSize),
+        ],
+        
+        // No payment method available message
+        if (!controller.googlePayAvailable && !controller.applePayAvailable) ...[
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
+            decoration: BoxDecoration(
+              color: Colors.orange.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(Dimensions.radius),
+              border: Border.all(color: Colors.orange),
+            ),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.payment_outlined,
+                  color: Colors.orange,
+                  size: 32.r,
+                ),
+                SizedBox(height: Dimensions.heightSize),
+                Text(
+                  'Payment Not Available',
+                  style: CustomStyle.commonTextTitle.copyWith(
+                    color: Colors.orange,
+                  ),
+                ),
+                SizedBox(height: Dimensions.heightSize * 0.5),
+                Text(
+                  'Google Pay or Apple Pay is required for subscriptions. Please ensure you have a payment method set up in your device settings.',
+                  style: CustomStyle.commonSubTextTitle,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ],
+        
+        SizedBox(height: Dimensions.heightSize),
+        Text(
+          'Secure payments powered by Moov.io',
+          style: CustomStyle.commonSubTextTitle.copyWith(
+            fontSize: Dimensions.smallTextSize - 2,
+            color: Colors.grey,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 } 

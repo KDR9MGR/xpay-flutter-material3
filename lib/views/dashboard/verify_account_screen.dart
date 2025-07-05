@@ -11,7 +11,7 @@ import '../../widgets/inputs/text_field_input_widget.dart';
 import '../../widgets/inputs/text_label_widget.dart';
 
 class VerifyAccountScreen extends StatelessWidget {
-  VerifyAccountScreen({Key? key}) : super(key: key);
+  VerifyAccountScreen({super.key});
   final formKey = GlobalKey<FormState>();
 
   @override

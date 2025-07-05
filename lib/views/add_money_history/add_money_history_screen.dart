@@ -9,7 +9,7 @@ import '../../widgets/add_money_history_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class AddMoneyHistoryScreen extends StatelessWidget {
-  AddMoneyHistoryScreen({Key? key}) : super(key: key);
+  AddMoneyHistoryScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
 

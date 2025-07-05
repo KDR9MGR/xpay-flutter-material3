@@ -20,7 +20,7 @@ import '../../widgets/inputs/dropdown_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class AddMoneyMoneyScreen extends StatefulWidget {
-  AddMoneyMoneyScreen({Key? key}) : super(key: key);
+  const AddMoneyMoneyScreen({super.key});
 
   @override
   State<AddMoneyMoneyScreen> createState() => _AddMoneyMoneyScreenState();
@@ -265,7 +265,7 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
                    validator: MultiValidator([
                      RequiredValidator(errorText: 'Please enter an amount'),
                      MinValueValidator(5, errorText: 'Minimum amount is 5')
-                   ]),
+                   ]).call,
                    decoration: InputDecoration(
                      hintText: '0.00',
                      hintStyle: TextStyle(

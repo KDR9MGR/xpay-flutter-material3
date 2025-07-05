@@ -10,7 +10,7 @@ import '../utils/strings.dart';
 import '../widgets/bottom_navbar_widget.dart';
 
 class NavigationScreen extends StatelessWidget {
-  NavigationScreen({Key? key}) : super(key: key);
+  NavigationScreen({super.key});
   final _controller = Get.put(NavigationController());
 
   @override

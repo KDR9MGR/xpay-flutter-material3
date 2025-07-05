@@ -9,7 +9,7 @@ import '../../widgets/primary_appbar.dart';
 import '../../widgets/withdraw_money_history_widget.dart';
 
 class WithdrawHistoryScreen extends StatelessWidget {
-  WithdrawHistoryScreen({Key? key}) : super(key: key);
+  WithdrawHistoryScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
 

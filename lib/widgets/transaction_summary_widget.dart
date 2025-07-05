@@ -6,13 +6,13 @@ import '../utils/dimensions.dart';
 
 class TransactionsSummaryWidget extends StatelessWidget {
   const TransactionsSummaryWidget({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.title,
     required this.transactionId,
     required this.amount,
     required this.isMoneyOut,
-  }) : super(key: key);
+  });
   final String imagePath;
   final String title;
 

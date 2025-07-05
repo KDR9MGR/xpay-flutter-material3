@@ -10,7 +10,7 @@ import '../../widgets/invoice_item_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class InvoiceScreen extends StatelessWidget {
-  InvoiceScreen({Key? key}) : super(key: key);
+  InvoiceScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
 

@@ -5,14 +5,13 @@ import '../utils/dimensions.dart';
 
 class DetailsTransactionWidget extends StatelessWidget {
   const DetailsTransactionWidget(
-      {Key? key,
+      {super.key,
       required this.transactionId,
       required this.wallet,
       required this.beforeCharge,
       required this.charge,
       required this.transactedAmount,
-      required this.remainingBalance})
-      : super(key: key);
+      required this.remainingBalance});
 
   final String transactionId;
   final String wallet;

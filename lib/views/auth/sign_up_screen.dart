@@ -21,7 +21,7 @@ import '../../widgets/inputs/pin_and_password_input_widget.dart';
 import 'login_vm.dart';
 
 class RegisterScreen extends StatefulWidget {
-  RegisterScreen({Key? key}) : super(key: key);
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -213,7 +213,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         children: [
           TextLabelWidget(text: Strings.firstName.tr),
           TextFieldInputWidget(
-            validator: RequiredValidator(errorText: 'Please enter first name'),
+            validator: RequiredValidator(errorText: 'Please enter first name').call,
             keyboardType: TextInputType.name,
             controller: controller.firstNameAuthController,
             hintText: Strings.firstNameHint.tr,
@@ -225,7 +225,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           TextLabelWidget(text: Strings.lastName.tr),
           TextFieldInputWidget(
-            validator: RequiredValidator(errorText: 'Please enter last name'),
+            validator: RequiredValidator(errorText: 'Please enter last name').call,
             controller: controller.lastNameAuthController,
             keyboardType: TextInputType.name,
             hintText: Strings.lastNameHint.tr,
@@ -254,7 +254,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           TextLabelWidget(text: Strings.mobile.tr),
           PhoneNumberWithCountryCodeInput(
             validator:
-                RequiredValidator(errorText: 'Please enter mobile number'),
+                RequiredValidator(errorText: 'Please enter mobile number').call,
             controller: controller.phoneNumberAuthController,
           ),
           SizedBox(
@@ -268,7 +268,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             validator: MultiValidator([
               RequiredValidator(errorText: 'Please enter an email address'),
               EmailValidator(errorText: 'Please enter a valid email address')
-            ]),
+            ]).call,
             keyboardType: TextInputType.emailAddress,
             controller: controller.emailAuthController,
             hintText: Strings.enterEmailHint.tr,
@@ -287,7 +287,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   max: 16,
                   errorText:
                       'Password should be minimum 6 and max 16 characters')
-            ]),
+            ]).call,
             hintText: Strings.password.tr,
             controller: controller.passwordController,
             borderColor: CustomColor.primaryColor,
@@ -306,7 +306,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   max: 16,
                   errorText:
                       'Password should be minimum 6 and max 16 characters')
-            ]),
+            ]).call,
             hintText: Strings.confirmPasswordHint.tr,
             controller: controller.confirmPasswordController,
             borderColor: CustomColor.primaryColor,

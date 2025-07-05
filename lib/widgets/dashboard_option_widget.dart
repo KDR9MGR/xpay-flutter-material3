@@ -6,12 +6,12 @@ import '../utils/dimensions.dart';
 
 class DashboardOptionWidget extends StatelessWidget {
   const DashboardOptionWidget({
-    Key? key,
+    super.key,
     required this.icon,
     required this.title,
     required this.subtitle,
     required this.onTap,
-  }) : super(key: key);
+  });
   
   final IconData icon;
   final String title;

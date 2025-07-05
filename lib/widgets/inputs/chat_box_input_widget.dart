@@ -19,7 +19,7 @@ class ChatBoxInputWidget extends StatelessWidget {
   final double? iconSize;
 
   const ChatBoxInputWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hintText,
     this.keyboardType,
@@ -31,7 +31,7 @@ class ChatBoxInputWidget extends StatelessWidget {
     this.onPressed,
     this.icon = Icons.edit,
     this.iconSize = 20.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

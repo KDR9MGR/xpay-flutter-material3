@@ -14,7 +14,7 @@ import '../../widgets/primary_appbar.dart';
 import '../../widgets/withdraw_money_wallet_info_widget.dart';
 
 class WithdrawMoneyScreen extends StatelessWidget {
-  WithdrawMoneyScreen({Key? key}) : super(key: key);
+  WithdrawMoneyScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
 

@@ -14,7 +14,7 @@ import '../../widgets/inputs/secondary_text_input_widget.dart';
 import '../../widgets/primary_appbar.dart';
 
 class CurrencyExchangeScreen extends StatelessWidget {
-  CurrencyExchangeScreen({Key? key}) : super(key: key);
+  CurrencyExchangeScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
 

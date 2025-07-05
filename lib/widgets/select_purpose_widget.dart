@@ -5,10 +5,10 @@ import '../utils/dimensions.dart';
 
 class SelectPurpose extends StatelessWidget {
   const SelectPurpose({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.purpose,
-  }) : super(key: key);
+  });
   final String imagePath;
 
   final String purpose;
