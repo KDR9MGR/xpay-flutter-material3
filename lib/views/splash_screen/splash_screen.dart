@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:xpay/routes/routes.dart';
 import 'package:xpay/utils/storage_service.dart';
+import 'package:xpay/utils/threading_utils.dart';
 import 'package:xpay/views/auth/user_provider.dart';
 import 'package:xpay/controller/subscription_controller.dart';
 
@@ -74,15 +73,26 @@ class _SplashScreenState extends State<SplashScreen> {
   void _checkSession() async {
     try {
       print('Checking session status...');
+
+      // Storage operations must run on main thread
       bool isLoggedIn = _storageService.getValue(Strings.isLoggedIn) ?? false;
       print('Is logged in: $isLoggedIn');
 
       if (isLoggedIn) {
         try {
           print('Fetching user details...');
-          await _userProvider.fetchUserDetails();
+
+          // Use background thread for Firebase operations
+          await ThreadingUtils.runFirebaseOperation(
+            () async => await _userProvider.fetchUserDetails(),
+            operationName: 'Fetch user details',
+          );
+
           print('User details fetched successfully');
-          
+
+          // Yield control to prevent main thread blocking
+          await ThreadingUtils.yieldControl();
+
           // Initialize subscription controller after user is loaded
           try {
             final subscriptionController = Get.find<SubscriptionController>();
@@ -91,28 +101,51 @@ class _SplashScreenState extends State<SplashScreen> {
             print('Subscription controller not ready: $e');
             // This is okay - controller will initialize on its own
           }
-          
-          Get.offAllNamed(Routes.dashboardScreen);
+
+          // Use UI operation for navigation
+          await ThreadingUtils.runUIOperation(() async {
+            Get.offAllNamed(Routes.dashboardScreen);
+          });
         } catch (e) {
           print('Error fetching user details: $e');
-          setState(() {
-            _error = 'Failed to load user data. Please try again.';
-            _isLoading = false;
+          await ThreadingUtils.runUIOperation(() async {
+            setState(() {
+              _error = 'Failed to load user data. Please try again.';
+              _isLoading = false;
+            });
           });
         }
       } else {
-        print('User not logged in, navigating to onboard screen in 3 seconds...');
-        Timer(
+        print(
+          'User not logged in, navigating to welcome screen in 3 seconds...',
+        );
+
+        // Use timer with threading utils
+        ThreadingUtils.createTimer(
+          'splash_navigation',
           const Duration(seconds: 3),
-          () => Get.offAllNamed(Routes.onBoardScreen),
+          () {
+            ThreadingUtils.runUIOperation(() async {
+              Get.offAllNamed(Routes.welcomeScreen);
+            });
+          },
         );
       }
     } catch (e) {
       print('Error in _checkSession: $e');
-      setState(() {
-        _error = 'Something went wrong. Please try again.';
-        _isLoading = false;
+      await ThreadingUtils.runUIOperation(() async {
+        setState(() {
+          _error = 'Something went wrong. Please try again.';
+          _isLoading = false;
+        });
       });
     }
+  }
+
+  @override
+  void dispose() {
+    // Clean up timers
+    ThreadingUtils.disposeTimer('splash_navigation');
+    super.dispose();
   }
 }

@@ -7,7 +7,6 @@ import 'package:xpay/utils/utils.dart';
 import 'package:xpay/views/auth/user_provider.dart';
 import 'package:xpay/views/auth/wallet_view_model.dart';
 
-
 import '../../controller/money_out_controller.dart';
 import '../../utils/custom_color.dart';
 import '../../utils/custom_style.dart';
@@ -88,11 +87,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
             onPressed: () {
               Get.back();
             },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 20,
-            ),
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
           ),
         ),
       ),
@@ -165,7 +160,9 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: CustomColor.primaryColor.withValues(alpha: 0.3),
+                          color: CustomColor.primaryColor.withValues(
+                            alpha: 0.3,
+                          ),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -191,7 +188,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
                           ),
                         ),
                         Text(
-                          'Withdraw funds to agent',
+                          'Withdraw funds',
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.7),
                             fontSize: 14,
@@ -211,7 +208,9 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
                 ),
                 child: DropDownInputWidget(
                   items: controller.walletList,
@@ -228,53 +227,60 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
               // Agent Email
               _buildModernLabel('Receiver'),
               const SizedBox(height: 12),
-                             Container(
-                 decoration: BoxDecoration(
-                   color: Colors.white.withValues(alpha: 0.05),
-                   borderRadius: BorderRadius.circular(16),
-                   border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-                 ),
-                 child: TextFormField(
-                   controller: controller.agentUsernameOrEmailController,
-                   keyboardType: TextInputType.emailAddress,
-                   style: TextStyle(
-                     color: Colors.white,
-                     fontSize: 16,
-                     fontWeight: FontWeight.w500,
-                   ),
-                   validator: MultiValidator([
-                     RequiredValidator(errorText: 'Please enter an email address'),
-                     EmailValidator(errorText: 'Please enter a valid email address')
-                   ]).call,
-                   decoration: InputDecoration(
-                     hintText: 'Enter receiver email address',
-                     hintStyle: TextStyle(
-                       color: Colors.white.withValues(alpha: 0.5),
-                       fontSize: 16,
-                     ),
-                     border: InputBorder.none,
-                     contentPadding: const EdgeInsets.all(20),
-                     suffixIcon: GestureDetector(
-                       onTap: () {
-                         controller.navigateToMoneyOutScanQrCodeScreen();
-                       },
-                       child: Container(
-                         margin: const EdgeInsets.all(12),
-                         padding: const EdgeInsets.all(8),
-                         decoration: BoxDecoration(
-                           color: Colors.white.withValues(alpha: 0.1),
-                           borderRadius: BorderRadius.circular(8),
-                         ),
-                         child: Icon(
-                           Ionicons.qr_code_outline,
-                           color: Colors.white.withValues(alpha: 0.8),
-                           size: 20,
-                         ),
-                       ),
-                     ),
-                   ),
-                 ),
-               ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
+                ),
+                child: TextFormField(
+                  controller: controller.agentUsernameOrEmailController,
+                  keyboardType: TextInputType.emailAddress,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  validator:
+                      MultiValidator([
+                        RequiredValidator(
+                          errorText: 'Please enter an email address',
+                        ),
+                        EmailValidator(
+                          errorText: 'Please enter a valid email address',
+                        ),
+                      ]).call,
+                  decoration: InputDecoration(
+                    hintText: 'Enter receiver email address',
+                    hintStyle: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.5),
+                      fontSize: 16,
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.all(20),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        controller.navigateToMoneyOutScanQrCodeScreen();
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Ionicons.qr_code_outline,
+                          color: Colors.white.withValues(alpha: 0.8),
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               const SizedBox(height: 8),
               Row(
                 children: [
@@ -299,36 +305,39 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
               // Amount Input
               _buildModernLabel('Amount'),
               const SizedBox(height: 12),
-                             Container(
-                 decoration: BoxDecoration(
-                   color: Colors.white.withValues(alpha: 0.05),
-                   borderRadius: BorderRadius.circular(16),
-                   border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-                 ),
-                 child: TextFormField(
-                   controller: controller.amountController,
-                   keyboardType: TextInputType.numberWithOptions(decimal: true),
-                   style: TextStyle(
-                     color: Colors.white,
-                     fontSize: 18,
-                     fontWeight: FontWeight.w600,
-                   ),
-                   validator: MultiValidator([
-                     RequiredValidator(errorText: 'Please enter an amount'),
-                     MinValueValidator(5, errorText: 'Minimum amount is 5')
-                   ]).call,
-                   decoration: InputDecoration(
-                     hintText: '0.00',
-                     hintStyle: TextStyle(
-                       color: Colors.white.withValues(alpha: 0.5),
-                       fontSize: 18,
-                     ),
-                     border: InputBorder.none,
-                     contentPadding: const EdgeInsets.all(20),
-                     suffixIcon: _amountButton(context),
-                   ),
-                 ),
-               ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
+                ),
+                child: TextFormField(
+                  controller: controller.amountController,
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  validator:
+                      MultiValidator([
+                        RequiredValidator(errorText: 'Please enter an amount'),
+                        MinValueValidator(5, errorText: 'Minimum amount is 5'),
+                      ]).call,
+                  decoration: InputDecoration(
+                    hintText: '0.00',
+                    hintStyle: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.5),
+                      fontSize: 18,
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.all(20),
+                    suffixIcon: _amountButton(context),
+                  ),
+                ),
+              ),
               const SizedBox(height: 16),
 
               // Limit and charge info
@@ -337,7 +346,9 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.03),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.05),
+                  ),
                 ),
                 child: Column(
                   children: [
@@ -350,7 +361,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
                         ),
                         const SizedBox(width: 8),
                         Text(
-                    '${Strings.limit.tr}: 5.00 - 2,500.00 USD',
+                          '${Strings.limit.tr}: 5.00 - 2,500.00 USD',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -445,7 +456,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
                 fontWeight: FontWeight.w700,
                 fontSize: Dimensions.mediumTextSize,
               ),
-            )
+            ),
           ],
         ),
       );
@@ -477,14 +488,18 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
               Utils.showLoadingDialog(context);
               try {
                 await _walletViewModel!.sendMoneyToUser(
-                    controller.agentUsernameOrEmailController.text.trim(),
-                    double.parse(controller.amountController.text.trim()),
-                    controller.walletName.value);
+                  controller.agentUsernameOrEmailController.text.trim(),
+                  double.parse(controller.amountController.text.trim()),
+                  controller.walletName.value,
+                );
                 await _userProvider.fetchUserDetails();
                 if (context.mounted) {
                   Navigator.pop(context);
                   Utils.showDialogMessage(
-                      context, 'Success', 'Money has been sent successfully!');
+                    context,
+                    'Success',
+                    'Money has been sent successfully!',
+                  );
                   controller.amountController.clear();
                   controller.agentUsernameOrEmailController.clear();
                 }
@@ -526,9 +541,10 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
         ),
         child: MoneyOutWalletInfoWidget(
           wallet: controller.walletName.value,
-          agent: controller.agentUsernameOrEmailController.text.isEmpty
-              ? 'adsent@gmail.com'
-              : controller.agentUsernameOrEmailController.text,
+          agent:
+              controller.agentUsernameOrEmailController.text.isEmpty
+                  ? 'adsent@gmail.com'
+                  : controller.agentUsernameOrEmailController.text,
           transferAmount:
               '${controller.amountController.text.isNotEmpty ? controller.amountController.text : '100'} ${controller.walletName.value}',
           totalCharge:

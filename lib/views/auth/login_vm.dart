@@ -6,15 +6,29 @@ import 'package:xpay/data/user_model.dart';
 import '../../base_vm.dart';
 
 class LoginViewModel extends BaseViewModel {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseAuth? _auth;
   User? _user;
+
+  LoginViewModel() {
+    try {
+      _auth = FirebaseAuth.instance;
+    } catch (e) {
+      print('Firebase Auth initialization error: $e');
+      _auth = null;
+    }
+  }
 
   User? get user => _user;
 
   Future<String> signUp(UserModel user) async {
+    if (_auth == null) {
+      return 'Firebase Auth is not initialized. Please restart the app.';
+    }
     try {
-      final UserCredential result = await _auth.createUserWithEmailAndPassword(
-          email: user.emailAddress, password: user.password);
+      final UserCredential result = await _auth!.createUserWithEmailAndPassword(
+        email: user.emailAddress,
+        password: user.password,
+      );
       _user = result.user;
       user.userId = _user!.uid;
 
@@ -55,8 +69,12 @@ class LoginViewModel extends BaseViewModel {
   }
 
   Future<void> signOut() async {
+    if (_auth == null) {
+      print('Firebase Auth is not initialized');
+      return;
+    }
     try {
-      await _auth.signOut();
+      await _auth!.signOut();
 
       _user = null;
     } catch (error) {
@@ -67,9 +85,14 @@ class LoginViewModel extends BaseViewModel {
   }
 
   Future<String> signIn(String email, String password) async {
+    if (_auth == null) {
+      return 'Firebase Auth is not initialized. Please restart the app.';
+    }
     try {
-      final UserCredential result = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      final UserCredential result = await _auth!.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       _user = result.user;
 
       if (_user != null) {
@@ -108,8 +131,11 @@ class LoginViewModel extends BaseViewModel {
   }
 
   Future<String> resetPassword(String email) async {
+    if (_auth == null) {
+      return 'Firebase Auth is not initialized. Please restart the app.';
+    }
     try {
-      await _auth.sendPasswordResetEmail(email: email);
+      await _auth!.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
       debugPrint('signInError: $e');
       if (e.code == 'email-already-in-use') {

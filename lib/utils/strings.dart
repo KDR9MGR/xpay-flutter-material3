@@ -1,5 +1,5 @@
 class Strings {
-  static const String appName = "xPay";
+  static const String appName = "Digital Payments";
   static const String appVersion = '1.0';
 
   // splash screen
@@ -28,7 +28,8 @@ class Strings {
   static const String welcomeScreenLogoPath =
       'assets/images/logo/welcome_logo.png';
   static const String welcomeTitle = 'Welcome To Digital Payments';
-  static const String welcomeSubTitle = 'Building a Better life with DP';
+  static const String welcomeSubTitle =
+      'Building a Better life with Digital Payments';
 
   static const String register = 'Register';
   static const String signIn = 'Sign In';
@@ -164,7 +165,7 @@ class Strings {
   static const transfer = 'Transfer';
   static const more = 'More';
 
-  static const myXPay = 'My xPay';
+  static const myXPay = 'My Digital Payments';
   static const latestTransaction = 'Latest Transactions';
   static const viewAll = 'View All';
   static const samplePhoneNumber = '+1 689 635 9865';
@@ -274,7 +275,7 @@ class Strings {
   static const addAmount = 'Add Amount';
   static const totalCharge = 'Total Charge';
   static const payableAmount = 'Payable Amount';
-  static const validUserForMoneyOut = 'Valid agent for money out.';
+  static const validUserForMoneyOut = 'Valid user for money out.';
   static const agent = 'Agent';
   static const moneyOutConfirm = 'Your money has been out successfully';
   static const validMerchantForMoneyOut = 'Valid Merchant For MoneyOut';
@@ -347,7 +348,7 @@ class Strings {
   static const transferMoneyTitle = 'Transfer Money';
   static const account = 'Account';
   static const transferMoneyMessage =
-      'Transfer Money from xPay Account to Bank Account directly anytime';
+      'Transfer Money from Digital Payments Account to Bank Account directly anytime';
 
   static const acceptAndProceed = 'Accept and Proceed';
   static const selectTermHint = 'Select Term';

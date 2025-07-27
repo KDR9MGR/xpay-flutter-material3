@@ -1,5 +1,5 @@
 class English {
-  static const String appName = "xPay";
+  static const String appName = "Digital Payments";
   static const String appVersion = '1.0';
 
   // splash screen
@@ -16,7 +16,8 @@ class English {
 
   // Welcome screen
   static const String welcomeTitle = 'Welcome To Digital Payments';
-  static const String welcomeSubTitle = 'Building a Better life with xPay';
+  static const String welcomeSubTitle =
+      'Building a Better life with Digital Payments';
   static const String register = 'Register';
   static const String signIn = 'Sign In';
   static const String signUp = 'Sign Up';
@@ -61,7 +62,8 @@ class English {
       'Your identity has been verified, Set your new Password';
 
   // register screen
-  static const String registerMessage = 'Start your journey with xPay.';
+  static const String registerMessage =
+      'Start your journey with Digital Payments.';
   static const String personalAccount = 'Personal Account';
   static const String companyAccount = 'Company Account';
   static const String fullNameLabel = 'Full Name';
@@ -144,9 +146,9 @@ class English {
   static const charge = 'charge';
   static const coupons = 'Coupons';
   static const informationUpdate = 'Information Update';
-  static const referXPayApp = 'Refer xPay App';
-  static const xPayMap = 'xPay Map';
-  static const discoverXPay = 'Discover xPay';
+  static const referXPayApp = 'Refer Digital Payments App';
+  static const xPayMap = 'Digital Payments Map';
+  static const discoverXPay = 'Discover Digital Payments';
   static const settings = 'Settings';
   static const support = 'Support';
   static const logout = 'Logout';
@@ -176,7 +178,7 @@ class English {
   static const addAmount = 'Add Amount';
   static const totalCharge = 'Total Charge';
   static const payableAmount = 'Payable Amount';
-  static const validUserForMoneyOut = 'Valid agent for money out.';
+  static const validUserForMoneyOut = 'Valid user for money out.';
   static const agent = 'Agent';
   static const moneyOutConfirm = 'Your money has been out successfully';
   static const validMerchantForMoneyOut = 'Valid Merchant For MoneyOut';
@@ -243,7 +245,7 @@ class English {
   static const transferMoneyTitle = 'Transfer Money';
   static const account = 'Account';
   static const transferMoneyMessage =
-      'Transfer Money from xPay Account to Bank Account directly anytime';
+      'Transfer Money from Digital Payments Account to Bank Account directly anytime';
 
   static const acceptAndProceed = 'Accept and Proceed';
   static const selectTermHint = 'Select Term';

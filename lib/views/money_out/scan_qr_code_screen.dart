@@ -26,7 +26,7 @@ class MoneyOutScanQrCodeScreenState extends State<MoneyOutScanQrCodeScreen> {
 
   @override
   void dispose() {
-    // QR controller disposal is now handled automatically
+    // QR controller disposal is now handled automatically by the library
     super.dispose();
   }
 
@@ -36,16 +36,16 @@ class MoneyOutScanQrCodeScreenState extends State<MoneyOutScanQrCodeScreen> {
   void reassemble() async {
     super.reassemble();
     if (Platform.isAndroid) {
-      await controller!.pauseCamera();
+      await controller?.pauseCamera();
     } else if (Platform.isIOS) {
-      controller!.resumeCamera();
+      controller?.resumeCamera();
     }
   }
 
   void readQr() async {
     if (barcode != null) {
-      controller!.pauseCamera();
-      // Disposal is now handled automatically
+      await controller?.pauseCamera();
+      // Navigate or process the QR code data
     }
   }
 
@@ -89,15 +89,13 @@ class MoneyOutScanQrCodeScreenState extends State<MoneyOutScanQrCodeScreen> {
     return Center(
       child: Stack(
         children: [
-          Positioned(
-            child: _scanQrCodeWidget(context),
-          ),
+          Positioned(child: _scanQrCodeWidget(context)),
           Positioned(
             bottom: 50,
             right: 20,
             left: 20,
             child: _qrCodeBottomMessageWidget(context),
-          )
+          ),
         ],
       ),
     );
@@ -132,9 +130,7 @@ class MoneyOutScanQrCodeScreenState extends State<MoneyOutScanQrCodeScreen> {
         child: Row(
           children: [
             Image.asset(Strings.qrCodeIconImagePath),
-            SizedBox(
-              width: Dimensions.widthSize,
-            ),
+            SizedBox(width: Dimensions.widthSize),
             Expanded(
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -148,7 +144,7 @@ class MoneyOutScanQrCodeScreenState extends State<MoneyOutScanQrCodeScreen> {
                   softWrap: true,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -160,21 +156,24 @@ class MoneyOutScanQrCodeScreenState extends State<MoneyOutScanQrCodeScreen> {
       key: qrKey,
       onQRViewCreated: onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          cutOutSize: MediaQuery.of(context).size.width * 0.6,
-          borderWidth: 8,
-          borderLength: 20,
-          borderRadius: 10,
-          borderColor: CustomColor.primaryColor),
+        cutOutSize: MediaQuery.of(context).size.width * 0.6,
+        borderWidth: 8,
+        borderLength: 20,
+        borderRadius: 10,
+        borderColor: CustomColor.primaryColor,
+      ),
     );
   }
 
   void onQRViewCreated(QRViewController controller) {
     setState(() => this.controller = controller);
     // this.controller = controller;
-    controller.scannedDataStream.listen((barcode) => setState(() {
-          this.barcode = barcode;
-          // print(this.barcode!.code);
-          readQr();
-        }));
+    controller.scannedDataStream.listen(
+      (barcode) => setState(() {
+        this.barcode = barcode;
+        // print(this.barcode!.code);
+        readQr();
+      }),
+    );
   }
 }

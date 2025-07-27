@@ -257,7 +257,7 @@ class Routes {
   static const String myCardsScreen = '/myCardsScreen';
   static const String addNewCardScreen = '/addNewCardScreen';
   static const String bankInfoScreen = '/bankInfoScreen';
-  
+
   // Subscription routes
   static const String subscriptionScreen = '/subscriptionScreen';
   static const String subscriptionPlansScreen = '/subscriptionPlansScreen';
@@ -273,62 +273,26 @@ class Routes {
       page: () => OnboardScreen(),
       binding: OnBoardBinding(),
     ),
-    GetPage(
-      name: welcomeScreen,
-      page: () => const WelcomeScreen(),
-    ),
-    GetPage(
-      name: loginScreen,
-      page: () => LoginScreen(),
-    ),
-    GetPage(
-      name: registerScreen,
-      page: () => RegisterScreen(),
-    ),
-    GetPage(
-      name: forgetPasswordScreen,
-      page: () => ForgetPasswordScreen(),
-    ),
-    GetPage(
-      name: otpScreen,
-      page: () => OtpScreen(),
-    ),
-    GetPage(
-      name: resetPasswordScreen,
-      page: () => ResetPasswordScreen(),
-    ),
+    GetPage(name: welcomeScreen, page: () => const WelcomeScreen()),
+    GetPage(name: loginScreen, page: () => LoginScreen()),
+    GetPage(name: registerScreen, page: () => RegisterScreen()),
+    GetPage(name: forgetPasswordScreen, page: () => ForgetPasswordScreen()),
+    GetPage(name: otpScreen, page: () => OtpScreen()),
+    GetPage(name: resetPasswordScreen, page: () => ResetPasswordScreen()),
     GetPage(
       name: congratulationsScreen,
       page: () => const CongratulationsScreen(),
     ),
-    GetPage(
-      name: dashboardScreen,
-      page: () => DashboardScreen(),
-    ),
-    GetPage(
-      name: navigationScreen,
-      page: () => NavigationScreen(),
-    ),
-    GetPage(
-      name: scanQeCodeScreen,
-      page: () => const ScanQrCodeScreen(),
-    ),
-    GetPage(
-      name: verifyAccountScreen,
-      page: () => VerifyAccountScreen(),
-    ),
-    GetPage(
-      name: addMoneyMoneyScreen,
-      page: () => AddMoneyMoneyScreen(),
-    ),
+    GetPage(name: dashboardScreen, page: () => DashboardScreen()),
+    GetPage(name: navigationScreen, page: () => NavigationScreen()),
+    GetPage(name: scanQeCodeScreen, page: () => const ScanQrCodeScreen()),
+    GetPage(name: verifyAccountScreen, page: () => VerifyAccountScreen()),
+    GetPage(name: addMoneyMoneyScreen, page: () => AddMoneyMoneyScreen()),
     GetPage(
       name: confirmAddMoneyScreen,
       page: () => add_money_confirm.ConfirmAddMoneyScreen(),
     ),
-    GetPage(
-      name: transferMoneyScreen,
-      page: () => TransferMoneyScreen(),
-    ),
+    GetPage(name: transferMoneyScreen, page: () => TransferMoneyScreen()),
     GetPage(
       name: transferMoneyScanQrCodeScreen,
       page: () => const TransferMoneyScanQrCodeScreen(),
@@ -337,10 +301,7 @@ class Routes {
       name: confirmTransferMoneyScreen,
       page: () => transfer_money_confirm.ConfirmTransferMoneyScreen(),
     ),
-    GetPage(
-      name: moneyOutScreen,
-      page: () => MoneyOutScreen(),
-    ),
+    GetPage(name: moneyOutScreen, page: () => MoneyOutScreen()),
     GetPage(
       name: moneyOutScanQrCodeScreen,
       page: () => const MoneyOutScanQrCodeScreen(),
@@ -349,10 +310,7 @@ class Routes {
       name: confirmMoneyOutScreen,
       page: () => money_out_confirm.ConfirmMoneyOutScreen(),
     ),
-    GetPage(
-      name: makePaymentScreen,
-      page: () => MakePaymentScreen(),
-    ),
+    GetPage(name: makePaymentScreen, page: () => MakePaymentScreen()),
     GetPage(
       name: makePaymentScanQrCodeScreen,
       page: () => const MakePaymentScanQrCodeScreen(),
@@ -361,86 +319,47 @@ class Routes {
       name: confirmMakePaymentOutScreen,
       page: () => payment_confirm.ConfirmMakePaymentOutScreen(),
     ),
-    GetPage(
-      name: requestScreen,
-      page: () => RequestMoneyScreen(),
-    ),
+    GetPage(name: requestScreen, page: () => RequestMoneyScreen()),
     GetPage(
       name: confirmRequestMoneyScreen,
       page: () => request_money_confirm.ConfirmRequestMoneyScreen(),
     ),
-    GetPage(
-      name: currencyExchangeScreen,
-      page: () => CurrencyExchangeScreen(),
-    ),
+    GetPage(name: currencyExchangeScreen, page: () => CurrencyExchangeScreen()),
     GetPage(
       name: confirmCurrencyExchangeScreen,
       page: () => currency_exchange_confirm.ConfirmCurrencyExchangeScreen(),
     ),
-    GetPage(
-      name: voucherScreen,
-      page: () => VoucherScreen(),
-    ),
-    GetPage(
-      name: createVoucherScreen,
-      page: () => CreateVoucherScreen(),
-    ),
+    GetPage(name: voucherScreen, page: () => VoucherScreen()),
+    GetPage(name: createVoucherScreen, page: () => CreateVoucherScreen()),
     GetPage(
       name: confirmCreateVoucherOutScreen,
       page: () => voucher_confirm.ConfirmCreateVoucherOutScreen(),
     ),
-    GetPage(
-      name: redeemVoucherScreen,
-      page: () => RedeemVoucherScreen(),
-    ),
+    GetPage(name: redeemVoucherScreen, page: () => RedeemVoucherScreen()),
     GetPage(
       name: confirmCreateVoucherCodeOutScreen,
       page: () => ConfirmCreateVoucherCodeOutScreen(),
     ),
-    GetPage(
-      name: invoiceScreen,
-      page: () => InvoiceScreen(),
-    ),
-    GetPage(
-      name: createInvoiceScreen,
-      page: () => CreateInvoiceScreen(),
-    ),
-    GetPage(
-      name: invoicePreviewScreen,
-      page: () => InvoicePreviewScreen(),
-    ),
+    GetPage(name: invoiceScreen, page: () => InvoiceScreen()),
+    GetPage(name: createInvoiceScreen, page: () => CreateInvoiceScreen()),
+    GetPage(name: invoicePreviewScreen, page: () => InvoicePreviewScreen()),
     GetPage(
       name: confirmInvoiceScreen,
       page: () => invoice_confirm.ConfirmInvoiceScreen(),
     ),
-    GetPage(
-      name: invoiceUpdateScreen,
-      page: () => InvoiceUpdateScreen(),
-    ),
-    GetPage(
-      name: withdrawScreen,
-      page: () => WithdrawScreen(),
-    ),
+    GetPage(name: invoiceUpdateScreen, page: () => InvoiceUpdateScreen()),
+    GetPage(name: withdrawScreen, page: () => WithdrawScreen()),
     GetPage(
       name: addWithdrawMethodScreen,
       page: () => AddWithdrawMethodScreen(),
     ),
-    GetPage(
-      name: withdrawMoneyScreen,
-      page: () => WithdrawMoneyScreen(),
-    ),
+    GetPage(name: withdrawMoneyScreen, page: () => WithdrawMoneyScreen()),
     GetPage(
       name: confirmWithdrawMoneyScreen,
       page: () => withdraw_confirm.ConfirmWithdrawMoneyScreen(),
     ),
-    GetPage(
-      name: requestToMeScreen,
-      page: () => RequestToMeScreen(),
-    ),
-    GetPage(
-      name: transactionsHistoryScreen,
-      page: () => TransactionsHistory(),
-    ),
+    GetPage(name: requestToMeScreen, page: () => RequestToMeScreen()),
+    GetPage(name: transactionsHistoryScreen, page: () => TransactionsHistory()),
     GetPage(
       name: requestToMeWalletInfoScreen,
       page: () => RequestToMeWalletInfoScreen(),
@@ -449,62 +368,23 @@ class Routes {
       name: confirmRequestToMeScreen,
       page: () => request_to_me_confirm.ConfirmRequestToMeScreen(),
     ),
-    GetPage(
-      name: addMoneyHistoryScreen,
-      page: () => AddMoneyHistoryScreen(),
-    ),
-    GetPage(
-      name: withdrawHistoryScreen,
-      page: () => WithdrawHistoryScreen(),
-    ),
-    GetPage(
-      name: myQrCodeScreen,
-      page: () => const MyQrCodeScreen(),
-    ),
-    GetPage(
-      name: settingsScreen,
-      page: () => SettingsScreen(),
-    ),
-    GetPage(
-      name: updateProfileScreen,
-      page: () => UpdateProfileScreen(),
-    ),
-    GetPage(
-      name: changePasswordScreen,
-      page: () => ChangePasswordScreen(),
-    ),
-    GetPage(
-      name: twoFaSecurity,
-      page: () => TwoFaSecurity(),
-    ),
-    GetPage(
-      name: supportScreen,
-      page: () => SupportScreen(),
-    ),
+    GetPage(name: addMoneyHistoryScreen, page: () => AddMoneyHistoryScreen()),
+    GetPage(name: withdrawHistoryScreen, page: () => WithdrawHistoryScreen()),
+    GetPage(name: myQrCodeScreen, page: () => const MyQrCodeScreen()),
+    GetPage(name: settingsScreen, page: () => SettingsScreen()),
+    GetPage(name: updateProfileScreen, page: () => UpdateProfileScreen()),
+    GetPage(name: changePasswordScreen, page: () => ChangePasswordScreen()),
+    GetPage(name: twoFaSecurity, page: () => TwoFaSecurity()),
+    GetPage(name: supportScreen, page: () => SupportScreen()),
     GetPage(
       name: createSupportTicketScreen,
       page: () => CreateSupportTicketScreen(),
     ),
-    GetPage(
-      name: mySupportTickets,
-      page: () => MySupportTickets(),
-    ),
-    GetPage(
-      name: changeLanguageScreen,
-      page: () => ChangeLanguageScreen(),
-    ),
-    GetPage(
-      name: myCardsScreen,
-      page: () => const MyCardsScreen(),
-    ),
-    GetPage(
-      name: addNewCardScreen,
-      page: () => AddNewCardScreen(),
-    ),
-    GetPage(
-      name: bankInfoScreen,
-      page: () => const BankInfoScreen(),
-    ),
+    GetPage(name: mySupportTickets, page: () => MySupportTickets()),
+    GetPage(name: changeLanguageScreen, page: () => ChangeLanguageScreen()),
+    GetPage(name: myCardsScreen, page: () => const MyCardsScreen()),
+    GetPage(name: addNewCardScreen, page: () => AddNewCardScreen()),
+    GetPage(name: bankInfoScreen, page: () => const BankInfoScreen()),
     GetPage(
       name: Routes.subscriptionScreen,
       page: () => const SubscriptionScreen(),
