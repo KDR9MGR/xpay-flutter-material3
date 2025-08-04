@@ -61,9 +61,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: CustomColor.primaryGradient,
-        ),
+        decoration: BoxDecoration(gradient: CustomColor.primaryGradient),
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -74,7 +72,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, SettingsController controller) {
+  ListView _bodyWidget(BuildContext context, SettingsController controller) {
     return ListView(
       shrinkWrap: true,
       children: [
@@ -93,8 +91,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       onTap: () {
                         showModalBottomSheet(
                           context: context,
-                          builder: (context) =>
-                              _imagePickerBottomSheetWidget(context),
+                          builder:
+                              (context) =>
+                                  _imagePickerBottomSheetWidget(context),
                         );
                       },
                       child: _getProfileImageWidget(),
@@ -111,22 +110,22 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       size: Dimensions.iconSizeDefault,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
         ),
         _updateProfileInputWidget(context, controller),
         _buttonWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize,
-        ),
+        SizedBox(height: Dimensions.heightSize),
       ],
     );
   }
 
-  _updateProfileInputWidget(
-      BuildContext context, SettingsController controller) {
+  Container _updateProfileInputWidget(
+    BuildContext context,
+    SettingsController controller,
+  ) {
     return Container(
       margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       padding: const EdgeInsets.all(20),
@@ -146,9 +145,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               borderColor: CustomColor.primaryColor,
               color: CustomColor.secondaryColor,
             ),
-            SizedBox(
-              height: Dimensions.heightSize,
-            ),
+            SizedBox(height: Dimensions.heightSize),
             TextLabelWidget(text: Strings.lastName.tr),
             TextFieldInputWidget(
               readOnly: true,
@@ -157,9 +154,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               borderColor: CustomColor.primaryColor,
               color: CustomColor.secondaryColor,
             ),
-            SizedBox(
-              height: Dimensions.heightSize,
-            ),
+            SizedBox(height: Dimensions.heightSize),
             TextLabelWidget(text: Strings.emailAddress.tr),
             TextFieldInputWidget(
               readOnly: true,
@@ -168,17 +163,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               borderColor: CustomColor.primaryColor,
               color: CustomColor.secondaryColor,
             ),
-            SizedBox(
-              height: Dimensions.heightSize,
-            ),
+            SizedBox(height: Dimensions.heightSize),
             TextLabelWidget(text: Strings.mobile.tr),
             PhoneNumberWithCountryCodeInput(
               readOnly: true,
               controller: controller.mobileController,
             ),
-            SizedBox(
-              height: Dimensions.heightSize,
-            ),
+            SizedBox(height: Dimensions.heightSize),
             TextLabelWidget(text: Strings.address.tr),
             TextFieldInputWidget(
               validator:
@@ -188,9 +179,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               borderColor: CustomColor.primaryColor,
               color: CustomColor.secondaryColor,
             ),
-            SizedBox(
-              height: Dimensions.heightSize,
-            ),
+            SizedBox(height: Dimensions.heightSize),
             Row(
               children: [
                 Expanded(
@@ -199,8 +188,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     children: [
                       TextLabelWidget(text: Strings.state.tr),
                       TextFieldInputWidget(
-                        validator: RequiredValidator(
-                            errorText: 'Please enter a State').call,
+                        validator:
+                            RequiredValidator(
+                              errorText: 'Please enter a State',
+                            ).call,
                         controller: controller.stateController,
                         hintText: Strings.state.tr,
                         borderColor: CustomColor.primaryColor,
@@ -209,9 +200,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: Dimensions.widthSize,
-                ),
+                SizedBox(width: Dimensions.widthSize),
                 Expanded(
                   flex: 1,
                   child: Column(
@@ -219,7 +208,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       TextLabelWidget(text: Strings.city.tr),
                       TextFieldInputWidget(
                         validator:
-                            RequiredValidator(errorText: 'Please enter a City').call,
+                            RequiredValidator(
+                              errorText: 'Please enter a City',
+                            ).call,
                         controller: controller.cityController,
                         hintText: Strings.city.tr,
                         borderColor: CustomColor.primaryColor,
@@ -230,9 +221,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 ),
               ],
             ),
-            SizedBox(
-              height: Dimensions.heightSize,
-            ),
+            SizedBox(height: Dimensions.heightSize),
             Column(
               children: [
                 TextLabelWidget(text: Strings.zip.tr),
@@ -240,24 +229,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   controller: controller.zipController,
                   keyboardType: TextInputType.number,
                   validator:
-                      RequiredValidator(errorText: 'Please enter a ZIP CODE').call,
+                      RequiredValidator(
+                        errorText: 'Please enter a ZIP CODE',
+                      ).call,
                   hintText: Strings.zip.tr,
                   borderColor: CustomColor.primaryColor,
                   color: CustomColor.secondaryColor,
                 ),
-                SizedBox(
-                  width: Dimensions.widthSize,
-                ),
+                SizedBox(width: Dimensions.widthSize),
               ],
             ),
-            SizedBox(
-              width: Dimensions.widthSize,
-            ),
+            SizedBox(width: Dimensions.widthSize),
             Column(
               children: [
-                SizedBox(
-                  height: Dimensions.heightSize,
-                ),
+                SizedBox(height: Dimensions.heightSize),
                 // TextLabelWidget(text: Strings.country.tr),
                 // ProfileCountryCodePickerWidget(
                 //   hintText: 'Select Country',
@@ -276,7 +261,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context, SettingsController controller) {
+  Padding _buttonWidget(BuildContext context, SettingsController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: PrimaryButton(
@@ -292,21 +277,30 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 if (context.mounted) {
                   Navigator.pop(context);
                   Utils.showDialogMessage(
-                      context, 'Success', 'Profile Updated!');
+                    context,
+                    'Success',
+                    'Profile Updated!',
+                  );
                   controller.userPhoto = null;
                 }
               } else {
                 if (context.mounted) {
                   Navigator.pop(context);
                   Utils.showDialogMessage(
-                      context, 'Info', 'No changes to update.');
+                    context,
+                    'Info',
+                    'No changes to update.',
+                  );
                 }
               }
             } catch (e) {
               if (context.mounted) {
                 Navigator.pop(context);
                 Utils.showDialogMessage(
-                    context, 'Error', 'Failed to update profile: $e');
+                  context,
+                  'Error',
+                  'Failed to update profile: $e',
+                );
               }
             }
           }
@@ -326,7 +320,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     }
   }
 
-  _imagePickerBottomSheetWidget(BuildContext context) {
+  Container _imagePickerBottomSheetWidget(BuildContext context) {
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.15,
@@ -337,26 +331,28 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           Padding(
             padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
             child: IconButton(
-                onPressed: () {
-                  pickImage(ImageSource.gallery);
-                },
-                icon: const Icon(
-                  Icons.image,
-                  color: CustomColor.primaryColor,
-                  size: 50,
-                )),
+              onPressed: () {
+                pickImage(ImageSource.gallery);
+              },
+              icon: const Icon(
+                Icons.image,
+                color: CustomColor.primaryColor,
+                size: 50,
+              ),
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
             child: IconButton(
-                onPressed: () {
-                  pickImage(ImageSource.camera);
-                },
-                icon: const Icon(
-                  Icons.camera,
-                  color: CustomColor.primaryColor,
-                  size: 50,
-                )),
+              onPressed: () {
+                pickImage(ImageSource.camera);
+              },
+              icon: const Icon(
+                Icons.camera,
+                color: CustomColor.primaryColor,
+                size: 50,
+              ),
+            ),
           ),
         ],
       ),
@@ -365,8 +361,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   Future pickImage(ImageSource imageSource) async {
     try {
-      final image =
-          await ImagePicker().pickImage(source: imageSource, imageQuality: 100);
+      final image = await ImagePicker().pickImage(
+        source: imageSource,
+        imageQuality: 100,
+      );
       if (image == null) return;
       setState(() {
         settingsController.userPhoto = File(image.path);
@@ -394,8 +392,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       updatedFields['zip_code'] = settingsController.zipController.text.trim();
     }
     if (settingsController.userPhoto != null) {
-      String? photoUrl =
-          await _userProvider.uploadProfilePhoto(settingsController.userPhoto!);
+      String? photoUrl = await _userProvider.uploadProfilePhoto(
+        settingsController.userPhoto!,
+      );
       updatedFields['profile_photo'] = photoUrl;
     }
 

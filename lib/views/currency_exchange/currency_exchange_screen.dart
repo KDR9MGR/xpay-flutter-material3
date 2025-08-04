@@ -55,25 +55,26 @@ class CurrencyExchangeScreen extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, CurrencyExchangeController controller) {
+  ListView _bodyWidget(
+    BuildContext context,
+    CurrencyExchangeController controller,
+  ) {
     return ListView(
       shrinkWrap: true,
       children: [
         _infoInputWidget(context, controller),
         _walletInfoWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
         _buttonWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
       ],
     );
   }
 
-  _infoInputWidget(
-      BuildContext context, CurrencyExchangeController controller) {
+  Obx _infoInputWidget(
+    BuildContext context,
+    CurrencyExchangeController controller,
+  ) {
     return Obx(() {
       return Container(
         padding: const EdgeInsets.all(20),
@@ -90,21 +91,15 @@ class CurrencyExchangeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextLabelWidget(text: Strings.amount.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               SecondaryTextInputWidget(
                 controller: controller.amountController,
                 hintText: '0.00',
                 color: CustomColor.secondaryColor,
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               TextLabelWidget(text: Strings.fromCurrency.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               DropDownInputWidget(
                 items: controller.formCurrencyList,
                 color: CustomColor.primaryColor.withValues(alpha: 0.1),
@@ -114,16 +109,12 @@ class CurrencyExchangeScreen extends StatelessWidget {
                   controller.formCurrencyName.value = value!;
                 },
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   TextLabelWidget(text: Strings.toCurrency.tr),
-                  SizedBox(
-                    height: Dimensions.heightSize,
-                  ),
+                  SizedBox(height: Dimensions.heightSize),
                   DropDownInputWidget(
                     items: controller.toCurrencyList,
                     color: CustomColor.primaryColor.withValues(alpha: 0.1),
@@ -143,7 +134,10 @@ class CurrencyExchangeScreen extends StatelessWidget {
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context, CurrencyExchangeController controller) {
+  Padding _buttonWidget(
+    BuildContext context,
+    CurrencyExchangeController controller,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: PrimaryButton(
@@ -156,8 +150,10 @@ class CurrencyExchangeScreen extends StatelessWidget {
     );
   }
 
-  _walletInfoWidget(
-      BuildContext context, CurrencyExchangeController controller) {
+  Obx _walletInfoWidget(
+    BuildContext context,
+    CurrencyExchangeController controller,
+  ) {
     return Obx(() {
       return Container(
         margin: const EdgeInsets.only(top: 15, left: 10, right: 10),

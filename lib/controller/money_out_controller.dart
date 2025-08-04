@@ -45,15 +45,15 @@ class MoneyOutController extends GetxController {
     super.dispose();
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
-  navigateToConfirmMoneyOutScreen() {
+  void navigateToConfirmMoneyOutScreen() {
     Get.toNamed(Routes.confirmMoneyOutScreen);
   }
 
-  navigateToMoneyOutScanQrCodeScreen() {
+  void navigateToMoneyOutScanQrCodeScreen() {
     Get.toNamed(Routes.moneyOutScanQrCodeScreen);
   }
 }

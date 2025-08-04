@@ -1,7 +1,8 @@
+import '../data/card_model.dart';
+import '/utils/app_logger.dart';
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../data/card_model.dart';
 
 class CardsController extends GetxController {
   static const String _cardsKey = 'saved_cards';
@@ -30,7 +31,7 @@ class CardsController extends GetxController {
         _cards.value = cardsList.map((cardJson) => CardModel.fromJson(cardJson)).toList();
       }
     } catch (e) {
-      print('Error loading cards: $e');
+      AppLogger.log('Error loading cards: $e');
       Get.snackbar('Error', 'Failed to load saved cards');
     } finally {
       _isLoading.value = false;
@@ -44,7 +45,7 @@ class CardsController extends GetxController {
       final cardsJson = json.encode(_cards.map((card) => card.toJson()).toList());
       await prefs.setString(_cardsKey, cardsJson);
     } catch (e) {
-      print('Error saving cards: $e');
+      AppLogger.log('Error saving cards: $e');
       throw Exception('Failed to save cards');
     }
   }
@@ -89,7 +90,7 @@ class CardsController extends GetxController {
       Get.snackbar('Success', 'Card added successfully');
       return true;
     } catch (e) {
-      print('Error adding card: $e');
+      AppLogger.log('Error adding card: $e');
       Get.snackbar('Error', 'Failed to add card');
       return false;
     } finally {
@@ -120,7 +121,7 @@ class CardsController extends GetxController {
       Get.snackbar('Success', 'Card removed successfully');
       return true;
     } catch (e) {
-      print('Error removing card: $e');
+      AppLogger.log('Error removing card: $e');
       Get.snackbar('Error', 'Failed to remove card');
       return false;
     } finally {
@@ -151,7 +152,7 @@ class CardsController extends GetxController {
       Get.snackbar('Success', 'Default card updated');
       return true;
     } catch (e) {
-      print('Error setting default card: $e');
+      AppLogger.log('Error setting default card: $e');
       Get.snackbar('Error', 'Failed to update default card');
       return false;
     } finally {
@@ -231,7 +232,7 @@ class CardsController extends GetxController {
       await _saveCards();
       Get.snackbar('Success', 'All cards cleared');
     } catch (e) {
-      print('Error clearing cards: $e');
+      AppLogger.log('Error clearing cards: $e');
       Get.snackbar('Error', 'Failed to clear cards');
     }
   }

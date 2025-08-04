@@ -3,18 +3,8 @@ import 'package:get/get.dart';
 
 import '../routes/routes.dart';
 
-List<String> yearList = [
-  'Select Term',
-  '2 Years',
-  '3 Years',
-  '5 Years',
-];
-List<String> depositAmountList = [
-  'Select Term',
-  '\$ 50',
-  '\$ 100',
-  '\$ 200',
-];
+List<String> yearList = ['Select Term', '2 Years', '3 Years', '5 Years'];
+List<String> depositAmountList = ['Select Term', '\$ 50', '\$ 100', '\$ 200'];
 List<String> frequencyList = [
   'Select Deposit Frequency ',
   'Weekly',
@@ -48,47 +38,47 @@ class SavingsController extends GetxController
     super.dispose();
   }
 
-  changeIndicator(int value) {
+  void changeIndicator(int value) {
     activeIndex.value = value;
   }
 
-  changeAnimatedHeight(value) {
+  void changeAnimatedHeight(value) {
     animatedHeight.value = value;
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
-  navigateToSchemeScreen() {
+  void navigateToSchemeScreen() {
     Get.toNamed(Routes.schemeScreen);
   }
 
-  navigateToAddTermAndFrequencyScreen() {
+  void navigateToAddTermAndFrequencyScreen() {
     Get.toNamed(Routes.addTermAndFrequencyScreen);
   }
 
-  navigateToDepositAmountScreen() {
+  void navigateToDepositAmountScreen() {
     Get.toNamed(Routes.depositAmountScreen);
   }
 
-  navigateToReviewSavingScreen() {
+  void navigateToReviewSavingScreen() {
     Get.toNamed(Routes.reviewSavingScreen);
   }
 
-  navigateToConfirmSavingScreen() {
+  void navigateToConfirmSavingScreen() {
     Get.toNamed(Routes.confirmSavingScreen);
   }
 
-  navigateToDataSavingScreen() {
+  void navigateToDataSavingScreen() {
     Get.toNamed(Routes.dataSavingScreen);
   }
 
-  navigateToDataShowScreen() {
+  void navigateToDataShowScreen() {
     Get.toNamed(Routes.dataShowScreen);
   }
 
-  navigateToHistorySavingScreen() {
+  void navigateToHistorySavingScreen() {
     Get.toNamed(Routes.historySavingScreen);
   }
 }

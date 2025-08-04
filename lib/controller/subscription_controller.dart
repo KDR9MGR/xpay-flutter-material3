@@ -1,13 +1,14 @@
-import 'package:get/get.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../services/stripe_service.dart';
+import '../config/moov_config.dart';
+import '../config/stripe_config.dart';
+import '../routes/routes.dart';
 import '../services/moov_service.dart';
 import '../services/platform_payment_service.dart';
-import '../config/stripe_config.dart';
-import '../config/moov_config.dart';
-import '../routes/routes.dart';
+import '../services/stripe_service.dart';
+import '/utils/app_logger.dart';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 class SubscriptionController extends GetxController {
   final StripeService _stripeService = StripeService();
@@ -61,7 +62,7 @@ class SubscriptionController extends GetxController {
   Future<void> _initializeSubscriptionData() async {
     _isLoading.value = true;
     try {
-      print('Initializing subscription data...');
+      AppLogger.log('Initializing subscription data...');
       
       // Only try to load account IDs if user is authenticated
       final user = FirebaseAuth.instance.currentUser;
@@ -76,27 +77,27 @@ class SubscriptionController extends GetxController {
         try {
           await _checkSubscriptionStatus();
         } catch (e) {
-          print('Warning: Could not check subscription status: $e');
+          AppLogger.log('Warning: Could not check subscription status: $e');
         }
         
         try {
           await _loadSubscriptions();
         } catch (e) {
-          print('Warning: Could not load subscriptions: $e');
+          AppLogger.log('Warning: Could not load subscriptions: $e');
         }
         
         try {
           await _loadPaymentMethods();
         } catch (e) {
-          print('Warning: Could not load payment methods: $e');
+          AppLogger.log('Warning: Could not load payment methods: $e');
         }
       } else {
-        print('User not authenticated, skipping account initialization');
+        AppLogger.log('User not authenticated, skipping account initialization');
       }
       
-      print('Subscription data initialization completed');
+      AppLogger.log('Subscription data initialization completed');
     } catch (e) {
-      print('Error during subscription initialization: $e');
+      AppLogger.log('Error during subscription initialization: $e');
       // Don't show error to user - they can still use the app
     } finally {
       _isLoading.value = false;
@@ -109,7 +110,7 @@ class SubscriptionController extends GetxController {
       _googlePayAvailable.value = await PlatformPaymentService.isGooglePayAvailable();
       _applePayAvailable.value = await PlatformPaymentService.isApplePayAvailable();
     } catch (e) {
-      print('Error checking platform payment availability: $e');
+      AppLogger.log('Error checking platform payment availability: $e');
     }
   }
 
@@ -118,7 +119,7 @@ class SubscriptionController extends GetxController {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
-        print('User not authenticated, skipping Moov account creation');
+        AppLogger.log('User not authenticated, skipping Moov account creation');
         return;
       }
 
@@ -128,18 +129,18 @@ class SubscriptionController extends GetxController {
 
       if (userDoc.exists && userDoc.data()?['moovAccountId'] != null) {
         _moovAccountId.value = userDoc.data()!['moovAccountId'];
-        print('Loaded existing Moov account ID: ${_moovAccountId.value}');
+        AppLogger.log('Loaded existing Moov account ID: ${_moovAccountId.value}');
       } else {
         // Try to create new Moov account, but don't fail if it doesn't work
         try {
           await _createMoovAccount(user, userDocRef, userDoc);
         } catch (e) {
-          print('Warning: Could not create Moov account: $e');
+          AppLogger.log('Warning: Could not create Moov account: $e');
           // Continue without Moov account - user can still use other features
         }
       }
     } catch (e) {
-      print('Error loading Moov account ID: $e');
+      AppLogger.log('Error loading Moov account ID: $e');
       // Don't throw error - allow app to continue
     }
   }
@@ -170,7 +171,7 @@ class SubscriptionController extends GetxController {
       }
     }
 
-    print('Creating Moov account for user: $email');
+    AppLogger.log('Creating Moov account for user: $email');
     
     // Create new Moov account
     final accountResult = await _moovService.createAccount(
@@ -183,7 +184,7 @@ class SubscriptionController extends GetxController {
     
     if (accountResult != null && accountResult['success'] == true) {
       _moovAccountId.value = accountResult['accountId'];
-      print('Created Moov account: ${_moovAccountId.value}');
+      AppLogger.log('Created Moov account: ${_moovAccountId.value}');
       
       // Save account ID to Firestore
       if (userDoc.exists) {
@@ -260,7 +261,7 @@ class SubscriptionController extends GetxController {
         }
       }
     } catch (e) {
-      print('Error loading customer ID: $e');
+      AppLogger.log('Error loading customer ID: $e');
       Get.snackbar('Error', 'Failed to initialize payment system. Please try again.');
     }
   }
@@ -272,7 +273,7 @@ class SubscriptionController extends GetxController {
       final status = await _stripeService.getSubscriptionStatus();
       _subscriptionStatus.value = status ?? '';
     } catch (e) {
-      print('Error checking subscription status: $e');
+      AppLogger.log('Error checking subscription status: $e');
     }
   }
 
@@ -291,7 +292,7 @@ class SubscriptionController extends GetxController {
         _currentPlan.value = _getPlanNameFromPriceId(activeSubscription['price_id']);
       }
     } catch (e) {
-      print('Error loading subscriptions: $e');
+      AppLogger.log('Error loading subscriptions: $e');
     }
   }
 
@@ -301,7 +302,7 @@ class SubscriptionController extends GetxController {
       final paymentMethods = await _stripeService.getPaymentMethods();
       _paymentMethods.value = paymentMethods;
     } catch (e) {
-      print('Error loading payment methods: $e');
+      AppLogger.log('Error loading payment methods: $e');
     }
   }
 
@@ -374,7 +375,7 @@ class SubscriptionController extends GetxController {
 
       return false;
     } catch (e) {
-      print('Error subscribing with Moov: $e');
+      AppLogger.log('Error subscribing with Moov: $e');
       Get.snackbar('Error', 'Failed to subscribe: $e');
       return false;
     } finally {
@@ -410,7 +411,7 @@ class SubscriptionController extends GetxController {
 
       return success;
     } catch (e) {
-      print('Error subscribing with Stripe: $e');
+      AppLogger.log('Error subscribing with Stripe: $e');
       Get.snackbar('Error', 'Failed to subscribe: $e');
       return false;
     } finally {
@@ -426,7 +427,7 @@ class SubscriptionController extends GetxController {
           .doc(subscriptionData['subscriptionId'])
           .set(subscriptionData);
     } catch (e) {
-      print('Error storing subscription data: $e');
+      AppLogger.log('Error storing subscription data: $e');
     }
   }
 
@@ -445,7 +446,7 @@ class SubscriptionController extends GetxController {
 
       return success;
     } catch (e) {
-      print('Error cancelling subscription: $e');
+      AppLogger.log('Error cancelling subscription: $e');
       return false;
     } finally {
       _isLoading.value = false;
@@ -474,7 +475,7 @@ class SubscriptionController extends GetxController {
       await _loadPaymentMethods(); // Refresh payment methods
       return true;
     } catch (e) {
-      print('Error adding payment method: $e');
+      AppLogger.log('Error adding payment method: $e');
       return false;
     } finally {
       _isLoading.value = false;
@@ -496,7 +497,7 @@ class SubscriptionController extends GetxController {
 
       return success;
     } catch (e) {
-      print('Error deleting payment method: $e');
+      AppLogger.log('Error deleting payment method: $e');
       return false;
     } finally {
       _isLoading.value = false;
@@ -567,7 +568,7 @@ class SubscriptionController extends GetxController {
         Get.snackbar('Error', 'Google Pay payment failed. Please try again.');
       }
     } catch (e) {
-      print('Error processing Google Pay subscription: $e');
+      AppLogger.log('Error processing Google Pay subscription: $e');
       Get.snackbar('Error', 'Failed to process Google Pay payment: $e');
     } finally {
       _isLoading.value = false;
@@ -623,7 +624,7 @@ class SubscriptionController extends GetxController {
         Get.snackbar('Error', 'Apple Pay payment failed. Please try again.');
       }
     } catch (e) {
-      print('Error processing Apple Pay subscription: $e');
+      AppLogger.log('Error processing Apple Pay subscription: $e');
       Get.snackbar('Error', 'Failed to process Apple Pay payment: $e');
     } finally {
       _isLoading.value = false;

@@ -54,35 +54,35 @@ class AuthController extends GetxController
     super.dispose();
   }
 
-  navigateToRegisterScreen() {
+  void navigateToRegisterScreen() {
     Get.toNamed(Routes.registerScreen);
   }
 
-  navigateToForgetPinScreen() {
+  void navigateToForgetPinScreen() {
     Get.toNamed(Routes.forgetPasswordScreen);
   }
 
-  navigateToOTPScreen() {
+  void navigateToOTPScreen() {
     Get.toNamed(Routes.otpScreen);
   }
 
-  navigateToResetPasswordScreen() {
+  void navigateToResetPasswordScreen() {
     Get.toNamed(Routes.resetPasswordScreen);
   }
 
-  navigateToLoginScreen() {
+  void navigateToLoginScreen() {
     Get.toNamed(Routes.loginScreen);
   }
 
-  navigateToNidPassportScreen() {
+  void navigateToNidPassportScreen() {
     Get.toNamed(Routes.nidPassportScreen);
   }
 
-  navigateToCongratulationsScreen() {
+  void navigateToCongratulationsScreen() {
     Get.toNamed(Routes.congratulationsScreen);
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 }

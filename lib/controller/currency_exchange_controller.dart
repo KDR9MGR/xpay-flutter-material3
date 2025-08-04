@@ -30,11 +30,11 @@ class CurrencyExchangeController extends GetxController {
     super.dispose();
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
-  navigateToConfirmCurrencyExchangeScreen() {
+  void navigateToConfirmCurrencyExchangeScreen() {
     Get.toNamed(Routes.confirmCurrencyExchangeScreen);
   }
 }

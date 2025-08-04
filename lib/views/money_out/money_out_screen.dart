@@ -103,7 +103,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context) {
+  ListView _bodyWidget(BuildContext context) {
     return ListView(
       shrinkWrap: true,
       children: [
@@ -116,7 +116,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
     );
   }
 
-  _infoInputWidget(BuildContext context) {
+  Obx _infoInputWidget(BuildContext context) {
     return Obx(() {
       return Container(
         margin: const EdgeInsets.all(20),
@@ -426,7 +426,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
     );
   }
 
-  _amountButton(BuildContext context) {
+  Obx _amountButton(BuildContext context) {
     return Obx(() {
       return Container(
         width: MediaQuery.of(context).size.width * 0.20,
@@ -464,7 +464,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context) {
+  Container _buttonWidget(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
@@ -494,6 +494,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
                 );
                 await _userProvider.fetchUserDetails();
                 if (context.mounted) {
+                  // TODO: Add mounted check before using context in async function
                   Navigator.pop(context);
                   Utils.showDialogMessage(
                     context,
@@ -504,6 +505,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
                   controller.agentUsernameOrEmailController.clear();
                 }
               } catch (e) {
+                // TODO: Add mounted check before using context in async function
                 Navigator.pop(context); // Dismiss loading dialog on error
                 Utils.showDialogMessage(context, 'Error', '$e');
               }
@@ -515,7 +517,7 @@ class _MoneyOutScreenState extends State<MoneyOutScreen>
     );
   }
 
-  _walletInfoWidget(BuildContext context) {
+  Obx _walletInfoWidget(BuildContext context) {
     return Obx(() {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),

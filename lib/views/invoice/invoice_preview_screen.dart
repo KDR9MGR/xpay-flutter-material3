@@ -52,25 +52,21 @@ class InvoicePreviewScreen extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, InvoiceController controller) {
+  ListView _bodyWidget(BuildContext context, InvoiceController controller) {
     return ListView(
       shrinkWrap: true,
       children: [
         _invoiceItemWidget(context, controller),
         _invoiceItemDetailsWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
         _buttonWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
       ],
     );
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context, InvoiceController controller) {
+  Padding _buttonWidget(BuildContext context, InvoiceController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: PrimaryButton(
@@ -83,14 +79,17 @@ class InvoicePreviewScreen extends StatelessWidget {
     );
   }
 
-  _invoiceItemDetailsWidget(
-      BuildContext context, InvoiceController controller) {
+  Container _invoiceItemDetailsWidget(
+    BuildContext context,
+    InvoiceController controller,
+  ) {
     return Container(
       margin: const EdgeInsets.only(top: 20, right: 10, left: 10),
       padding: const EdgeInsets.only(bottom: 20, top: 20),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Dimensions.radius * 2),
-          color: const Color(0xff011526)),
+        borderRadius: BorderRadius.circular(Dimensions.radius * 2),
+        color: const Color(0xff011526),
+      ),
       child: Column(
         children: [
           Container(
@@ -134,7 +133,9 @@ class InvoicePreviewScreen extends StatelessWidget {
                     Text(
                       Strings.payableAmount.tr,
                       style: TextStyle(
-                        color: CustomColor.primaryTextColor.withValues(alpha: 0.5),
+                        color: CustomColor.primaryTextColor.withValues(
+                          alpha: 0.5,
+                        ),
                         fontSize: Dimensions.smallestTextSize,
                         fontWeight: FontWeight.w200,
                       ),
@@ -142,7 +143,9 @@ class InvoicePreviewScreen extends StatelessWidget {
                     Text(
                       '11.00 USD',
                       style: TextStyle(
-                        color: CustomColor.primaryTextColor.withValues(alpha: 0.5),
+                        color: CustomColor.primaryTextColor.withValues(
+                          alpha: 0.5,
+                        ),
                         fontSize: Dimensions.smallestTextSize,
                         fontWeight: FontWeight.w200,
                       ),
@@ -157,13 +160,17 @@ class InvoicePreviewScreen extends StatelessWidget {
     );
   }
 
-  _invoiceItemWidget(BuildContext context, InvoiceController controller) {
+  Container _invoiceItemWidget(
+    BuildContext context,
+    InvoiceController controller,
+  ) {
     return Container(
       margin: const EdgeInsets.only(top: 20, right: 10, left: 10),
       padding: const EdgeInsets.only(bottom: 20, top: 20),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Dimensions.radius * 2),
-          color: const Color(0xff011526)),
+        borderRadius: BorderRadius.circular(Dimensions.radius * 2),
+        color: const Color(0xff011526),
+      ),
       child: Column(
         children: [
           Container(
@@ -185,7 +192,9 @@ class InvoicePreviewScreen extends StatelessWidget {
                     Text(
                       'Product Name 2',
                       style: TextStyle(
-                        color: CustomColor.primaryTextColor.withValues(alpha: 0.5),
+                        color: CustomColor.primaryTextColor.withValues(
+                          alpha: 0.5,
+                        ),
                         fontSize: Dimensions.smallestTextSize,
                         fontWeight: FontWeight.w200,
                       ),
@@ -193,7 +202,9 @@ class InvoicePreviewScreen extends StatelessWidget {
                     Text(
                       '5.00 USD',
                       style: TextStyle(
-                        color: CustomColor.primaryTextColor.withValues(alpha: 0.5),
+                        color: CustomColor.primaryTextColor.withValues(
+                          alpha: 0.5,
+                        ),
                         fontSize: Dimensions.smallestTextSize,
                         fontWeight: FontWeight.w200,
                       ),
@@ -208,7 +219,10 @@ class InvoicePreviewScreen extends StatelessWidget {
     );
   }
 
-  _invoiceItemDataWidget({required String title, required String value}) {
+  Column _invoiceItemDataWidget({
+    required String title,
+    required String value,
+  }) {
     return Column(
       children: [
         Row(
@@ -232,10 +246,7 @@ class InvoicePreviewScreen extends StatelessWidget {
             ),
           ],
         ),
-        const Divider(
-          thickness: 1.5,
-          color: CustomColor.secondaryColor,
-        )
+        const Divider(thickness: 1.5, color: CustomColor.secondaryColor),
       ],
     );
   }

@@ -23,22 +23,16 @@ class OnboardController extends GetxController {
   void nextPage() {
     if (isLastPage) {
     } else {
-      pageController.nextPage(
-        duration: 300.milliseconds,
-        curve: Curves.ease,
-      );
+      pageController.nextPage(duration: 300.milliseconds, curve: Curves.ease);
     }
   }
 
   void backPage() {
-    pageController.previousPage(
-      duration: 300.milliseconds,
-      curve: Curves.ease,
-    );
+    pageController.previousPage(duration: 300.milliseconds, curve: Curves.ease);
   }
 
-// navigate to the welcome screen
-  pageNavigate() {
+  // navigate to the welcome screen
+  void pageNavigate() {
     Get.toNamed(Routes.welcomeScreen);
   }
 
@@ -48,16 +42,17 @@ class OnboardController extends GetxController {
       height: 6.h,
       width: 100.w,
       decoration: BoxDecoration(
-        color: index! <= selectedPageIndex.value
-            ? CustomColor.primaryColor
-            : Colors.white,
+        color:
+            index! <= selectedPageIndex.value
+                ? CustomColor.primaryColor
+                : Colors.white,
         shape: BoxShape.rectangle,
       ),
     );
   }
 
-// generate the line equal to page List length
-  lineWidget() {
+  // generate the line equal to page List length
+  Row lineWidget() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
@@ -68,24 +63,24 @@ class OnboardController extends GetxController {
   }
 
   // button widget with color and size
-  buttonWidget() {
+  Padding buttonWidget() {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 36.w,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 36.w),
       child: SizedBox(
-          width: 342.76.w,
-          height: 55.h,
-          child: PrimaryButton(
-            onPressed: () {
-              isFirstPage || isSecondPage ? nextPage() : pageNavigate();
-            },
-            borderColorName: CustomColor.primaryColor,
-            borderWidth: 0,
-            title: isFirstPage || isSecondPage
-                ? Strings.next.tr
-                : Strings.getStarted.tr,
-          )),
+        width: 342.76.w,
+        height: 55.h,
+        child: PrimaryButton(
+          onPressed: () {
+            isFirstPage || isSecondPage ? nextPage() : pageNavigate();
+          },
+          borderColorName: CustomColor.primaryColor,
+          borderWidth: 0,
+          title:
+              isFirstPage || isSecondPage
+                  ? Strings.next.tr
+                  : Strings.getStarted.tr,
+        ),
+      ),
     );
   }
 }

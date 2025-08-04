@@ -58,19 +58,19 @@ class WithdrawController extends GetxController
     super.dispose();
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
-  navigateAddWithdrawMethodScreen() {
+  void navigateAddWithdrawMethodScreen() {
     Get.toNamed(Routes.addWithdrawMethodScreen);
   }
 
-  navigateWithdrawMoneyScreen() {
+  void navigateWithdrawMoneyScreen() {
     Get.toNamed(Routes.withdrawMoneyScreen);
   }
 
-  navigateConfirmWithdrawMoneyScreen() {
+  void navigateConfirmWithdrawMoneyScreen() {
     Get.toNamed(Routes.confirmWithdrawMoneyScreen);
   }
 }

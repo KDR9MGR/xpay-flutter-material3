@@ -47,27 +47,27 @@ class CreateVoucherController extends GetxController {
     super.dispose();
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
-  navigateToConfirmCreateVoucherOutScreen() {
+  void navigateToConfirmCreateVoucherOutScreen() {
     Get.toNamed(Routes.confirmCreateVoucherOutScreen);
   }
 
-  navigateToTransferMoneyScanQrCodeScreen() {
+  void navigateToTransferMoneyScanQrCodeScreen() {
     Get.toNamed(Routes.transferMoneyScanQrCodeScreen);
   }
 
-  navigateToCreateVoucherScreen() {
+  void navigateToCreateVoucherScreen() {
     Get.toNamed(Routes.createVoucherScreen);
   }
 
-  navigateToRedeemVoucherScreen() {
+  void navigateToRedeemVoucherScreen() {
     Get.toNamed(Routes.redeemVoucherScreen);
   }
 
-  navigateToConfirmCreateVoucherCodeOutScreen() {
+  void navigateToConfirmCreateVoucherCodeOutScreen() {
     Get.toNamed(Routes.confirmCreateVoucherCodeOutScreen);
   }
 }

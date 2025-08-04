@@ -55,24 +55,26 @@ class CreateVoucherScreen extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, CreateVoucherController controller) {
+  ListView _bodyWidget(
+    BuildContext context,
+    CreateVoucherController controller,
+  ) {
     return ListView(
       shrinkWrap: true,
       children: [
         _infoInputWidget(context, controller),
         _walletInfoWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
         _buttonWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
       ],
     );
   }
 
-  _infoInputWidget(BuildContext context, CreateVoucherController controller) {
+  Obx _infoInputWidget(
+    BuildContext context,
+    CreateVoucherController controller,
+  ) {
     return Obx(() {
       return Container(
         padding: const EdgeInsets.all(20),
@@ -88,13 +90,9 @@ class CreateVoucherScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               TextLabelWidget(text: Strings.yourWallet.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               DropDownInputWidget(
                 items: controller.walletList,
                 color: CustomColor.primaryColor.withValues(alpha: 0.1),
@@ -104,39 +102,33 @@ class CreateVoucherScreen extends StatelessWidget {
                   controller.walletName.value = value!;
                 },
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               TextLabelWidget(text: Strings.amount.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               AmountInputWidget(
                 hintText: '0.00',
                 controller: controller.amountController,
                 color: CustomColor.secondaryColor,
                 suffixIcon: _amountButton(context, controller),
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               Text(
                 '${Strings.limit.tr}: 1.00 -  100,000.00 USD',
                 style: TextStyle(
-                    fontSize: Dimensions.smallestTextSize * 0.8,
-                    fontWeight: FontWeight.w200,
-                    color: Colors.white.withValues(alpha: 0.4)),
+                  fontSize: Dimensions.smallestTextSize * 0.8,
+                  fontWeight: FontWeight.w200,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
               ),
-              SizedBox(
-                height: Dimensions.heightSize * 0.5,
-              ),
+              SizedBox(height: Dimensions.heightSize * 0.5),
               Text(
                 '${Strings.charge.tr}: 2.00 USD + 1%',
                 style: TextStyle(
-                    fontSize: Dimensions.smallestTextSize * 0.8,
-                    fontWeight: FontWeight.w200,
-                    color: Colors.white.withValues(alpha: 0.4)),
-              )
+                  fontSize: Dimensions.smallestTextSize * 0.8,
+                  fontWeight: FontWeight.w200,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+              ),
             ],
           ),
         ),
@@ -144,7 +136,7 @@ class CreateVoucherScreen extends StatelessWidget {
     });
   }
 
-  _amountButton(BuildContext context, CreateVoucherController controller) {
+  Obx _amountButton(BuildContext context, CreateVoucherController controller) {
     return Obx(() {
       return Container(
         width: MediaQuery.of(context).size.width * 0.20,
@@ -165,7 +157,7 @@ class CreateVoucherScreen extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 fontSize: Dimensions.mediumTextSize,
               ),
-            )
+            ),
           ],
         ),
       );
@@ -173,7 +165,10 @@ class CreateVoucherScreen extends StatelessWidget {
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context, CreateVoucherController controller) {
+  Padding _buttonWidget(
+    BuildContext context,
+    CreateVoucherController controller,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: PrimaryButton(
@@ -186,7 +181,10 @@ class CreateVoucherScreen extends StatelessWidget {
     );
   }
 
-  _walletInfoWidget(BuildContext context, CreateVoucherController controller) {
+  Obx _walletInfoWidget(
+    BuildContext context,
+    CreateVoucherController controller,
+  ) {
     return Obx(() {
       return Container(
         margin: const EdgeInsets.only(top: 15, left: 10, right: 10),

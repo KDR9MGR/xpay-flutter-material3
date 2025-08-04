@@ -129,8 +129,10 @@ class _RequestToMeScreenState extends State<RequestToMeScreen> {
                 Utils.showLoadingDialog(context);
                 try {
                   await _walletViewModel.cancelRequest(request);
+            // TODO: Add mounted check before using context in async function
                   Navigator.of(context).pop();
                 } catch (e) {
+            // TODO: Add mounted check before using context in async function
                   Navigator.of(context).pop();
                   Utils.showDialogMessage(
                       context, 'Error', 'Failed to cancel request: $e');
@@ -158,8 +160,10 @@ class _RequestToMeScreenState extends State<RequestToMeScreen> {
                 );
                 await _walletViewModel.acceptRequest(request);
                 await _userProvider.fetchUserDetails();
+            // TODO: Add mounted check before using context in async function
                 Navigator.of(context).pop();
               } catch (e) {
+            // TODO: Add mounted check before using context in async function
                 Navigator.of(context).pop();
                 Utils.showDialogMessage(
                     context, 'Error', 'Failed to accept request: $e');
@@ -171,8 +175,10 @@ class _RequestToMeScreenState extends State<RequestToMeScreen> {
               Utils.showLoadingDialog(context);
               try {
                 await _walletViewModel.declineRequest(request);
+            // TODO: Add mounted check before using context in async function
                 Navigator.of(context).pop();
               } catch (e) {
+            // TODO: Add mounted check before using context in async function
                 Navigator.of(context).pop();
                 Utils.showDialogMessage(
                     context, 'Error', 'Failed to decline request: $e');

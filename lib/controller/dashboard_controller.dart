@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import '/utils/app_logger.dart';
 import 'package:flutter/material.dart';
+import '/utils/app_logger.dart';
 import 'package:get/get.dart';
+import '/utils/app_logger.dart';
 import 'package:get_storage/get_storage.dart';
+import '/utils/app_logger.dart';
 
 import '../routes/routes.dart';
+import '/utils/app_logger.dart';
 
-List<String> languageList = [
-  'English ',
-  'Spanish',
-  'Chinese',
-  'Hindi',
-];
+List<String> languageList = ['English ', 'Spanish', 'Chinese', 'Hindi'];
 
 class DashboardController extends GetxController {
   RxBool showBalance = true.obs;
@@ -34,120 +34,119 @@ class DashboardController extends GetxController {
     super.dispose();
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
-  changeBalanceStatus() async {
+  Future<void> changeBalanceStatus() async {
     showBalance.value = !showBalance.value;
     await Future.delayed(const Duration(seconds: 5));
     showBalance.value = !showBalance.value;
   }
 
-  changeIndicator(int value) {
+  void changeIndicator(int value) {
     activeIndex.value = value;
   }
 
-  navigateToInvoiceScreen() {
+  void navigateToInvoiceScreen() {
     Get.toNamed(Routes.invoiceScreen);
   }
 
-  navigateToVoucherScreen() {
+  void navigateToVoucherScreen() {
     Get.toNamed(Routes.voucherScreen);
   }
 
-  navigateToSendMoney() {
+  void navigateToSendMoney() {
     Get.toNamed(Routes.addNumberSendMoneyScreen);
   }
 
-  navigateToMakePaymentScreen() {
+  void navigateToMakePaymentScreen() {
     Get.toNamed(Routes.makePaymentScreen);
   }
 
-  navigateToMoneyOutScreen() {
+  void navigateToMoneyOutScreen() {
     Get.toNamed(Routes.moneyOutScreen);
   }
 
-  navigateToAddNumberPaymentScreen() {
+  void navigateToAddNumberPaymentScreen() {
     Get.toNamed(Routes.addNumberPaymentScreen);
   }
 
-  navigateToAddMoneyScreen() {
+  void navigateToAddMoneyScreen() {
     Get.toNamed(Routes.addMoneyMoneyScreen);
   }
 
-  navigateToRequestScreen() {
+  void navigateToRequestScreen() {
     Get.toNamed(Routes.requestScreen);
   }
 
-  navigateToTransferMoneyScreen() {
+  void navigateToTransferMoneyScreen() {
     Get.toNamed(Routes.transferMoneyScreen);
   }
 
-  navigateToCurrencyExchangeScreen() {
+  void navigateToCurrencyExchangeScreen() {
     Get.toNamed(Routes.currencyExchangeScreen);
   }
 
-  navigateToSavingRulesScreen() {
+  void navigateToSavingRulesScreen() {
     Get.toNamed(Routes.savingRulesScreen);
   }
 
-  navigateToRemittanceSourceScreen() {
+  void navigateToRemittanceSourceScreen() {
     Get.toNamed(Routes.remittanceSourceScreen);
   }
 
-  navigateToWithdrawScreen() {
+  void navigateToWithdrawScreen() {
     Get.toNamed(Routes.withdrawScreen);
   }
 
-  navigateToRequestToMeScreen() {
+  void navigateToRequestToMeScreen() {
     Get.toNamed(Routes.requestToMeScreen);
   }
 
-  navigateToAddMoneyHistoryScreen() {
+  void navigateToAddMoneyHistoryScreen() {
     Get.toNamed(Routes.addMoneyHistoryScreen);
   }
 
-  navigateToTransactionHistoryScreen() {
+  void navigateToTransactionHistoryScreen() {
     Get.toNamed(Routes.transactionsHistoryScreen);
   }
 
-  navigateToWithdrawHistoryScreen() {
+  void navigateToWithdrawHistoryScreen() {
     Get.toNamed(Routes.withdrawHistoryScreen);
   }
 
-  navigateToMyQrCodeScreen() {
+  void navigateToMyQrCodeScreen() {
     Get.toNamed(Routes.myQrCodeScreen);
   }
 
-  navigateToXPayMapScreen() {
+  void navigateToXPayMapScreen() {
     Get.toNamed(Routes.xPayMapScreen);
   }
 
-  navigateToSettingScreen() {
+  void navigateToSettingScreen() {
     Get.toNamed(Routes.settingsScreen);
   }
 
-  navigateToChangeNameScreen() {
+  void navigateToChangeNameScreen() {
     Get.toNamed(Routes.changeNameScreen);
   }
 
-  navigateToChangePictureScreen() {
+  void navigateToChangePictureScreen() {
     Get.toNamed(Routes.changePictureScreen);
   }
 
-  navigateToSupportScreen() {
+  void navigateToSupportScreen() {
     Get.toNamed(Routes.supportScreen);
   }
 
-  navigateToLiveChatScreen() {
+  void navigateToLiveChatScreen() {
     Get.toNamed(Routes.liveChatScreen);
   }
 
-  navigateToVerifyAccountScreen() {
+  void navigateToVerifyAccountScreen() {
     Get.toNamed(Routes.verifyAccountScreen);
   }
-
 
   Future<void> signOut() async {
     try {
@@ -156,7 +155,7 @@ class DashboardController extends GetxController {
       await FirebaseAuth.instance.signOut();
       Get.offAllNamed(Routes.onBoardScreen);
     } catch (e) {
-      print('Error signing out: $e');
+      AppLogger.log('Error signing out: $e');
     }
   }
 }

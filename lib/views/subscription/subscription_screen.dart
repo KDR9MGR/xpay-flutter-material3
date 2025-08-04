@@ -13,41 +13,47 @@ class SubscriptionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<SubscriptionController>(
-      builder: (controller) => Scaffold(
-        backgroundColor: CustomColor.screenBGColor,
-        appBar: AppBar(
-          title: Text(
-            'Premium Subscription',
-            style: CustomStyle.commonTextTitleWhite,
-          ),
-          backgroundColor: CustomColor.primaryColor,
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () => Get.back(),
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: CustomColor.primaryTextColor,
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () => controller.refreshData(),
-              icon: const Icon(
-                Icons.refresh,
-                color: CustomColor.primaryTextColor,
+      builder:
+          (controller) => Scaffold(
+            backgroundColor: CustomColor.screenBGColor,
+            appBar: AppBar(
+              title: Text(
+                'Premium Subscription',
+                style: CustomStyle.commonTextTitleWhite,
               ),
+              backgroundColor: CustomColor.primaryColor,
+              elevation: 0,
+              leading: IconButton(
+                onPressed: () => Get.back(),
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: CustomColor.primaryTextColor,
+                ),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () => controller.refreshData(),
+                  icon: const Icon(
+                    Icons.refresh,
+                    color: CustomColor.primaryTextColor,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-        body: Obx(() => controller.isLoading 
-          ? const Center(child: CircularProgressIndicator())
-          : _bodyWidget(context, controller)
-        ),
-      ),
+            body: Obx(
+              () =>
+                  controller.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : _bodyWidget(context, controller),
+            ),
+          ),
     );
   }
 
-  _bodyWidget(BuildContext context, SubscriptionController controller) {
+  SingleChildScrollView _bodyWidget(
+    BuildContext context,
+    SubscriptionController controller,
+  ) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
       child: Column(
@@ -68,23 +74,30 @@ class SubscriptionScreen extends StatelessWidget {
     );
   }
 
-  _subscriptionStatusWidget(SubscriptionController controller) {
+  Container _subscriptionStatusWidget(SubscriptionController controller) {
     final hasActive = controller.hasActiveSubscription;
-    
+
     return Container(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
       decoration: BoxDecoration(
-        gradient: hasActive 
-          ? LinearGradient(
-              colors: [Colors.green.withOpacity(0.2), Colors.green.withOpacity(0.1)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            )
-          : LinearGradient(
-              colors: [Colors.orange.withOpacity(0.2), Colors.orange.withOpacity(0.1)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+        gradient:
+            hasActive
+                ? LinearGradient(
+                  colors: [
+                    Colors.green.withValues(alpha: 0.2),
+                    Colors.green.withValues(alpha: 0.1),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
+                : LinearGradient(
+                  colors: [
+                    Colors.orange.withValues(alpha: 0.2),
+                    Colors.orange.withValues(alpha: 0.1),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
         borderRadius: BorderRadius.circular(Dimensions.radius * 2),
         border: Border.all(
           color: hasActive ? Colors.green : Colors.orange,
@@ -119,32 +132,28 @@ class SubscriptionScreen extends StatelessWidget {
                 ),
                 SizedBox(height: Dimensions.heightSize * 0.3),
                 Text(
-                  hasActive 
-                    ? 'Enjoying all premium features'
-                    : 'Upgrade to unlock premium features',
+                  hasActive
+                      ? 'Enjoying all premium features'
+                      : 'Upgrade to unlock premium features',
                   style: CustomStyle.commonSubTextTitle,
                 ),
               ],
             ),
           ),
           if (hasActive)
-            Icon(
-              Icons.workspace_premium,
-              color: Colors.green,
-              size: 28.r,
-            ),
+            Icon(Icons.workspace_premium, color: Colors.green, size: 28.r),
         ],
       ),
     );
   }
 
-  _currentPlanWidget(SubscriptionController controller) {
+  Widget _currentPlanWidget(SubscriptionController controller) {
     final subscription = controller.subscriptions.firstWhereOrNull(
-      (sub) => sub['status'] == 'active' || sub['status'] == 'trialing'
+      (sub) => sub['status'] == 'active' || sub['status'] == 'trialing',
     );
-    
+
     if (subscription == null) return const SizedBox();
-    
+
     return Container(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
       decoration: BoxDecoration(
@@ -156,7 +165,7 @@ class SubscriptionScreen extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -190,12 +199,13 @@ class SubscriptionScreen extends StatelessWidget {
                     _showCancelDialog(subscription['id']);
                   }
                 },
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 'cancel',
-                    child: Text('Cancel Subscription'),
-                  ),
-                ],
+                itemBuilder:
+                    (context) => [
+                      const PopupMenuItem(
+                        value: 'cancel',
+                        child: Text('Cancel Subscription'),
+                      ),
+                    ],
                 child: Icon(
                   Icons.more_vert,
                   color: CustomColor.secondaryTextColor,
@@ -204,7 +214,7 @@ class SubscriptionScreen extends StatelessWidget {
             ],
           ),
           SizedBox(height: Dimensions.heightSize),
-          
+
           Container(
             padding: EdgeInsets.all(Dimensions.defaultPaddingSize * 0.8),
             decoration: BoxDecoration(
@@ -234,7 +244,9 @@ class SubscriptionScreen extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: CustomColor.primaryColor,
-                    borderRadius: BorderRadius.circular(Dimensions.radius * 0.5),
+                    borderRadius: BorderRadius.circular(
+                      Dimensions.radius * 0.5,
+                    ),
                   ),
                   child: Text(
                     'ACTIVE',
@@ -248,7 +260,7 @@ class SubscriptionScreen extends StatelessWidget {
               ],
             ),
           ),
-          
+
           SizedBox(height: Dimensions.heightSize),
           if (subscription['current_period_end'] != null) ...[
             Row(
@@ -260,30 +272,22 @@ class SubscriptionScreen extends StatelessWidget {
                 ),
                 SizedBox(width: Dimensions.widthSize * 0.5),
                 Text(
-                  'Next billing: ${DateFormat('MMM dd, yyyy').format(
-                    DateTime.fromMillisecondsSinceEpoch(subscription['current_period_end'] * 1000)
-                  )}',
+                  'Next billing: ${DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(subscription['current_period_end'] * 1000))}',
                   style: CustomStyle.commonSubTextTitle,
                 ),
               ],
             ),
           ],
-          
+
           SizedBox(height: Dimensions.heightSize * 1.5),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
               onPressed: () => _showCancelDialog(subscription['id']),
-              icon: Icon(
-                Icons.cancel_outlined,
-                size: 18.r,
-                color: Colors.red,
-              ),
+              icon: Icon(Icons.cancel_outlined, size: 18.r, color: Colors.red),
               label: Text(
                 'Cancel Subscription',
-                style: CustomStyle.commonTextTitle.copyWith(
-                  color: Colors.red,
-                ),
+                style: CustomStyle.commonTextTitle.copyWith(color: Colors.red),
               ),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.red),
@@ -298,7 +302,7 @@ class SubscriptionScreen extends StatelessWidget {
     );
   }
 
-  _paymentMethodsWidget(SubscriptionController controller) {
+  Container _paymentMethodsWidget(SubscriptionController controller) {
     return Container(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
       decoration: BoxDecoration(
@@ -306,7 +310,7 @@ class SubscriptionScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(Dimensions.radius * 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -318,16 +322,10 @@ class SubscriptionScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Payment Methods',
-                style: CustomStyle.commonTextTitle,
-              ),
+              Text('Payment Methods', style: CustomStyle.commonTextTitle),
               TextButton(
                 onPressed: () => controller.addPaymentMethod(),
-                child: Text(
-                  'Add New',
-                  style: CustomStyle.commonTextTitle,
-                ),
+                child: Text('Add New', style: CustomStyle.commonTextTitle),
               ),
             ],
           ),
@@ -350,54 +348,57 @@ class SubscriptionScreen extends StatelessWidget {
               ),
             ),
           ] else ...[
-            ...controller.paymentMethods.map((method) => Container(
-              margin: EdgeInsets.only(bottom: Dimensions.heightSize * 0.5),
-              padding: EdgeInsets.all(Dimensions.defaultPaddingSize * 0.6),
-              decoration: BoxDecoration(
-                border: Border.all(color: CustomColor.outlineColor),
-                borderRadius: BorderRadius.circular(Dimensions.radius),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.credit_card,
-                    color: CustomColor.primaryColor,
-                    size: 24.r,
-                  ),
-                  SizedBox(width: Dimensions.widthSize),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '•••• •••• •••• ${method['last4'] ?? '****'}',
-                          style: CustomStyle.commonTextTitle,
-                        ),
-                        Text(
-                          '${method['brand']?.toString().capitalizeFirst ?? 'Card'} • Expires ${method['exp_month']}/${method['exp_year']}',
-                          style: CustomStyle.commonSubTextTitle,
-                        ),
-                      ],
+            ...controller.paymentMethods.map(
+              (method) => Container(
+                margin: EdgeInsets.only(bottom: Dimensions.heightSize * 0.5),
+                padding: EdgeInsets.all(Dimensions.defaultPaddingSize * 0.6),
+                decoration: BoxDecoration(
+                  border: Border.all(color: CustomColor.outlineColor),
+                  borderRadius: BorderRadius.circular(Dimensions.radius),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.credit_card,
+                      color: CustomColor.primaryColor,
+                      size: 24.r,
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () => controller.deletePaymentMethod(method['id']),
-                    icon: Icon(
-                      Icons.delete_outline,
-                      color: Colors.red,
-                      size: 20.r,
+                    SizedBox(width: Dimensions.widthSize),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '•••• •••• •••• ${method['last4'] ?? '****'}',
+                            style: CustomStyle.commonTextTitle,
+                          ),
+                          Text(
+                            '${method['brand']?.toString().capitalizeFirst ?? 'Card'} • Expires ${method['exp_month']}/${method['exp_year']}',
+                            style: CustomStyle.commonSubTextTitle,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    IconButton(
+                      onPressed:
+                          () => controller.deletePaymentMethod(method['id']),
+                      icon: Icon(
+                        Icons.delete_outline,
+                        color: Colors.red,
+                        size: 20.r,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            )),
+            ),
           ],
         ],
       ),
     );
   }
 
-  _subscriptionHistoryWidget(SubscriptionController controller) {
+  Container _subscriptionHistoryWidget(SubscriptionController controller) {
     return Container(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
       decoration: BoxDecoration(
@@ -405,7 +406,7 @@ class SubscriptionScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(Dimensions.radius * 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -414,10 +415,7 @@ class SubscriptionScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Subscription History',
-            style: CustomStyle.commonTextTitle,
-          ),
+          Text('Subscription History', style: CustomStyle.commonTextTitle),
           SizedBox(height: Dimensions.heightSize),
           if (controller.subscriptions.isEmpty) ...[
             Center(
@@ -427,56 +425,69 @@ class SubscriptionScreen extends StatelessWidget {
               ),
             ),
           ] else ...[
-            ...controller.subscriptions.take(5).map((subscription) => Container(
-              margin: EdgeInsets.only(bottom: Dimensions.heightSize * 0.5),
-              padding: EdgeInsets.all(Dimensions.defaultPaddingSize * 0.6),
-              decoration: BoxDecoration(
-                border: Border.all(color: CustomColor.outlineColor),
-                borderRadius: BorderRadius.circular(Dimensions.radius),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 8.w,
-                    height: 8.h,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _getStatusColor(subscription['status']),
+            ...controller.subscriptions
+                .take(5)
+                .map(
+                  (subscription) => Container(
+                    margin: EdgeInsets.only(
+                      bottom: Dimensions.heightSize * 0.5,
                     ),
-                  ),
-                  SizedBox(width: Dimensions.widthSize),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    padding: EdgeInsets.all(
+                      Dimensions.defaultPaddingSize * 0.6,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: CustomColor.outlineColor),
+                      borderRadius: BorderRadius.circular(Dimensions.radius),
+                    ),
+                    child: Row(
                       children: [
-                        Text(
-                          subscription['status']?.toString().capitalizeFirst ?? 'Unknown',
-                          style: CustomStyle.commonTextTitle,
-                        ),
-                        if (subscription['created'] != null) ...[
-                          Text(
-                            DateFormat('MMM dd, yyyy').format(
-                              DateTime.fromMillisecondsSinceEpoch(subscription['created'] * 1000)
-                            ),
-                            style: CustomStyle.commonSubTextTitle,
+                        Container(
+                          width: 8.w,
+                          height: 8.h,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _getStatusColor(subscription['status']),
                           ),
-                        ],
+                        ),
+                        SizedBox(width: Dimensions.widthSize),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                subscription['status']
+                                        ?.toString()
+                                        .capitalizeFirst ??
+                                    'Unknown',
+                                style: CustomStyle.commonTextTitle,
+                              ),
+                              if (subscription['created'] != null) ...[
+                                Text(
+                                  DateFormat('MMM dd, yyyy').format(
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                      subscription['created'] * 1000,
+                                    ),
+                                  ),
+                                  style: CustomStyle.commonSubTextTitle,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            )),
+                ),
           ],
         ],
       ),
     );
   }
 
-  _noSubscriptionWidget(SubscriptionController controller) {
+  Container _noSubscriptionWidget(SubscriptionController controller) {
     final plan = controller.singlePlan;
     final isLoading = controller.isLoading;
-    
+
     return Container(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize * 1.5),
       decoration: BoxDecoration(
@@ -511,7 +522,8 @@ class SubscriptionScreen extends StatelessWidget {
           ),
           SizedBox(height: Dimensions.heightSize),
           Text(
-            plan?['description'] ?? 'Get Coupons, Brand Deals and Discounts on various brands',
+            plan?['description'] ??
+                'Get Coupons, Brand Deals and Discounts on various brands',
             style: CustomStyle.commonSubTextTitle,
             textAlign: TextAlign.center,
           ),
@@ -526,13 +538,13 @@ class SubscriptionScreen extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           SizedBox(height: Dimensions.heightSize * 2),
-          
+
           // Feature list
           if (plan?['features'] != null) ...[
             Container(
               padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.8),
+                color: Colors.white.withValues(alpha: 0.8),
                 borderRadius: BorderRadius.circular(Dimensions.radius),
               ),
               child: Column(
@@ -547,7 +559,9 @@ class SubscriptionScreen extends StatelessWidget {
                   ...List.generate(
                     (plan!['features'] as List).length.clamp(0, 4),
                     (index) => Padding(
-                      padding: EdgeInsets.only(bottom: Dimensions.heightSize * 0.5),
+                      padding: EdgeInsets.only(
+                        bottom: Dimensions.heightSize * 0.5,
+                      ),
                       child: Row(
                         children: [
                           Icon(
@@ -573,7 +587,7 @@ class SubscriptionScreen extends StatelessWidget {
             ),
             SizedBox(height: Dimensions.heightSize * 2),
           ],
-          
+
           // Payment options - Google Pay and Apple Pay ONLY
           if (!isLoading) ...[
             // Google Pay button (Android)
@@ -581,19 +595,20 @@ class SubscriptionScreen extends StatelessWidget {
               _buildGooglePayButton(controller, plan),
               SizedBox(height: Dimensions.heightSize),
             ],
-            
+
             // Apple Pay button (iOS)
             if (controller.applePayAvailable) ...[
               _buildApplePayButton(controller, plan),
               SizedBox(height: Dimensions.heightSize),
             ],
-            
+
             // No payment method available message
-            if (!controller.googlePayAvailable && !controller.applePayAvailable) ...[
+            if (!controller.googlePayAvailable &&
+                !controller.applePayAvailable) ...[
               Container(
                 padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
                 decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(0.1),
+                  color: Colors.orange.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(Dimensions.radius),
                   border: Border.all(color: Colors.orange),
                 ),
@@ -627,17 +642,15 @@ class SubscriptionScreen extends StatelessWidget {
               height: 50.h,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: CustomColor.primaryColor.withOpacity(0.7),
+                color: CustomColor.primaryColor.withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(Dimensions.radius),
               ),
               child: Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
+                child: CircularProgressIndicator(color: Colors.white),
               ),
             ),
           ],
-          
+
           SizedBox(height: Dimensions.heightSize),
           Text(
             'Secure payments powered by Moov.io',
@@ -652,7 +665,10 @@ class SubscriptionScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildGooglePayButton(SubscriptionController controller, Map<String, dynamic>? plan) {
+  Widget _buildGooglePayButton(
+    SubscriptionController controller,
+    Map<String, dynamic>? plan,
+  ) {
     return SizedBox(
       width: double.infinity,
       height: 50.h,
@@ -672,11 +688,9 @@ class SubscriptionScreen extends StatelessWidget {
               'assets/images/google_pay_logo.png',
               height: 24.h,
               width: 24.w,
-              errorBuilder: (context, error, stackTrace) => Icon(
-                Icons.payment,
-                color: Colors.white,
-                size: 24.r,
-              ),
+              errorBuilder:
+                  (context, error, stackTrace) =>
+                      Icon(Icons.payment, color: Colors.white, size: 24.r),
             ),
             SizedBox(width: Dimensions.widthSize),
             Text(
@@ -692,7 +706,10 @@ class SubscriptionScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildApplePayButton(SubscriptionController controller, Map<String, dynamic>? plan) {
+  Widget _buildApplePayButton(
+    SubscriptionController controller,
+    Map<String, dynamic>? plan,
+  ) {
     return SizedBox(
       width: double.infinity,
       height: 50.h,
@@ -708,11 +725,7 @@ class SubscriptionScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.apple,
-              color: Colors.white,
-              size: 24.r,
-            ),
+            Icon(Icons.apple, color: Colors.white, size: 24.r),
             SizedBox(width: Dimensions.widthSize),
             Text(
               'Pay with Apple Pay',
@@ -757,7 +770,9 @@ class SubscriptionScreen extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               Get.back();
-              Get.find<SubscriptionController>().cancelSubscription(subscriptionId);
+              Get.find<SubscriptionController>().cancelSubscription(
+                subscriptionId,
+              );
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: const Text('Cancel Subscription'),
@@ -766,4 +781,4 @@ class SubscriptionScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}

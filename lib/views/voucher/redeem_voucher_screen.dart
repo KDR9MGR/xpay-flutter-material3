@@ -53,23 +53,25 @@ class RedeemVoucherScreen extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, CreateVoucherController controller) {
+  ListView _bodyWidget(
+    BuildContext context,
+    CreateVoucherController controller,
+  ) {
     return ListView(
       shrinkWrap: true,
       children: [
         _infoInputWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
         _buttonWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
       ],
     );
   }
 
-  _infoInputWidget(BuildContext context, CreateVoucherController controller) {
+  Container _infoInputWidget(
+    BuildContext context,
+    CreateVoucherController controller,
+  ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -85,24 +87,21 @@ class RedeemVoucherScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextLabelWidget(text: Strings.voucherCode.tr),
-            SizedBox(
-              height: Dimensions.heightSize,
-            ),
+            SizedBox(height: Dimensions.heightSize),
             SecondaryTextInputWidget(
               controller: controller.voucherCodeController,
               hintText: Strings.redeemVoucherHint.tr,
               color: CustomColor.secondaryColor,
             ),
-            SizedBox(
-              height: Dimensions.heightSize,
-            ),
+            SizedBox(height: Dimensions.heightSize),
             Text(
               '${Strings.charge.tr}: 2.00 USD + 1%',
               style: TextStyle(
-                  fontSize: Dimensions.smallestTextSize * 0.8,
-                  fontWeight: FontWeight.w200,
-                  color: Colors.white.withValues(alpha: 0.4)),
-            )
+                fontSize: Dimensions.smallestTextSize * 0.8,
+                fontWeight: FontWeight.w200,
+                color: Colors.white.withValues(alpha: 0.4),
+              ),
+            ),
           ],
         ),
       ),
@@ -110,7 +109,10 @@ class RedeemVoucherScreen extends StatelessWidget {
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context, CreateVoucherController controller) {
+  Padding _buttonWidget(
+    BuildContext context,
+    CreateVoucherController controller,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: PrimaryButton(

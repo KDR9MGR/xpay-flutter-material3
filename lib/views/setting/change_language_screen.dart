@@ -48,20 +48,18 @@ class ChangeLanguageScreen extends StatelessWidget {
     );
   }
 
-  _bodyWidget(BuildContext context) {
+  ListView _bodyWidget(BuildContext context) {
     return ListView(
       children: [
         addVerticalSpace(20.h),
         _changeLanguageWidget(context),
-        SizedBox(
-          height: Dimensions.heightSize,
-        ),
-        _submitButtonWidget(context)
+        SizedBox(height: Dimensions.heightSize),
+        _submitButtonWidget(context),
       ],
     );
   }
 
-  _submitButtonWidget(BuildContext context) {
+  Padding _submitButtonWidget(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Dimensions.marginSize),
       child: PrimaryButton(
@@ -74,52 +72,68 @@ class ChangeLanguageScreen extends StatelessWidget {
           } else if (_controller.selectedLanguage.value == Strings.spanish) {
             LocalStorage.saveLanguage(langSmall: 'sp', langCap: 'SP');
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Please Select a language"),
-            ));
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Please Select a language')));
           }
         },
       ),
     );
   }
 
-  _changeLanguageWidget(BuildContext context) {
+  Column _changeLanguageWidget(BuildContext context) {
     return Column(
       children: [
         _selectLanguageWidget(
-            context, Strings.arabicImage, Strings.arabic, Strings.arabic),
+          context,
+          Strings.arabicImage,
+          Strings.arabic,
+          Strings.arabic,
+        ),
         _selectLanguageWidget(
-            context, Strings.englishImage, Strings.english, Strings.english),
+          context,
+          Strings.englishImage,
+          Strings.english,
+          Strings.english,
+        ),
         _selectLanguageWidget(
-            context, Strings.spanishImage, Strings.spanish, Strings.spanish),
+          context,
+          Strings.spanishImage,
+          Strings.spanish,
+          Strings.spanish,
+        ),
       ],
     );
   }
 
-  _selectLanguageWidget(
-      BuildContext context, String image, String name, String buttonIndex) {
+  Container _selectLanguageWidget(
+    BuildContext context,
+    String image,
+    String name,
+    String buttonIndex,
+  ) {
     return Container(
       height: Dimensions.heightSize * 4.5,
       margin: EdgeInsets.symmetric(
-          horizontal: Dimensions.marginSize,
-          vertical: Dimensions.marginSize * 0.2),
+        horizontal: Dimensions.marginSize,
+        vertical: Dimensions.marginSize * 0.2,
+      ),
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize * 0.5),
       decoration: BoxDecoration(
-          color: CustomColor.primaryColor.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(Dimensions.radius * 0.5),
-          border: Border.all(color: Theme.of(context).secondaryHeaderColor)),
+        color: CustomColor.primaryColor.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(Dimensions.radius * 0.5),
+        border: Border.all(color: Theme.of(context).secondaryHeaderColor),
+      ),
       child: Row(
         mainAxisAlignment: mainSpaceBet,
         children: [
           Row(
             children: [
               SizedBox(
-                  height: 40,
-                  width: 50,
-                  child: Image.asset(
-                    image,
-                    fit: BoxFit.fill,
-                  )),
+                height: 40,
+                width: 50,
+                child: Image.asset(image, fit: BoxFit.fill),
+              ),
               addHorizontalSpace(10.w),
               Text(
                 name.tr,
@@ -134,8 +148,8 @@ class ChangeLanguageScreen extends StatelessWidget {
           Obx(
             () => Radio(
               activeColor: CustomColor.primaryTextColor,
-              // hoverColor: CustomColor.secondaryColor,
 
+              // hoverColor: CustomColor.secondaryColor,
               value: buttonIndex,
               groupValue: _controller.selectedLanguage.value,
               onChanged: (value) {

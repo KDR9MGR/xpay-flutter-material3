@@ -26,11 +26,11 @@ class PayBillController extends GetxController
     super.dispose();
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
-  navigateToPrepaidTokenScreen() {
+  void navigateToPrepaidTokenScreen() {
     Get.toNamed(Routes.prepaidTokenScreen);
   }
 }

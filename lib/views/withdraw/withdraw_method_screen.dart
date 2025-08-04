@@ -62,29 +62,29 @@ class WithdrawScreen extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, WithdrawController controller) {
+  ListView _bodyWidget(BuildContext context, WithdrawController controller) {
     return ListView(
       shrinkWrap: true,
-      children: [
-        _transactionsSection(context, controller),
-      ],
+      children: [_transactionsSection(context, controller)],
     );
   }
 
-  _transactionsSection(BuildContext context, WithdrawController controller) {
+  ListView _transactionsSection(
+    BuildContext context,
+    WithdrawController controller,
+  ) {
     return ListView(
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
-      children: [
-        SizedBox(
-          child: _transactionsBodyWidget(context, controller),
-        ),
-      ],
+      children: [SizedBox(child: _transactionsBodyWidget(context, controller))],
     );
   }
 
   // transaction tab section
-  _transactionsBodyWidget(BuildContext context, WithdrawController controller) {
+  SizedBox _transactionsBodyWidget(
+    BuildContext context,
+    WithdrawController controller,
+  ) {
     List<WithdrawMethodItemWidget> voucherList = [
       WithdrawMethodItemWidget(
         imagePath: Strings.payBillImagePath,

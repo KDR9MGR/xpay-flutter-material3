@@ -39,7 +39,7 @@ class ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   }
 
   // body widget containing all widget elements
-  _bodyWidget(BuildContext context) {
+  Padding _bodyWidget(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
         left: Dimensions.marginSize,
@@ -50,13 +50,9 @@ class ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
         children: [
           _naveBarWidget(context),
           _forgetPinInfo(context),
-          SizedBox(
-            height: Dimensions.heightSize * 2,
-          ),
+          SizedBox(height: Dimensions.heightSize * 2),
           _emailInputWidget(context),
-          SizedBox(
-            height: Dimensions.heightSize * 2,
-          ),
+          SizedBox(height: Dimensions.heightSize * 2),
           _buttonWidget(context),
         ],
       ),
@@ -64,14 +60,12 @@ class ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   }
 
   // navigation  bar widget
-  _naveBarWidget(BuildContext context) {
-    return const AuthNavBarWidget(
-      title: '',
-    );
+  AuthNavBarWidget _naveBarWidget(BuildContext context) {
+    return const AuthNavBarWidget(title: '');
   }
 
   // Login input and info
-  _emailInputWidget(BuildContext context) {
+  Container _emailInputWidget(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
       decoration: BoxDecoration(
@@ -85,10 +79,15 @@ class ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             TextLabelWidget(text: Strings.email.tr),
             TextFieldInputWidget(
               controller: emailController,
-              validator: MultiValidator([
-                RequiredValidator(errorText: 'Please enter an email address'),
-                EmailValidator(errorText: 'Please enter a valid email address')
-              ]).call,
+              validator:
+                  MultiValidator([
+                    RequiredValidator(
+                      errorText: 'Please enter an email address',
+                    ),
+                    EmailValidator(
+                      errorText: 'Please enter a valid email address',
+                    ),
+                  ]).call,
               hintText: Strings.enterEmailHint.tr,
               borderColor: CustomColor.primaryColor,
               color: CustomColor.secondaryColor,
@@ -100,10 +99,11 @@ class ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   }
 
   // login info
-  _forgetPinInfo(BuildContext context) {
+  Padding _forgetPinInfo(BuildContext context) {
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: Dimensions.defaultPaddingSize * 2),
+      padding: EdgeInsets.symmetric(
+        horizontal: Dimensions.defaultPaddingSize * 2,
+      ),
       child: Column(
         children: [
           Text(
@@ -111,12 +111,11 @@ class ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             style: CustomStyle.commonLargeTextTitleWhite,
             textAlign: TextAlign.center,
           ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          SizedBox(height: Dimensions.heightSize),
           Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: Dimensions.defaultPaddingSize),
+            padding: EdgeInsets.symmetric(
+              horizontal: Dimensions.defaultPaddingSize,
+            ),
             child: Text(
               Strings.forgetPasswordMessage.tr,
               style: TextStyle(
@@ -132,25 +131,35 @@ class ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     );
   }
 
-  _buttonWidget(BuildContext context) {
+  PrimaryButton _buttonWidget(BuildContext context) {
     return PrimaryButton(
       title: Strings.continueText.tr,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
           try {
             Utils.showLoadingDialog(context);
-            final errorMessage = await _loginViewModel!
-                .resetPassword(emailController.text.trim());
+            final errorMessage = await _loginViewModel!.resetPassword(
+              emailController.text.trim(),
+            );
             if (errorMessage.isNotEmpty) {
+              // TODO: Add mounted check before using context in async function
               Navigator.pop(context);
               Utils.showDialogMessage(
-                  context, 'Error resetting password', errorMessage);
+                context,
+                'Error resetting password',
+                errorMessage,
+              );
             } else {
+              // TODO: Add mounted check before using context in async function
               Navigator.pop(context);
-              Utils.showDialogMessage(context, 'Success',
-                  'If you have an account with us, we will send an email with instructions');
+              Utils.showDialogMessage(
+                context,
+                'Success',
+                'If you have an account with us, we will send an email with instructions',
+              );
             }
           } catch (exception) {
+            // TODO: Add mounted check before using context in async function
             Navigator.pop(context);
           }
         }

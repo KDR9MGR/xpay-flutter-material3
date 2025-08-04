@@ -21,10 +21,12 @@ class NavigationDrawerWidget extends StatelessWidget {
     );
   }
 
-  buildMenuItem(BuildContext context,
-      {required String title,
-      required String imagePath,
-      required VoidCallback onTap}) {
+  Column buildMenuItem(
+    BuildContext context, {
+    required String title,
+    required String imagePath,
+    required VoidCallback onTap,
+  }) {
     return Column(
       children: [
         Padding(
@@ -53,7 +55,7 @@ class NavigationDrawerWidget extends StatelessWidget {
     );
   }
 
-  _drawerItems(BuildContext context, DashboardController controller) {
+  Column _drawerItems(BuildContext context, DashboardController controller) {
     return Column(
       children: [
         // buildMenuItem(
@@ -108,8 +110,12 @@ class NavigationDrawerWidget extends StatelessWidget {
           context,
           imagePath: Strings.supportImagePath,
           title: Strings.support.tr,
-          onTap: () async => await Utils.sendEmail(
-              'digitalpayments@usa.com', 'Digital Payments App Support', 'Hi,'),
+          onTap:
+              () async => await Utils.sendEmail(
+                'digitalpayments@usa.com',
+                'Digital Payments App Support',
+                'Hi,',
+              ),
         ),
         Padding(
           padding: EdgeInsets.symmetric(
@@ -128,42 +134,35 @@ class NavigationDrawerWidget extends StatelessWidget {
             ),
             onTap: () {
               Utils.showConfirmationDialog(
-                  context,
-                  'Confirm Sign Out',
-                  'Are you sure you want to sign out?',
-                  'Sign Out',
-                  'Cancel',
-                  () async => await controller.signOut());
+                context,
+                'Confirm Sign Out',
+                'Are you sure you want to sign out?',
+                'Sign Out',
+                'Cancel',
+                () async => await controller.signOut(),
+              );
             },
           ),
         ),
-        SizedBox(
-          height: Dimensions.heightSize * 4,
-        )
+        SizedBox(height: Dimensions.heightSize * 4),
       ],
     );
   }
 
-  _allItemListView(BuildContext context, DashboardController controller) {
+  ListView _allItemListView(
+    BuildContext context,
+    DashboardController controller,
+  ) {
     return ListView(
       children: [
-        SizedBox(
-          height: Dimensions.heightSize * 3,
-        ),
+        SizedBox(height: Dimensions.heightSize * 3),
         Padding(
-          padding: EdgeInsets.only(
-            left: Dimensions.defaultPaddingSize,
-          ),
+          padding: EdgeInsets.only(left: Dimensions.defaultPaddingSize),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                Strings.splashScreenImagePath,
-                scale: 1.8,
-              ),
-              SizedBox(
-                height: Dimensions.heightSize * 4,
-              ),
+              Image.asset(Strings.splashScreenImagePath, scale: 1.8),
+              SizedBox(height: Dimensions.heightSize * 4),
             ],
           ),
         ),

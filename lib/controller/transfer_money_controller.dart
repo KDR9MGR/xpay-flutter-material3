@@ -46,15 +46,15 @@ class TransferMoneyController extends GetxController {
     super.dispose();
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
-  navigateToConfirmTransferMoneyScreen() {
+  void navigateToConfirmTransferMoneyScreen() {
     Get.toNamed(Routes.confirmTransferMoneyScreen);
   }
 
-  navigateToTransferMoneyScanQrCodeScreen() {
+  void navigateToTransferMoneyScanQrCodeScreen() {
     Get.toNamed(Routes.transferMoneyScanQrCodeScreen);
   }
 }

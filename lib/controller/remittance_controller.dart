@@ -20,23 +20,23 @@ class RemittanceController extends GetxController {
     super.dispose();
   }
 
-  changeAnimatedHeight(value) {
+  void changeAnimatedHeight(value) {
     animatedHeight.value = value;
   }
 
-  navigateToAddAmountRemittanceMoneyScreen() {
+  void navigateToAddAmountRemittanceMoneyScreen() {
     Get.toNamed(Routes.addAmountRemittanceMoneyScreen);
   }
 
-  navigateToPinRemittanceScreen() {
+  void navigateToPinRemittanceScreen() {
     Get.toNamed(Routes.pinRemittanceScreen);
   }
 
-  navigateToReviewRemittanceScreen() {
+  void navigateToReviewRemittanceScreen() {
     Get.toNamed(Routes.reviewRemittanceScreen);
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 }

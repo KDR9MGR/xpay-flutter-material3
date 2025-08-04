@@ -1,5 +1,5 @@
 class Strings {
-  static const String appName = "Digital Payments";
+  static const String appName = 'Digital Payments';
   static const String appVersion = '1.0';
 
   // splash screen

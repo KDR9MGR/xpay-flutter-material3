@@ -48,14 +48,17 @@ class SupportScreen extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, SupportController controller) {
+  Container _bodyWidget(BuildContext context, SupportController controller) {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: _selectOptionWidget(context, controller),
     );
   }
 
-  _selectOptionWidget(BuildContext context, SupportController controller) {
+  Column _selectOptionWidget(
+    BuildContext context,
+    SupportController controller,
+  ) {
     return Column(
       children: [
         InkWell(
@@ -84,14 +87,12 @@ class SupportScreen extends StatelessWidget {
                   Icons.chevron_right,
                   color: CustomColor.primaryColor,
                   size: Dimensions.iconSizeDefault * 1.5,
-                )
+                ),
               ],
             ),
           ),
         ),
-        SizedBox(
-          height: Dimensions.heightSize,
-        ),
+        SizedBox(height: Dimensions.heightSize),
         InkWell(
           onTap: () {
             controller.navigateToMySupportTickets();
@@ -118,7 +119,7 @@ class SupportScreen extends StatelessWidget {
                   Icons.chevron_right,
                   color: CustomColor.primaryColor,
                   size: Dimensions.iconSizeDefault * 1.5,
-                )
+                ),
               ],
             ),
           ),

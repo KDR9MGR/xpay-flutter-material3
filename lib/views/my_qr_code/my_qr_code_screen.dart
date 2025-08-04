@@ -48,27 +48,23 @@ class MyQrCodeScreen extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context) {
+  Column _bodyWidget(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _myQrCodeWidget(context),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
         _buttonWidget(context),
       ],
     );
   }
 
-  _myQrCodeWidget(BuildContext context) {
+  Column _myQrCodeWidget(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset(Strings.myQrCodeImagePath),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
         Text(
           'Download as a Image',
           style: TextStyle(
@@ -76,13 +72,13 @@ class MyQrCodeScreen extends StatelessWidget {
             fontSize: Dimensions.smallestTextSize,
             fontWeight: FontWeight.w600,
           ),
-        )
+        ),
       ],
     );
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context) {
+  Padding _buttonWidget(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: PrimaryButton(

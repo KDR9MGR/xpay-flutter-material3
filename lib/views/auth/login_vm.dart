@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '/utils/app_logger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '/utils/app_logger.dart';
 import 'package:flutter/foundation.dart';
+import '/utils/app_logger.dart';
 import 'package:xpay/data/user_model.dart';
+import '/utils/app_logger.dart';
 
 import '../../base_vm.dart';
+import '/utils/app_logger.dart';
 
 class LoginViewModel extends BaseViewModel {
   FirebaseAuth? _auth;
@@ -13,7 +18,7 @@ class LoginViewModel extends BaseViewModel {
     try {
       _auth = FirebaseAuth.instance;
     } catch (e) {
-      print('Firebase Auth initialization error: $e');
+      AppLogger.log('Firebase Auth initialization error: $e');
       _auth = null;
     }
   }
@@ -70,7 +75,7 @@ class LoginViewModel extends BaseViewModel {
 
   Future<void> signOut() async {
     if (_auth == null) {
-      print('Firebase Auth is not initialized');
+      AppLogger.log('Firebase Auth is not initialized');
       return;
     }
     try {
@@ -208,14 +213,14 @@ class LoginViewModel extends BaseViewModel {
 
   @override
   Future init() async {
-    dataLoadingState = DataLoadingState.DataLoadComplete;
+    dataloadingState = DataloadingState.dataLoadComplete;
     notifyListeners();
   }
 
   Future<void> saveUserDetails(UserModel user) async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     users.doc(user.userId).set(user.toMap()).catchError((error) {
-      debugPrint("Failed to add user: $error");
+      debugPrint('Failed to add user: $error');
     });
   }
 }

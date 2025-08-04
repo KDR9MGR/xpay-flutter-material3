@@ -54,23 +54,19 @@ class AddWithdrawMethodScreen extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, WithdrawController controller) {
+  ListView _bodyWidget(BuildContext context, WithdrawController controller) {
     return ListView(
       shrinkWrap: true,
       children: [
         _infoInputWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
         _buttonWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
       ],
     );
   }
 
-  _infoInputWidget(BuildContext context, WithdrawController controller) {
+  Obx _infoInputWidget(BuildContext context, WithdrawController controller) {
     return Obx(() {
       return Container(
         padding: const EdgeInsets.all(20),
@@ -86,13 +82,9 @@ class AddWithdrawMethodScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               TextLabelWidget(text: Strings.selectMethod.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               DropDownInputWidget(
                 items: controller.methodList,
                 color: CustomColor.primaryColor.withValues(alpha: 0.1),
@@ -102,13 +94,9 @@ class AddWithdrawMethodScreen extends StatelessWidget {
                   controller.methodName.value = value!;
                 },
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               TextLabelWidget(text: Strings.selectCurrency.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               DropDownInputWidget(
                 items: controller.currencyList,
                 color: CustomColor.primaryColor.withValues(alpha: 0.1),
@@ -118,16 +106,12 @@ class AddWithdrawMethodScreen extends StatelessWidget {
                   controller.currencyName.value = value!;
                 },
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   TextLabelWidget(text: Strings.provideANickName.tr),
-                  SizedBox(
-                    height: Dimensions.heightSize,
-                  ),
+                  SizedBox(height: Dimensions.heightSize),
                   SecondaryTextInputWidget(
                     controller: controller.provideANickNameHint,
                     hintText: Strings.provideANickNameHint.tr,
@@ -143,7 +127,7 @@ class AddWithdrawMethodScreen extends StatelessWidget {
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context, WithdrawController controller) {
+  Padding _buttonWidget(BuildContext context, WithdrawController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: PrimaryButton(

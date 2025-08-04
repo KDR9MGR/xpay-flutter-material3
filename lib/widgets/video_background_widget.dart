@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import '../utils/app_logger.dart';
 
 // Super fast animated background as alternative to slow videos
 class SuperFastAnimatedBackground extends StatefulWidget {
@@ -201,7 +202,7 @@ class _VideoBackgroundWidgetState extends State<VideoBackgroundWidget> {
       }
     } catch (e) {
       // Ignore disposal errors
-      print('Video disposal error: $e');
+      AppLogger.error('Video disposal error: $e', tag: 'VideoBackgroundWidget', error: e);
     }
     super.dispose();
   }
@@ -302,7 +303,7 @@ class _SimpleVideoWidgetState extends State<SimpleVideoWidget> {
         });
       }
     } catch (e) {
-      print('Error initializing video: $e');
+      AppLogger.error('Error initializing video: $e', tag: 'SimpleVideo', error: e);
       if (mounted) {
         setState(() {
           _hasError = true;
@@ -320,7 +321,7 @@ class _SimpleVideoWidgetState extends State<SimpleVideoWidget> {
       }
     } catch (e) {
       // Ignore disposal errors
-      print('SimpleVideo disposal error: $e');
+      AppLogger.error('SimpleVideo disposal error: $e', tag: 'SimpleVideo', error: e);
     }
     super.dispose();
   }
@@ -402,9 +403,9 @@ class _SimpleVideoWidgetState extends State<SimpleVideoWidget> {
                             size: 48,
                             color: Colors.white.withValues(alpha: 0.7),
                           ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
                             !_isInitialized
                                 ? 'Loading video...'
@@ -495,7 +496,7 @@ class _YouTubeVideoWidgetState extends State<YouTubeVideoWidget> {
       }
     } catch (e) {
       // Ignore disposal errors
-      print('YouTube disposal error: $e');
+      AppLogger.error('YouTube disposal error: $e', tag: 'YouTubeVideo', error: e);
     }
     super.dispose();
   }
@@ -577,9 +578,9 @@ class _YouTubeVideoWidgetState extends State<YouTubeVideoWidget> {
                             size: 48,
                             color: Colors.white.withValues(alpha: 0.7),
                           ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
                             !_isInitialized
                                 ? 'Loading YouTube video...'

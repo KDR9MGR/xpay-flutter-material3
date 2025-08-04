@@ -34,7 +34,7 @@ class OtpScreenState extends State<OtpScreen> {
   }
 
   // body widget containing all widget elements
-  _bodyWidget(BuildContext context) {
+  Padding _bodyWidget(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
         left: Dimensions.marginSize,
@@ -45,13 +45,9 @@ class OtpScreenState extends State<OtpScreen> {
         children: [
           _naveBarWidget(context),
           _otpInfo(context),
-          SizedBox(
-            height: Dimensions.heightSize * 2,
-          ),
+          SizedBox(height: Dimensions.heightSize * 2),
           _loginInputs(context),
-          SizedBox(
-            height: Dimensions.heightSize * 2,
-          ),
+          SizedBox(height: Dimensions.heightSize * 2),
           _buttonWidget(context),
         ],
       ),
@@ -59,18 +55,18 @@ class OtpScreenState extends State<OtpScreen> {
   }
 
   // navigation  bar widget
-  _naveBarWidget(BuildContext context) {
-    return const AuthNavBarWidget(
-      title: '',
-    );
+  AuthNavBarWidget _naveBarWidget(BuildContext context) {
+    return const AuthNavBarWidget(title: '');
   }
 
   // Login input and info
-  _loginInputs(BuildContext context) {
+  Container _loginInputs(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.symmetric(
-          horizontal: Dimensions.defaultPaddingSize * 0.5, vertical: 20),
+        horizontal: Dimensions.defaultPaddingSize * 0.5,
+        vertical: 20,
+      ),
       decoration: BoxDecoration(
         color: CustomColor.secondaryColor,
         borderRadius: BorderRadius.circular(Dimensions.radius),
@@ -78,10 +74,7 @@ class OtpScreenState extends State<OtpScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            Strings.otp.tr,
-            style: CustomStyle.commonSubTextTitle,
-          ),
+          Text(Strings.otp.tr, style: CustomStyle.commonSubTextTitle),
           SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Row(
@@ -102,19 +95,18 @@ class OtpScreenState extends State<OtpScreen> {
   }
 
   // Otp info
-  _otpInfo(BuildContext context) {
+  Padding _otpInfo(BuildContext context) {
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: Dimensions.defaultPaddingSize * 2),
+      padding: EdgeInsets.symmetric(
+        horizontal: Dimensions.defaultPaddingSize * 2,
+      ),
       child: Column(
         children: [
           Text(
             Strings.otpInfo.tr,
             style: CustomStyle.commonLargeTextTitleWhite,
           ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          SizedBox(height: Dimensions.heightSize),
           Text(
             '${Strings.otpInfoMessage.tr}demouser@gmail.com',
             style: TextStyle(
@@ -130,7 +122,7 @@ class OtpScreenState extends State<OtpScreen> {
   }
 
   // otp number input
-  _otpNumberInputWidget(BuildContext context) {
+  Container _otpNumberInputWidget(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
       height: Dimensions.buttonHeight,
@@ -172,7 +164,7 @@ class OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  _buttonWidget(BuildContext context) {
+  PrimaryButton _buttonWidget(BuildContext context) {
     return PrimaryButton(
       title: Strings.continueText.tr,
       onPressed: () {

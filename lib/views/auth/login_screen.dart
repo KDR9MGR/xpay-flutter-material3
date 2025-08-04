@@ -1,27 +1,49 @@
 import 'package:flutter/material.dart';
+import '/utils/app_logger.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import '/utils/app_logger.dart';
 import 'package:get/get.dart';
+import '/utils/app_logger.dart';
 import 'package:provider/provider.dart';
+import '/utils/app_logger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '/utils/app_logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '/utils/app_logger.dart';
 import 'package:xpay/controller/auth_controller.dart';
+import '/utils/app_logger.dart';
 import 'package:xpay/data/user_model.dart';
+import '/utils/app_logger.dart';
 import 'package:xpay/routes/routes.dart';
+import '/utils/app_logger.dart';
 import 'package:xpay/utils/storage_service.dart';
-import 'package:xpay/utils/threading_utils.dart';
+import '/utils/app_logger.dart';
+import '/utils/app_logger.dart';
 import 'package:xpay/views/auth/login_vm.dart';
+import '/utils/app_logger.dart';
 import 'package:xpay/views/auth/user_provider.dart';
+import '/utils/app_logger.dart';
 import 'package:xpay/widgets/buttons/primary_button.dart';
+import '/utils/app_logger.dart';
 import 'package:xpay/widgets/inputs/text_field_input_widget.dart';
+import '/utils/app_logger.dart';
 import 'package:xpay/widgets/inputs/text_label_widget.dart';
+import '/utils/app_logger.dart';
 
 import '../../utils/custom_color.dart';
+import '/utils/app_logger.dart';
 import '../../utils/custom_style.dart';
+import '/utils/app_logger.dart';
 import '../../utils/dimensions.dart';
+import '/utils/app_logger.dart';
 import '../../utils/strings.dart';
+import '/utils/app_logger.dart';
 import '../../utils/utils.dart';
+import '/utils/app_logger.dart';
 import '../../widgets/auth_nav_bar.dart';
+import '/utils/app_logger.dart';
 import '../../widgets/inputs/pin_and_password_input_widget.dart';
+import '/utils/app_logger.dart';
 
 // Static authentication function that can be safely used in isolates
 class IsolateAuthHelper {
@@ -94,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // body widget containing all widget elements
-  _bodyWidget(BuildContext context, AuthController controller) {
+  Padding _bodyWidget(BuildContext context, AuthController controller) {
     return Padding(
       padding: EdgeInsets.only(
         left: Dimensions.marginSize,
@@ -115,7 +137,10 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // navigation  bar widget
-  _naveBarWidget(BuildContext context, AuthController controller) {
+  AuthNavBarWidget _naveBarWidget(
+    BuildContext context,
+    AuthController controller,
+  ) {
     return AuthNavBarWidget(
       title: Strings.signUp.tr,
       onPressed: () {
@@ -125,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // Login input and info
-  _loginInputs(BuildContext context, AuthController controller) {
+  Container _loginInputs(BuildContext context, AuthController controller) {
     return Container(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
       decoration: BoxDecoration(
@@ -157,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // login info
-  _loginInfoWidget(BuildContext context) {
+  Container _loginInfoWidget(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: Dimensions.heightSize * 2),
       child: Column(
@@ -182,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // input widget containing all input field
-  _loginInputWidget(BuildContext context, AuthController controller) {
+  Form _loginInputWidget(BuildContext context, AuthController controller) {
     return Form(
       key: formKey,
       child: Column(
@@ -227,7 +252,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // Login Button
-  _buttonWidget(BuildContext context, AuthController controller) {
+  PrimaryButton _buttonWidget(BuildContext context, AuthController controller) {
     return PrimaryButton(
       title: Strings.signIn.tr,
       onPressed: () async {
@@ -239,7 +264,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller.emailAuthController.text.trim().toLowerCase();
             final password = controller.pinLoginController.text.trim();
 
-            print('Attempting sign in with: $email');
+            AppLogger.log('Attempting sign in with: $email');
 
             // Perform Firebase authentication directly on main thread
             String errorMessage = '';
@@ -279,11 +304,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
             if (errorMessage.isNotEmpty) {
               // Handle sign in failure
+              // TODO: Add mounted check before using context in async function
               Navigator.pop(context);
               Utils.showDialogMessage(context, 'Sign In Failed', errorMessage);
             } else {
               // Handle successful sign in - all on main thread
-              print('Sign in successful, saving login state...');
+              AppLogger.log('Sign in successful, saving login state...');
 
               // Storage operations on main thread
               final storageService = StorageService();
@@ -307,15 +333,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                 }
               } catch (e) {
-                print('Error fetching user details: $e');
+                AppLogger.log('Error fetching user details: $e');
                 // Continue anyway - user can see dashboard
               }
 
+              // TODO: Add mounted check before using context in async function
               Navigator.pop(context);
               Get.offAllNamed(Routes.dashboardScreen);
             }
           } catch (ex) {
-            print('Login error: $ex');
+            AppLogger.log('Login error: $ex');
+            // TODO: Add mounted check before using context in async function
             Navigator.pop(context);
             Utils.showDialogMessage(
               context,

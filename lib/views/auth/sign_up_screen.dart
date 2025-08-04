@@ -53,9 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 children: [
                   _naveBarWidget(context, controller),
                   _registerInfoWidget(context),
-                  SizedBox(
-                    height: Dimensions.heightSize,
-                  ),
+                  SizedBox(height: Dimensions.heightSize),
                 ],
               ),
             ),
@@ -139,7 +137,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   // navigation  bar widget
-  _naveBarWidget(BuildContext context, AuthController controller) {
+  AuthNavBarWidget _naveBarWidget(
+    BuildContext context,
+    AuthController controller,
+  ) {
     return AuthNavBarWidget(
       title: Strings.signIn.tr,
       onPressed: () {
@@ -149,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   // Register input and info
-  _registerInputs(BuildContext context, AuthController controller) {
+  Column _registerInputs(BuildContext context, AuthController controller) {
     return Column(
       children: [
         Container(
@@ -162,35 +163,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _personalAccountInputWidget(context, controller),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               _checkBoxWidget(context, controller),
             ],
           ),
         ),
-        SizedBox(
-          height: Dimensions.heightSize,
-        ),
+        SizedBox(height: Dimensions.heightSize),
         _buttonWidget(context, controller, Strings.user),
       ],
     );
   }
 
   // register info
-  _registerInfoWidget(BuildContext context) {
+  Padding _registerInfoWidget(BuildContext context) {
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: Dimensions.defaultPaddingSize * 2),
+      padding: EdgeInsets.symmetric(
+        horizontal: Dimensions.defaultPaddingSize * 2,
+      ),
       child: Column(
         children: [
-          Text(
-            Strings.signUp.tr,
-            style: CustomStyle.commonLargeTextTitleWhite,
-          ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          Text(Strings.signUp.tr, style: CustomStyle.commonLargeTextTitleWhite),
+          SizedBox(height: Dimensions.heightSize),
           Text(
             Strings.registerMessage.tr,
             style: TextStyle(
@@ -206,26 +199,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   // register inputs
-  _personalAccountInputWidget(BuildContext context, AuthController controller) {
+  Form _personalAccountInputWidget(
+    BuildContext context,
+    AuthController controller,
+  ) {
     return Form(
       key: formKey,
       child: Column(
         children: [
           TextLabelWidget(text: Strings.firstName.tr),
           TextFieldInputWidget(
-            validator: RequiredValidator(errorText: 'Please enter first name').call,
+            validator:
+                RequiredValidator(errorText: 'Please enter first name').call,
             keyboardType: TextInputType.name,
             controller: controller.firstNameAuthController,
             hintText: Strings.firstNameHint.tr,
             borderColor: CustomColor.primaryColor,
             color: CustomColor.secondaryColor,
           ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          SizedBox(height: Dimensions.heightSize),
           TextLabelWidget(text: Strings.lastName.tr),
           TextFieldInputWidget(
-            validator: RequiredValidator(errorText: 'Please enter last name').call,
+            validator:
+                RequiredValidator(errorText: 'Please enter last name').call,
             controller: controller.lastNameAuthController,
             keyboardType: TextInputType.name,
             hintText: Strings.lastNameHint.tr,
@@ -234,9 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           Column(
             children: [
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               TextLabelWidget(text: Strings.country.tr),
               ProfileCountryCodePickerWidget(
                 hintText: 'Select Country',
@@ -248,114 +242,122 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ],
           ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          SizedBox(height: Dimensions.heightSize),
           TextLabelWidget(text: Strings.mobile.tr),
           PhoneNumberWithCountryCodeInput(
             validator:
                 RequiredValidator(errorText: 'Please enter mobile number').call,
             controller: controller.phoneNumberAuthController,
           ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          SizedBox(height: Dimensions.heightSize),
+          SizedBox(height: Dimensions.heightSize),
           TextLabelWidget(text: Strings.emailAddress.tr),
           TextFieldInputWidget(
-            validator: MultiValidator([
-              RequiredValidator(errorText: 'Please enter an email address'),
-              EmailValidator(errorText: 'Please enter a valid email address')
-            ]).call,
+            validator:
+                MultiValidator([
+                  RequiredValidator(errorText: 'Please enter an email address'),
+                  EmailValidator(
+                    errorText: 'Please enter a valid email address',
+                  ),
+                ]).call,
             keyboardType: TextInputType.emailAddress,
             controller: controller.emailAuthController,
             hintText: Strings.enterEmailHint.tr,
             borderColor: CustomColor.primaryColor,
             color: CustomColor.secondaryColor,
           ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          SizedBox(height: Dimensions.heightSize),
           TextLabelWidget(text: Strings.password.tr),
           PinAndPasswordInputWidget(
-            validator: MultiValidator([
-              RequiredValidator(errorText: 'Please enter a password'),
-              LengthRangeValidator(
-                  min: 6,
-                  max: 16,
-                  errorText:
-                      'Password should be minimum 6 and max 16 characters')
-            ]).call,
+            validator:
+                MultiValidator([
+                  RequiredValidator(errorText: 'Please enter a password'),
+                  LengthRangeValidator(
+                    min: 6,
+                    max: 16,
+                    errorText:
+                        'Password should be minimum 6 and max 16 characters',
+                  ),
+                ]).call,
             hintText: Strings.password.tr,
             controller: controller.passwordController,
             borderColor: CustomColor.primaryColor,
             color: CustomColor.secondaryColor,
             keyboardType: TextInputType.visiblePassword,
           ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          SizedBox(height: Dimensions.heightSize),
           TextLabelWidget(text: Strings.confirmPassword.tr),
           PinAndPasswordInputWidget(
-            validator: MultiValidator([
-              RequiredValidator(errorText: 'Please enter a password'),
-              LengthRangeValidator(
-                  min: 6,
-                  max: 16,
-                  errorText:
-                      'Password should be minimum 6 and max 16 characters')
-            ]).call,
+            validator:
+                MultiValidator([
+                  RequiredValidator(errorText: 'Please enter a password'),
+                  LengthRangeValidator(
+                    min: 6,
+                    max: 16,
+                    errorText:
+                        'Password should be minimum 6 and max 16 characters',
+                  ),
+                ]).call,
             hintText: Strings.confirmPasswordHint.tr,
             controller: controller.confirmPasswordController,
             borderColor: CustomColor.primaryColor,
             color: CustomColor.secondaryColor,
             keyboardType: TextInputType.visiblePassword,
-          )
+          ),
         ],
       ),
     );
   }
 
   // Sign up Button
-  _buttonWidget(
-      BuildContext context, AuthController controller, String accountType) {
+  PrimaryButton _buttonWidget(
+    BuildContext context,
+    AuthController controller,
+    String accountType,
+  ) {
     return PrimaryButton(
       title: Strings.signUp.tr,
       onPressed: () async {
         UserModel user = UserModel(
-            userId: '',
-            companyName: controller.tabController.index == 1
-                ? controller.legalNameOfCompanyController.text.trim()
-                : '',
-            representativeFirstName: controller.tabController.index == 1
-                ? controller.representativeFirstNameController.text.trim()
-                : '',
-            representativeLastName: controller.tabController.index == 1
-                ? controller.representativeLastNameController.text.trim()
-                : '',
-            firstName: controller.firstNameAuthController.text.trim(),
-            lastName: controller.lastNameAuthController.text.trim(),
-            country: controller.countryController.text.trim().isNotEmpty
-                ? controller.countryController.text.trim()
-                : 'United States',
-            emailAddress: controller.tabController.index == 1
-                ? controller.companyEmailAuthController.text.trim()
-                : controller.emailAuthController.text.trim().toLowerCase(),
-            mobile: controller.tabController.index == 1
-                ? controller.companyPhoneNumberAuthController.text.trim()
-                : controller.phoneNumberAuthController.text.trim(),
-            password: controller.tabController.index == 1
-                ? controller.companyPasswordController.text.trim()
-                : controller.passwordController.text.trim(),
-            accountType: accountType,
-            walletBalances: {'USD': 0.0},
-            profilePhoto: '',
-            zipCode: '',
-            state: '',
-            city: '',
-            address: '');
+          userId: '',
+          companyName:
+              controller.tabController.index == 1
+                  ? controller.legalNameOfCompanyController.text.trim()
+                  : '',
+          representativeFirstName:
+              controller.tabController.index == 1
+                  ? controller.representativeFirstNameController.text.trim()
+                  : '',
+          representativeLastName:
+              controller.tabController.index == 1
+                  ? controller.representativeLastNameController.text.trim()
+                  : '',
+          firstName: controller.firstNameAuthController.text.trim(),
+          lastName: controller.lastNameAuthController.text.trim(),
+          country:
+              controller.countryController.text.trim().isNotEmpty
+                  ? controller.countryController.text.trim()
+                  : 'United States',
+          emailAddress:
+              controller.tabController.index == 1
+                  ? controller.companyEmailAuthController.text.trim()
+                  : controller.emailAuthController.text.trim().toLowerCase(),
+          mobile:
+              controller.tabController.index == 1
+                  ? controller.companyPhoneNumberAuthController.text.trim()
+                  : controller.phoneNumberAuthController.text.trim(),
+          password:
+              controller.tabController.index == 1
+                  ? controller.companyPasswordController.text.trim()
+                  : controller.passwordController.text.trim(),
+          accountType: accountType,
+          walletBalances: {'USD': 0.0},
+          profilePhoto: '',
+          zipCode: '',
+          state: '',
+          city: '',
+          address: '',
+        );
 
         if (accountType == Strings.user) {
           if (formKey.currentState!.validate()) {
@@ -371,55 +373,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  _checkBoxWidget(BuildContext context, AuthController controller) => Obx(
-        () => Row(
-          children: [
-            SizedBox(
-              width: 25,
-              child: Checkbox(
-                side: BorderSide(
-                  color: CustomColor.primaryColor.withValues(alpha: 0.5),
-                  width: 1.5,
-                ),
-                fillColor: WidgetStateProperty.all(CustomColor.primaryColor),
-                value: controller.isChecked.value,
-                shape: const RoundedRectangleBorder(),
-                onChanged: (value) {
-                  controller.isChecked.value = !controller.isChecked.value;
-                },
+  Obx _checkBoxWidget(BuildContext context, AuthController controller) => Obx(
+    () => Row(
+      children: [
+        SizedBox(
+          width: 25,
+          child: Checkbox(
+            side: BorderSide(
+              color: CustomColor.primaryColor.withValues(alpha: 0.5),
+              width: 1.5,
+            ),
+            fillColor: WidgetStateProperty.all(CustomColor.primaryColor),
+            value: controller.isChecked.value,
+            shape: const RoundedRectangleBorder(),
+            onChanged: (value) {
+              controller.isChecked.value = !controller.isChecked.value;
+            },
+          ),
+        ),
+        SizedBox(width: Dimensions.widthSize * 0.5),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              text: Strings.iAgree.tr,
+              style: TextStyle(
+                color: CustomColor.primaryTextColor,
+                fontSize: Dimensions.smallestTextSize,
+                fontWeight: FontWeight.bold,
               ),
-            ),
-            SizedBox(
-              width: Dimensions.widthSize * 0.5,
-            ),
-            Expanded(
-              child: RichText(
-                text: TextSpan(
-                  text: Strings.iAgree.tr,
+              children: <TextSpan>[
+                TextSpan(
+                  recognizer:
+                      TapGestureRecognizer()
+                        ..onTap =
+                            () async => await Utils.openUrl(
+                              'https://digitalpayments.live/terms-and-conditions',
+                            ),
+                  text: Strings.termsOfCheckBox.tr,
                   style: TextStyle(
-                    color: CustomColor.primaryTextColor,
+                    color: CustomColor.primaryColor,
                     fontSize: Dimensions.smallestTextSize,
                     fontWeight: FontWeight.bold,
                   ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () async => await Utils.openUrl(
-                            'https://digitalpayments.live/terms-and-conditions'),
-                      text: Strings.termsOfCheckBox.tr,
-                      style: TextStyle(
-                        color: CustomColor.primaryColor,
-                        fontSize: Dimensions.smallestTextSize,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
                 ),
-              ),
-            )
-          ],
+              ],
+            ),
+          ),
         ),
-      );
+      ],
+    ),
+  );
 
   @override
   void initState() {
@@ -428,28 +431,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _handleSignUp(
-      BuildContext context, UserModel user, AuthController controller) async {
+    BuildContext context,
+    UserModel user,
+    AuthController controller,
+  ) async {
     if (controller.isChecked.value) {
       try {
         Utils.showLoadingDialog(context);
         final errorMessage = await _loginViewModel?.signUp(user);
 
         if (errorMessage != null && errorMessage.isNotEmpty) {
+          // TODO: Add mounted check before using context in async function
           Navigator.pop(context);
           Utils.showDialogMessage(context, 'Sign Up Failed', errorMessage);
         } else {
+          // TODO: Add mounted check before using context in async function
           Navigator.pop(context);
           Utils.showDialogMessage(
-              context, 'Registered', 'You are now registered');
+            context,
+            'Registered',
+            'You are now registered',
+          );
         }
       } catch (ex) {
+        // TODO: Add mounted check before using context in async function
         Navigator.pop(context);
         Utils.showDialogMessage(
-            context, 'Sign Up Failed', 'Failed to sign up. $ex');
+          context,
+          'Sign Up Failed',
+          'Failed to sign up. $ex',
+        );
       }
     } else {
-      Utils.showDialogMessage(context, 'Please acknowledge',
-          'Please accept the Terms & Conditions before signing up');
+      Utils.showDialogMessage(
+        context,
+        'Please acknowledge',
+        'Please accept the Terms & Conditions before signing up',
+      );
     }
   }
 }

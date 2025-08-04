@@ -8,7 +8,6 @@ import 'package:xpay/utils/utils.dart';
 import 'package:xpay/views/auth/user_provider.dart';
 import 'package:xpay/views/auth/wallet_view_model.dart';
 
-
 import '../../utils/custom_color.dart';
 import '../../utils/custom_style.dart';
 import '../../utils/dimensions.dart';
@@ -87,11 +86,7 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
             onPressed: () {
               Get.back();
             },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 20,
-            ),
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
           ),
         ),
       ),
@@ -107,7 +102,7 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context) {
+  ListView _bodyWidget(BuildContext context) {
     return ListView(
       shrinkWrap: true,
       children: [
@@ -120,7 +115,7 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
     );
   }
 
-  _infoInputWidget(BuildContext context) {
+  Obx _infoInputWidget(BuildContext context) {
     return Obx(() {
       return Container(
         margin: const EdgeInsets.all(20),
@@ -164,7 +159,9 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: CustomColor.successColor.withValues(alpha: 0.3),
+                          color: CustomColor.successColor.withValues(
+                            alpha: 0.3,
+                          ),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -210,7 +207,9 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
                 ),
                 child: DropDownInputWidget(
                   items: controller.walletList,
@@ -231,7 +230,9 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
                 ),
                 child: DropDownInputWidget(
                   items: controller.gatewayList,
@@ -248,36 +249,39 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
               // Amount Input
               _buildModernLabel('Amount'),
               const SizedBox(height: 12),
-                             Container(
-                 decoration: BoxDecoration(
-                   color: Colors.white.withValues(alpha: 0.05),
-                   borderRadius: BorderRadius.circular(16),
-                   border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-                 ),
-                 child: TextFormField(
-                   controller: controller.amountController,
-                   keyboardType: TextInputType.numberWithOptions(decimal: true),
-                   style: TextStyle(
-                     color: Colors.white,
-                     fontSize: 18,
-                     fontWeight: FontWeight.w600,
-                   ),
-                   validator: MultiValidator([
-                     RequiredValidator(errorText: 'Please enter an amount'),
-                     MinValueValidator(5, errorText: 'Minimum amount is 5')
-                   ]).call,
-                   decoration: InputDecoration(
-                     hintText: '0.00',
-                     hintStyle: TextStyle(
-                       color: Colors.white.withValues(alpha: 0.5),
-                       fontSize: 18,
-                     ),
-                     border: InputBorder.none,
-                     contentPadding: const EdgeInsets.all(20),
-                     suffixIcon: _amountButton(context),
-                   ),
-                 ),
-               ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
+                ),
+                child: TextFormField(
+                  controller: controller.amountController,
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  validator:
+                      MultiValidator([
+                        RequiredValidator(errorText: 'Please enter an amount'),
+                        MinValueValidator(5, errorText: 'Minimum amount is 5'),
+                      ]).call,
+                  decoration: InputDecoration(
+                    hintText: '0.00',
+                    hintStyle: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.5),
+                      fontSize: 18,
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.all(20),
+                    suffixIcon: _amountButton(context),
+                  ),
+                ),
+              ),
               const SizedBox(height: 16),
 
               // Limit and charge info
@@ -286,7 +290,9 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.03),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.05),
+                  ),
                 ),
                 child: Column(
                   children: [
@@ -299,7 +305,7 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
                         ),
                         const SizedBox(width: 8),
                         Text(
-                    '${Strings.limit.tr}: 5.00 - 2,500.00 USD',
+                          '${Strings.limit.tr}: 5.00 - 2,500.00 USD',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -364,7 +370,7 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
     );
   }
 
-  _amountButton(BuildContext context) {
+  Obx _amountButton(BuildContext context) {
     return Obx(() {
       return Container(
         width: MediaQuery.of(context).size.width * 0.20,
@@ -394,7 +400,7 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
                 fontWeight: FontWeight.w700,
                 fontSize: Dimensions.mediumTextSize,
               ),
-            )
+            ),
           ],
         ),
       );
@@ -402,7 +408,7 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context) {
+  Container _buttonWidget(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
@@ -432,7 +438,7 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
     );
   }
 
-  _walletInfoWidget(BuildContext context) {
+  Obx _walletInfoWidget(BuildContext context) {
     return Obx(() {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -471,7 +477,9 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
   }
 
   void _showCardDetailsDialog(
-      BuildContext context, WalletViewModel walletViewModel) {
+    BuildContext context,
+    WalletViewModel walletViewModel,
+  ) {
     final formKey = GlobalKey<FormState>();
     final cardNumberController = TextEditingController();
     final expiryDateController = TextEditingController();
@@ -542,8 +550,9 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
                       if (value == null || value.isEmpty) {
                         return 'Please enter expiry date';
                       }
-                      if (!RegExp(r'(0[1-9]|1[0-2])\/?([0-9]{2})$')
-                          .hasMatch(value)) {
+                      if (!RegExp(
+                        r'(0[1-9]|1[0-2])\/?([0-9]{2})$',
+                      ).hasMatch(value)) {
                         return 'Please enter a valid expiry date';
                       }
                       return null;
@@ -583,6 +592,7 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
           actions: [
             TextButton(
               onPressed: () {
+                // TODO: Add mounted check before using context in async function
                 Navigator.pop(context);
               },
               child: Text(
@@ -607,14 +617,17 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
                 ),
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
+                    // TODO: Add mounted check before using context in async function
                     Navigator.pop(context); // Close the dialog
                     Utils.showLoadingDialog(context);
                     try {
                       await walletViewModel.addMoney(
-                          double.parse(controller.amountController.text.trim()),
-                          controller.walletName.value);
+                        double.parse(controller.amountController.text.trim()),
+                        controller.walletName.value,
+                      );
                       await _userProvider.fetchUserDetails();
                       if (context.mounted) {
+                        // TODO: Add mounted check before using context in async function
                         Navigator.pop(context); // Close the loading dialog
                         Utils.showDialogMessage(
                           context,
@@ -624,6 +637,7 @@ class _AddMoneyMoneyScreenState extends State<AddMoneyMoneyScreen>
                         controller.amountController.clear();
                       }
                     } catch (error) {
+                      // TODO: Add mounted check before using context in async function
                       Navigator.pop(context); // Close the loading dialog
                       Utils.showDialogMessage(
                         context,

@@ -4,11 +4,11 @@ import '../routes/routes.dart';
 
 class WelcomeController extends GetxController {
   // all navigation from welcome screen
-  navigateToLogin() {
+  void navigateToLogin() {
     Get.toNamed(Routes.loginScreen);
   }
 
-  navigateToRegisterScreen() {
+  void navigateToRegisterScreen() {
     Get.toNamed(Routes.registerScreen);
   }
 }

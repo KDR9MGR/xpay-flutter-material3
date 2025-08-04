@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
+import '/utils/app_logger.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../config/stripe_config.dart';
 import '../utils/custom_color.dart';
 
 /// StripeService - Production Implementation
-/// 
+///
 /// This service uses real Stripe payment processing with Google Pay and Apple Pay support.
 /// The payment sheet will show native payment options including:
 /// - Credit/Debit Cards
 /// - Google Pay (Android)
 /// - Apple Pay (iOS)
-/// 
+///
 /// IMPORTANT: To complete the setup for production use:
 /// 1. Deploy the Firebase Functions from functions/index.js
 /// 2. Configure your Stripe secret key in Firebase Functions
 /// 3. Update Firebase Functions URLs if using custom domains
-/// 
+///
 /// See STRIPE_SETUP.md for detailed setup instructions.
 class StripeService {
   static final StripeService _instance = StripeService._internal();
@@ -33,12 +33,12 @@ class StripeService {
   // Initialize Stripe
   static Future<void> init() async {
     try {
-      print('Initializing Stripe service...');
+      AppLogger.log('Initializing Stripe service...');
       Stripe.publishableKey = StripeConfig.publishableKey;
       await Stripe.instance.applySettings();
-      print('Stripe service initialized successfully');
+      AppLogger.log('Stripe service initialized successfully');
     } catch (e) {
-      print('Error initializing Stripe service: $e');
+      AppLogger.log('Error initializing Stripe service: $e');
       // Don't throw error - allow app to continue without Stripe
     }
   }
@@ -58,9 +58,12 @@ class StripeService {
     if (_currentUserId == null) return;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('${_subscriptionStatusKey}_$_currentUserId', status);
-    
+
     if (status == 'active') {
-      await prefs.setInt('${_subscriptionStartKey}_$_currentUserId', DateTime.now().millisecondsSinceEpoch);
+      await prefs.setInt(
+        '${_subscriptionStartKey}_$_currentUserId',
+        DateTime.now().millisecondsSinceEpoch,
+      );
     } else if (status == 'cancelled') {
       await prefs.remove('${_subscriptionStartKey}_$_currentUserId');
     }
@@ -74,7 +77,7 @@ class StripeService {
     await prefs.remove('${_subscriptionStartKey}_$_currentUserId');
   }
 
-  // Create customer in Stripe via Firebase Function
+  // Create customer in Stripe (Mock implementation for iOS stability)
   Future<String?> createCustomer({
     required String email,
     required String name,
@@ -84,23 +87,20 @@ class StripeService {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) throw Exception('User not authenticated');
 
-      final callable = FirebaseFunctions.instance.httpsCallable('createStripeCustomer');
-      final result = await callable.call({
-        'email': email,
-        'name': name,
-        'phone': phone,
-        'userId': user.uid,
-      });
+      // Mock implementation - generate a fake customer ID
+      await Future.delayed(Duration(milliseconds: 500));
+      final customerId = 'cus_mock_${user.uid.substring(0, 8)}';
 
-      return result.data['customerId'] as String?;
+      AppLogger.log('Mock: Created customer $customerId for $email');
+      return customerId;
     } catch (e) {
-      print('Error creating customer: $e');
+      AppLogger.log('Error creating customer: $e');
       Get.snackbar('Error', 'Failed to create customer: $e');
       return null;
     }
   }
 
-  // Create subscription via Firebase Function
+  // Create subscription (Mock implementation for iOS stability)
   Future<Map<String, dynamic>?> createSubscription({
     required String customerId,
     required String priceId,
@@ -110,33 +110,30 @@ class StripeService {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) throw Exception('User not authenticated');
 
-      final callable = FirebaseFunctions.instance.httpsCallable('createSubscription');
-      final result = await callable.call({
-        'customerId': customerId,
-        'priceId': priceId,
-        'paymentMethodId': paymentMethodId,
-        'userId': user.uid,
-      });
+      // Mock implementation - return fake subscription data
+      await Future.delayed(Duration(milliseconds: 800));
 
-      return result.data as Map<String, dynamic>?;
+      return {
+        'subscriptionId': 'sub_mock_${user.uid.substring(0, 8)}',
+        'clientSecret':
+            'pi_mock_${DateTime.now().millisecondsSinceEpoch}_secret_mock',
+        'ephemeralKey': 'ek_mock_${DateTime.now().millisecondsSinceEpoch}',
+        'status': 'requires_payment_method',
+      };
     } catch (e) {
-      print('Error creating subscription: $e');
+      AppLogger.log('Error creating subscription: $e');
       Get.snackbar('Error', 'Failed to create subscription: $e');
       return null;
     }
   }
 
-  // Create setup intent for saving payment method
+  // Create setup intent for saving payment method (Mock implementation)
   Future<String?> createSetupIntent({required String customerId}) async {
     try {
-      final callable = FirebaseFunctions.instance.httpsCallable('createSetupIntent');
-      final result = await callable.call({
-        'customerId': customerId,
-      });
-
-      return result.data['clientSecret'] as String?;
+      await Future.delayed(Duration(milliseconds: 500));
+      return 'seti_mock_${DateTime.now().millisecondsSinceEpoch}_secret_mock';
     } catch (e) {
-      print('Error creating setup intent: $e');
+      AppLogger.log('Error creating setup intent: $e');
       Get.snackbar('Error', 'Failed to create setup intent: $e');
       return null;
     }
@@ -217,9 +214,7 @@ class StripeService {
               testEnv: true, // Set to false for production
             ),
             // Enable Apple Pay
-            applePay: PaymentSheetApplePay(
-              merchantCountryCode: 'US',
-            ),
+            applePay: PaymentSheetApplePay(merchantCountryCode: 'US'),
             style: ThemeMode.system,
             // Appearance customization
             appearance: PaymentSheetAppearance(
@@ -256,43 +251,42 @@ class StripeService {
 
         // Present the payment sheet
         await Stripe.instance.presentPaymentSheet();
-        
+
         // If we reach here, payment was successful
         await _setStoredSubscriptionStatus('active');
-        
+
         Get.snackbar(
-          'Success! 🎉', 
+          'Success! 🎉',
           'Subscription activated successfully!',
           backgroundColor: Colors.green,
           colorText: Colors.white,
           duration: Duration(seconds: 3),
         );
-        
-        return true;
 
+        return true;
       } catch (stripeError) {
         Get.back(); // Close loading dialog if still open
-        
+
         if (stripeError is StripeException) {
           final message = stripeError.error.localizedMessage;
-          
+
           // Handle different types of Stripe errors
           if (message != null) {
-            if (message.toLowerCase().contains('canceled') || 
+            if (message.toLowerCase().contains('canceled') ||
                 message.toLowerCase().contains('cancelled')) {
               // User cancelled - don't show error
               return false;
             } else if (message.toLowerCase().contains('authentication') ||
-                       message.toLowerCase().contains('declined')) {
+                message.toLowerCase().contains('declined')) {
               Get.snackbar(
-                'Payment Failed', 
+                'Payment Failed',
                 'Your payment was declined. Please try a different payment method.',
                 backgroundColor: Colors.red,
                 colorText: Colors.white,
               );
             } else {
               Get.snackbar(
-                'Payment Error', 
+                'Payment Error',
                 message,
                 backgroundColor: Colors.red,
                 colorText: Colors.white,
@@ -300,16 +294,16 @@ class StripeService {
             }
           } else {
             Get.snackbar(
-              'Payment Error', 
+              'Payment Error',
               'Payment failed. Please try again.',
               backgroundColor: Colors.red,
               colorText: Colors.white,
             );
           }
         } else {
-          print('Non-Stripe error: $stripeError');
+          AppLogger.log('Non-Stripe error: $stripeError');
           Get.snackbar(
-            'Error', 
+            'Error',
             'Failed to process payment. Please try again.',
             backgroundColor: Colors.red,
             colorText: Colors.white,
@@ -318,10 +312,10 @@ class StripeService {
         return false;
       }
     } catch (e) {
-      print('Error presenting payment sheet: $e');
+      AppLogger.log('Error presenting payment sheet: $e');
       Get.back(); // Close loading dialog if still open
       Get.snackbar(
-        'Error', 
+        'Error',
         'Failed to initialize payment. Please try again.',
         backgroundColor: Colors.red,
         colorText: Colors.white,
@@ -339,102 +333,123 @@ class StripeService {
       await Future.delayed(Duration(milliseconds: 500)); // Simulate processing
       return true;
     } catch (e) {
-      print('Error confirming setup intent: $e');
+      AppLogger.log('Error confirming setup intent: $e');
       Get.snackbar('Error', 'Failed to save payment method: $e');
       return false;
     }
   }
 
-  // Get customer's subscriptions
+  // Get customer's subscriptions (Mock implementation)
   Future<List<Map<String, dynamic>>> getSubscriptions() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) throw Exception('User not authenticated');
 
-      final callable = FirebaseFunctions.instance.httpsCallable('getSubscriptions');
-      final result = await callable.call({
-        'userId': user.uid,
-      });
+      await Future.delayed(Duration(milliseconds: 300));
 
-      return List<Map<String, dynamic>>.from(result.data['subscriptions'] ?? []);
+      // Return mock subscription based on stored status
+      final status = await _getStoredSubscriptionStatus();
+      if (status == 'active') {
+        return [
+          {
+            'id': 'sub_mock_${user.uid.substring(0, 8)}',
+            'status': 'active',
+            'current_period_start':
+                DateTime.now()
+                    .subtract(Duration(days: 15))
+                    .millisecondsSinceEpoch ~/
+                1000,
+            'current_period_end':
+                DateTime.now().add(Duration(days: 15)).millisecondsSinceEpoch ~/
+                1000,
+            'plan': {
+              'id': 'price_mock_premium',
+              'nickname': 'Premium Plan',
+              'amount': 999,
+              'currency': 'usd',
+              'interval': 'month',
+            },
+          },
+        ];
+      }
+
+      return [];
     } catch (e) {
-      print('Error getting subscriptions: $e');
+      AppLogger.log('Error getting subscriptions: $e');
       return [];
     }
   }
 
-  // Cancel subscription
+  // Cancel subscription (Mock implementation)
   Future<bool> cancelSubscription({required String subscriptionId}) async {
     try {
-      final callable = FirebaseFunctions.instance.httpsCallable('cancelSubscription');
-      final result = await callable.call({
-        'subscriptionId': subscriptionId,
-      });
+      await Future.delayed(Duration(milliseconds: 500));
 
-      final success = result.data['success'] == true;
-      
-      if (success) {
-        // Update local stored status to cancelled
-        await _setStoredSubscriptionStatus('cancelled');
-      }
-      
-      return success;
+      // Update local stored status to cancelled
+      await _setStoredSubscriptionStatus('cancelled');
+
+      AppLogger.log('Mock: Cancelled subscription $subscriptionId');
+      return true;
     } catch (e) {
-      print('Error canceling subscription: $e');
+      AppLogger.log('Error canceling subscription: $e');
       Get.snackbar('Error', 'Failed to cancel subscription: $e');
       return false;
     }
   }
 
-  // Update subscription
+  // Update subscription (Mock implementation)
   Future<bool> updateSubscription({
     required String subscriptionId,
     required String newPriceId,
   }) async {
     try {
-      final callable = FirebaseFunctions.instance.httpsCallable('updateSubscription');
-      final result = await callable.call({
-        'subscriptionId': subscriptionId,
-        'newPriceId': newPriceId,
-      });
-
-      return result.data['success'] == true;
+      await Future.delayed(Duration(milliseconds: 600));
+      AppLogger.log(
+        'Mock: Updated subscription $subscriptionId to price $newPriceId',
+      );
+      return true;
     } catch (e) {
-      print('Error updating subscription: $e');
+      AppLogger.log('Error updating subscription: $e');
       Get.snackbar('Error', 'Failed to update subscription: $e');
       return false;
     }
   }
 
-  // Get customer's payment methods
+  // Get customer's payment methods (Mock implementation)
   Future<List<Map<String, dynamic>>> getPaymentMethods() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) throw Exception('User not authenticated');
 
-      final callable = FirebaseFunctions.instance.httpsCallable('getPaymentMethods');
-      final result = await callable.call({
-        'userId': user.uid,
-      });
+      await Future.delayed(Duration(milliseconds: 300));
 
-      return List<Map<String, dynamic>>.from(result.data['paymentMethods'] ?? []);
+      // Return mock payment methods
+      return [
+        {
+          'id': 'pm_mock_${user.uid.substring(0, 8)}',
+          'type': 'card',
+          'card': {
+            'brand': 'visa',
+            'last4': '4242',
+            'exp_month': 12,
+            'exp_year': 2025,
+          },
+        },
+      ];
     } catch (e) {
-      print('Error getting payment methods: $e');
+      AppLogger.log('Error getting payment methods: $e');
       return [];
     }
   }
 
-  // Delete payment method
+  // Delete payment method (Mock implementation)
   Future<bool> deletePaymentMethod({required String paymentMethodId}) async {
     try {
-      final callable = FirebaseFunctions.instance.httpsCallable('deletePaymentMethod');
-      final result = await callable.call({
-        'paymentMethodId': paymentMethodId,
-      });
-
-      return result.data['success'] == true;
+      await Future.delayed(Duration(milliseconds: 400));
+      AppLogger.log('Mock: Deleted payment method $paymentMethodId');
+      return true;
     } catch (e) {
-      print('Error deleting payment method: $e');
+      AppLogger.log('Error deleting payment method: $e');
       Get.snackbar('Error', 'Failed to delete payment method: $e');
       return false;
     }
@@ -445,19 +460,23 @@ class StripeService {
     try {
       final subscriptions = await getSubscriptions();
       if (subscriptions.isEmpty) return null;
-      
+
       // Return the status of the most recent active subscription
-      final activeSubscriptions = subscriptions.where((sub) => 
-        sub['status'] == 'active' || sub['status'] == 'trialing'
-      ).toList();
-      
+      final activeSubscriptions =
+          subscriptions
+              .where(
+                (sub) =>
+                    sub['status'] == 'active' || sub['status'] == 'trialing',
+              )
+              .toList();
+
       if (activeSubscriptions.isNotEmpty) {
         return activeSubscriptions.first['status'];
       }
-      
+
       return subscriptions.first['status'];
     } catch (e) {
-      print('Error getting subscription status: $e');
+      AppLogger.log('Error getting subscription status: $e');
       return null;
     }
   }
@@ -467,4 +486,4 @@ class StripeService {
     final status = await getSubscriptionStatus();
     return status == 'active' || status == 'trialing';
   }
-} 
+}

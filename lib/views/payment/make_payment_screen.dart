@@ -56,24 +56,20 @@ class MakePaymentScreen extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, PaymentController controller) {
+  ListView _bodyWidget(BuildContext context, PaymentController controller) {
     return ListView(
       shrinkWrap: true,
       children: [
         _infoInputWidget(context, controller),
         _walletInfoWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
         _buttonWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
       ],
     );
   }
 
-  _infoInputWidget(BuildContext context, PaymentController controller) {
+  Obx _infoInputWidget(BuildContext context, PaymentController controller) {
     return Obx(() {
       return Container(
         padding: const EdgeInsets.all(20),
@@ -89,13 +85,9 @@ class MakePaymentScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               TextLabelWidget(text: Strings.yourWallet.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               DropDownInputWidget(
                 items: controller.walletList,
                 color: CustomColor.primaryColor.withValues(alpha: 0.1),
@@ -105,16 +97,12 @@ class MakePaymentScreen extends StatelessWidget {
                   controller.walletName.value = value!;
                 },
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   TextLabelWidget(text: Strings.merchantUsernameOrEmail.tr),
-                  SizedBox(
-                    height: Dimensions.heightSize,
-                  ),
+                  SizedBox(height: Dimensions.heightSize),
                   SecondaryTextInputWidget(
                     controller: controller.merchantUsernameOrEmailController,
                     hintText: Strings.merchantUsernameOrEmailHint.tr,
@@ -124,9 +112,7 @@ class MakePaymentScreen extends StatelessWidget {
                       controller.navigateToMakePaymentScanQrCodeScreen();
                     },
                   ),
-                  SizedBox(
-                    height: Dimensions.heightSize * 0.3,
-                  ),
+                  SizedBox(height: Dimensions.heightSize * 0.3),
                   Text(
                     Strings.validMerchantForMoneyOut.tr,
                     style: TextStyle(
@@ -137,39 +123,33 @@ class MakePaymentScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               TextLabelWidget(text: Strings.amount.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               AmountInputWidget(
                 hintText: '0.00',
                 controller: controller.amountController,
                 color: CustomColor.secondaryColor,
                 suffixIcon: _amountButton(context, controller),
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               Text(
                 '${Strings.limit.tr}: 1.00 -  100,000.00 USD',
                 style: TextStyle(
-                    fontSize: Dimensions.smallestTextSize * 0.8,
-                    fontWeight: FontWeight.w200,
-                    color: Colors.white.withValues(alpha: 0.4)),
+                  fontSize: Dimensions.smallestTextSize * 0.8,
+                  fontWeight: FontWeight.w200,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
               ),
-              SizedBox(
-                height: Dimensions.heightSize * 0.5,
-              ),
+              SizedBox(height: Dimensions.heightSize * 0.5),
               Text(
                 '${Strings.charge.tr}: 2.00 USD + 1%',
                 style: TextStyle(
-                    fontSize: Dimensions.smallestTextSize * 0.8,
-                    fontWeight: FontWeight.w200,
-                    color: Colors.white.withValues(alpha: 0.4)),
-              )
+                  fontSize: Dimensions.smallestTextSize * 0.8,
+                  fontWeight: FontWeight.w200,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+              ),
             ],
           ),
         ),
@@ -177,7 +157,7 @@ class MakePaymentScreen extends StatelessWidget {
     });
   }
 
-  _amountButton(BuildContext context, PaymentController controller) {
+  Obx _amountButton(BuildContext context, PaymentController controller) {
     return Obx(() {
       return Container(
         width: MediaQuery.of(context).size.width * 0.20,
@@ -198,7 +178,7 @@ class MakePaymentScreen extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 fontSize: Dimensions.mediumTextSize,
               ),
-            )
+            ),
           ],
         ),
       );
@@ -206,7 +186,7 @@ class MakePaymentScreen extends StatelessWidget {
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context, PaymentController controller) {
+  Padding _buttonWidget(BuildContext context, PaymentController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: PrimaryButton(
@@ -219,15 +199,16 @@ class MakePaymentScreen extends StatelessWidget {
     );
   }
 
-  _walletInfoWidget(BuildContext context, PaymentController controller) {
+  Obx _walletInfoWidget(BuildContext context, PaymentController controller) {
     return Obx(() {
       return Container(
         margin: const EdgeInsets.only(top: 15, left: 10, right: 10),
         child: MakePaymentWalletInfoWidget(
           wallet: controller.walletName.value,
-          merchant: controller.merchantUsernameOrEmailController.text.isEmpty
-              ? 'adsent@gmail.com'
-              : controller.merchantUsernameOrEmailController.text,
+          merchant:
+              controller.merchantUsernameOrEmailController.text.isEmpty
+                  ? 'adsent@gmail.com'
+                  : controller.merchantUsernameOrEmailController.text,
           transferAmount:
               '${controller.amountController.text} ${controller.walletName.value}',
           totalCharge:

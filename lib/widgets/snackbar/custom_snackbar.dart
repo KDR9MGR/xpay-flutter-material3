@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomSnackBar {
-  static success(String message) {
-    return Get.snackbar('Success', message,
-        backgroundColor: Colors.green, colorText: Colors.white);
+  static SnackbarController success(String message) {
+    return Get.snackbar(
+      'Success',
+      message,
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+    );
   }
 
-  static error(String message) {
-    return Get.snackbar('Alert', message,
-        backgroundColor: Colors.red, colorText: Colors.white);
+  static SnackbarController error(String message) {
+    return Get.snackbar(
+      'Alert',
+      message,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+    );
   }
 }

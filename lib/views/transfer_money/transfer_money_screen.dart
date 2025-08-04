@@ -4,7 +4,6 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:xpay/controller/transfer_money_controller.dart';
 
-
 import '../../utils/custom_color.dart';
 import '../../utils/custom_style.dart';
 import '../../utils/dimensions.dart';
@@ -82,11 +81,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
             onPressed: () {
               Get.back();
             },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 20,
-            ),
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
           ),
         ),
       ),
@@ -102,7 +97,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context) {
+  ListView _bodyWidget(BuildContext context) {
     return ListView(
       shrinkWrap: true,
       children: [
@@ -115,7 +110,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
     );
   }
 
-  _infoInputWidget(BuildContext context) {
+  Obx _infoInputWidget(BuildContext context) {
     return Obx(() {
       return Container(
         margin: const EdgeInsets.all(20),
@@ -159,17 +154,15 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: CustomColor.primaryColor.withValues(alpha: 0.3),
+                          color: CustomColor.primaryColor.withValues(
+                            alpha: 0.3,
+                          ),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
                       ],
                     ),
-                    child: Icon(
-                      Ionicons.send,
-                      color: Colors.white,
-                      size: 24,
-                    ),
+                    child: Icon(Ionicons.send, color: Colors.white, size: 24),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -205,7 +198,9 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
                 ),
                 child: DropDownInputWidget(
                   items: controller.walletList,
@@ -226,14 +221,19 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
                 ),
                 child: SecondaryTextInputWidget(
                   controller: controller.receiverUsernameOrEmailController,
-                  validator: MultiValidator([
-                    RequiredValidator(errorText: 'Enter receiver email'),
-                    EmailValidator(errorText: 'Enter a valid email address')
-                  ]).call,
+                  validator:
+                      MultiValidator([
+                        RequiredValidator(errorText: 'Enter receiver email'),
+                        EmailValidator(
+                          errorText: 'Enter a valid email address',
+                        ),
+                      ]).call,
                   hintText: 'Enter receiver email address',
                   color: Colors.transparent,
                   suffixIcon: Ionicons.qr_code_outline,
@@ -271,16 +271,24 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
                 ),
                 child: AmountInputWidget(
                   hintText: '0.00',
-                  validator: MultiValidator([
-                    RequiredValidator(errorText: 'Please enter an amount'),
-                    MinValueValidator(5, errorText: 'Minimum amount is 5.00'),
-                    MaxValueValidator(2500,
-                        errorText: 'Maximum amount is 2500.00')
-                  ]).call,
+                  validator:
+                      MultiValidator([
+                        RequiredValidator(errorText: 'Please enter an amount'),
+                        MinValueValidator(
+                          5,
+                          errorText: 'Minimum amount is 5.00',
+                        ),
+                        MaxValueValidator(
+                          2500,
+                          errorText: 'Maximum amount is 2500.00',
+                        ),
+                      ]).call,
                   controller: controller.amountController,
                   color: Colors.transparent,
                   suffixIcon: _amountButton(context),
@@ -294,7 +302,9 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.03),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.05),
+                  ),
                 ),
                 child: Column(
                   children: [
@@ -372,7 +382,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
     );
   }
 
-  _amountButton(BuildContext context) {
+  Obx _amountButton(BuildContext context) {
     return Obx(() {
       return Container(
         width: MediaQuery.of(context).size.width * 0.20,
@@ -402,7 +412,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
                 fontWeight: FontWeight.w700,
                 fontSize: Dimensions.mediumTextSize,
               ),
-            )
+            ),
           ],
         ),
       );
@@ -410,7 +420,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context) {
+  Container _buttonWidget(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
@@ -440,7 +450,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
     );
   }
 
-  _walletInfoWidget(BuildContext context) {
+  Obx _walletInfoWidget(BuildContext context) {
     return Obx(() {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -466,18 +476,22 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
         ),
         child: WalletInfoWidget(
           wallet: controller.walletName.value,
-          recipient: controller.receiverUsernameOrEmailController.text.isEmpty
-              ? 'adsent@gmail.com'
-              : controller.receiverUsernameOrEmailController.text,
-          transferAmount: controller.amountController.text.isEmpty
-              ? '0 ${controller.walletName.value}'
-              : '${controller.amountController.text} ${controller.walletName.value}',
-          totalCharge: controller.amountController.text.isEmpty
-              ? '0 ${controller.walletName.value}'
-              : '${controller.calculateCharge(double.tryParse(controller.amountController.text) ?? 0)} ${controller.walletName.value}',
-          payableAmount: controller.amountController.text.isEmpty
-              ? '0 ${controller.walletName.value}'
-              : '${(double.tryParse(controller.amountController.text) ?? 0) + controller.charge.value} ${controller.walletName.value}',
+          recipient:
+              controller.receiverUsernameOrEmailController.text.isEmpty
+                  ? 'adsent@gmail.com'
+                  : controller.receiverUsernameOrEmailController.text,
+          transferAmount:
+              controller.amountController.text.isEmpty
+                  ? '0 ${controller.walletName.value}'
+                  : '${controller.amountController.text} ${controller.walletName.value}',
+          totalCharge:
+              controller.amountController.text.isEmpty
+                  ? '0 ${controller.walletName.value}'
+                  : '${controller.calculateCharge(double.tryParse(controller.amountController.text) ?? 0)} ${controller.walletName.value}',
+          payableAmount:
+              controller.amountController.text.isEmpty
+                  ? '0 ${controller.walletName.value}'
+                  : '${(double.tryParse(controller.amountController.text) ?? 0) + controller.charge.value} ${controller.walletName.value}',
         ),
       );
     });
@@ -487,7 +501,7 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen>
 class MaxValueValidator extends TextFieldValidator {
   final int max;
   MaxValueValidator(this.max, {String? errorText})
-      : super(errorText ?? 'Value cannot be greater than $max');
+    : super(errorText ?? 'Value cannot be greater than $max');
 
   @override
   bool get ignoreEmptyValues => true;

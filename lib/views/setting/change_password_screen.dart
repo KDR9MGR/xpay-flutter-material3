@@ -54,14 +54,15 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
           ),
         ),
       ),
-      body: SizedBox(
-        child: _bodyWidget(context, controller),
-      ),
+      body: SizedBox(child: _bodyWidget(context, controller)),
     );
   }
 
   // Body widget containing all widget elements
-  _bodyWidget(BuildContext context, SettingsController controller) {
+  SingleChildScrollView _bodyWidget(
+    BuildContext context,
+    SettingsController controller,
+  ) {
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.only(
@@ -72,10 +73,8 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
         child: Column(
           children: [
             _passwordInputsWidget(context, controller),
-            SizedBox(
-              height: Dimensions.heightSize * 2,
-            ),
-            _buttonWidget(context, controller)
+            SizedBox(height: Dimensions.heightSize * 2),
+            _buttonWidget(context, controller),
           ],
         ),
       ),
@@ -83,7 +82,10 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   // Password input widgets
-  _passwordInputsWidget(BuildContext context, SettingsController controller) {
+  Container _passwordInputsWidget(
+    BuildContext context,
+    SettingsController controller,
+  ) {
     return Container(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
       decoration: BoxDecoration(
@@ -95,8 +97,10 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   // Form with password input fields
-  _resetPasswordInputWidget(
-      BuildContext context, SettingsController controller) {
+  Form _resetPasswordInputWidget(
+    BuildContext context,
+    SettingsController controller,
+  ) {
     return Form(
       key: formKey,
       child: Column(
@@ -148,7 +152,10 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   // Button widget to trigger password change
-  _buttonWidget(BuildContext context, SettingsController controller) {
+  PrimaryButton _buttonWidget(
+    BuildContext context,
+    SettingsController controller,
+  ) {
     return PrimaryButton(
       title: Strings.changePassword,
       onPressed: () async {
@@ -159,13 +166,19 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
             if (context.mounted) {
               Navigator.pop(context);
               Utils.showDialogMessage(
-                  context, 'Success', 'Password updated successfully!');
+                context,
+                'Success',
+                'Password updated successfully!',
+              );
             }
           } catch (e) {
             if (context.mounted) {
               Navigator.pop(context);
               Utils.showDialogMessage(
-                  context, 'Error', 'Failed to update password: $e');
+                context,
+                'Error',
+                'Failed to update password: $e',
+              );
             }
           }
         }

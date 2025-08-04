@@ -45,15 +45,15 @@ class PaymentController extends GetxController {
     super.dispose();
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
-  navigateToMakePaymentScanQrCodeScreen() {
+  void navigateToMakePaymentScanQrCodeScreen() {
     Get.toNamed(Routes.makePaymentScanQrCodeScreen);
   }
 
-  navigateToConfirmMakePaymentOutScreen() {
+  void navigateToConfirmMakePaymentOutScreen() {
     Get.toNamed(Routes.confirmMakePaymentOutScreen);
   }
 }

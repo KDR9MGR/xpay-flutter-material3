@@ -51,27 +51,27 @@ class InvoiceController extends GetxController {
     super.dispose();
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
-  navigateToTransferMoneyScanQrCodeScreen() {
+  void navigateToTransferMoneyScanQrCodeScreen() {
     Get.toNamed(Routes.transferMoneyScanQrCodeScreen);
   }
 
-  navigateToInvoiceUpdateScreen() {
+  void navigateToInvoiceUpdateScreen() {
     Get.toNamed(Routes.invoiceUpdateScreen);
   }
 
-  navigateToInvoicePreviewScreen() {
+  void navigateToInvoicePreviewScreen() {
     Get.toNamed(Routes.invoicePreviewScreen);
   }
 
-  navigateToConfirmInvoiceScreen() {
+  void navigateToConfirmInvoiceScreen() {
     Get.toNamed(Routes.confirmInvoiceScreen);
   }
 
-  navigateToCreateInvoiceScreen() {
+  void navigateToCreateInvoiceScreen() {
     Get.toNamed(Routes.createInvoiceScreen);
   }
 }

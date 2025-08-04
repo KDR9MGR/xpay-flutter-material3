@@ -51,14 +51,17 @@ class SettingsScreen extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, SettingsController controller) {
+  Container _bodyWidget(BuildContext context, SettingsController controller) {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: Column(children: [_selectOptionWidget(context, controller)]),
     );
   }
 
-  _selectOptionWidget(BuildContext context, SettingsController controller) {
+  Expanded _selectOptionWidget(
+    BuildContext context,
+    SettingsController controller,
+  ) {
     return Expanded(
       child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -119,7 +122,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  settingsItemWidget(
+  InkWell settingsItemWidget(
     SettingsController controller, {
     required VoidCallback onTap,
     required String title,

@@ -55,7 +55,7 @@ class VerifyAccountScreen extends StatelessWidget {
   }
 
   // body widget containing all widget elements
-  _bodyWidget(BuildContext context, DashboardController controller) {
+  ListView _bodyWidget(BuildContext context, DashboardController controller) {
     return ListView(
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
@@ -71,13 +71,9 @@ class VerifyAccountScreen extends StatelessWidget {
                 fontWeight: FontWeight.w200,
               ),
             ),
-            SizedBox(
-              height: Dimensions.heightSize,
-            ),
+            SizedBox(height: Dimensions.heightSize),
             _verifyInfoInputWidget(context, controller),
-            SizedBox(
-              height: Dimensions.heightSize,
-            ),
+            SizedBox(height: Dimensions.heightSize),
             _buttonWidget(context, controller),
           ],
         ),
@@ -85,12 +81,16 @@ class VerifyAccountScreen extends StatelessWidget {
     );
   }
 
-  _verifyInfoInputWidget(BuildContext context, DashboardController controller) {
+  Container _verifyInfoInputWidget(
+    BuildContext context,
+    DashboardController controller,
+  ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-          color: CustomColor.secondaryColor,
-          borderRadius: BorderRadius.circular(Dimensions.radius)),
+        color: CustomColor.secondaryColor,
+        borderRadius: BorderRadius.circular(Dimensions.radius),
+      ),
       child: Column(
         children: [
           Form(
@@ -104,9 +104,7 @@ class VerifyAccountScreen extends StatelessWidget {
                   borderColor: CustomColor.primaryColor,
                   color: CustomColor.secondaryColor,
                 ),
-                SizedBox(
-                  height: Dimensions.heightSize,
-                ),
+                SizedBox(height: Dimensions.heightSize),
                 TextLabelWidget(text: Strings.nidNumber.tr),
                 TextFieldInputWidget(
                   controller: controller.nidNumberController,
@@ -117,17 +115,12 @@ class VerifyAccountScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          SizedBox(height: Dimensions.heightSize),
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Dimensions.radius * 2),
-              border: Border.all(
-                width: 1,
-                color: CustomColor.primaryColor,
-              ),
+              border: Border.all(width: 1, color: CustomColor.primaryColor),
             ),
             child: GestureDetector(
               onTap: () {},
@@ -138,27 +131,30 @@ class VerifyAccountScreen extends StatelessWidget {
                     Icons.arrow_upward,
                     color: CustomColor.primaryColor,
                   ),
-                  SizedBox(
-                    width: Dimensions.widthSize * 0.5,
-                  ),
+                  SizedBox(width: Dimensions.widthSize * 0.5),
                   Text(
                     Strings.uploadFile.tr,
                     style: TextStyle(
-                      color: CustomColor.primaryTextColor.withValues(alpha: 0.5),
+                      color: CustomColor.primaryTextColor.withValues(
+                        alpha: 0.5,
+                      ),
                       fontSize: Dimensions.smallestTextSize,
                       fontWeight: FontWeight.w200,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  _buttonWidget(BuildContext context, DashboardController controller) {
+  PrimaryButton _buttonWidget(
+    BuildContext context,
+    DashboardController controller,
+  ) {
     return PrimaryButton(
       title: Strings.submit.tr,
       onPressed: () {},

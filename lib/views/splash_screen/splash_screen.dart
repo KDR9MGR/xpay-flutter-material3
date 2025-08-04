@@ -1,11 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:xpay/routes/routes.dart';
-import 'package:xpay/utils/storage_service.dart';
-import 'package:xpay/utils/threading_utils.dart';
-import 'package:xpay/views/auth/user_provider.dart';
-import 'package:xpay/controller/subscription_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../data/user_model.dart';
+import '../../routes/routes.dart';
+import '../../utils/storage_service.dart';
+import '../auth/user_provider.dart';
+import '../../controller/subscription_controller.dart';
 
 import '../../utils/custom_color.dart';
 import '../../utils/strings.dart';
@@ -27,37 +30,134 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColor.splashScreenColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(Strings.splashScreenImagePath),
-            if (_isLoading) ...[
-              const SizedBox(height: 20),
-              const CircularProgressIndicator(),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              CustomColor.gradientStart,
+              CustomColor.gradientMiddle,
+              CustomColor.gradientEnd,
             ],
-            if (_error != null) ...[
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  'Error: $_error',
-                  style: const TextStyle(color: Colors.red),
-                  textAlign: TextAlign.center,
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Logo with error handling
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Image.asset(
+                    Strings.splashScreenImagePath,
+                    width: 120,
+                    height: 120,
+                    errorBuilder: (context, error, stackTrace) {
+                      if (kDebugMode) {
+                        debugPrint('❌ Image loading error: $error');
+                      }
+                      return Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: CustomColor.primaryColor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Icon(
+                          Icons.payment,
+                          size: 60,
+                          color: Colors.white,
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _error = null;
-                    _isLoading = true;
-                  });
-                  _checkSession();
-                },
-                child: const Text('Retry'),
-              ),
-            ],
-          ],
+                const SizedBox(height: 24),
+
+                // App name
+                Text(
+                  Strings.appName,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+
+                Text(
+                  'Digital Payment Solution',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.8),
+                    fontSize: 16,
+                  ),
+                ),
+
+                const SizedBox(height: 40),
+
+                if (_isLoading) ...[
+                  const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Loading...',
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.8),
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+
+                if (_error != null) ...[
+                  Container(
+                    margin: const EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.red.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                    ),
+                    child: Column(
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          color: Colors.red,
+                          size: 32,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Error: $_error',
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 14,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _error = null;
+                              _isLoading = true;
+                            });
+                            _checkSession();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -72,80 +172,115 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _checkSession() async {
     try {
-      print('Checking session status...');
+      if (kDebugMode) {
+        debugPrint('🚀 Splash Screen: Starting session check...');
+        debugPrint('🎯 Debug Mode: $kDebugMode');
+        debugPrint('📱 Platform: iOS');
+      }
+
+      setState(() {
+        _isLoading = true;
+        _error = null;
+      });
+
+      // Add a small delay to show splash screen
+      await Future.delayed(const Duration(milliseconds: 500));
 
       // Storage operations must run on main thread
-      bool isLoggedIn = _storageService.getValue(Strings.isLoggedIn) ?? false;
-      print('Is logged in: $isLoggedIn');
+      bool isLoggedIn = false;
+      try {
+        isLoggedIn = _storageService.getValue(Strings.isLoggedIn) ?? false;
+        if (kDebugMode) {
+          debugPrint('📱 Storage check - Is logged in: $isLoggedIn');
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          debugPrint('⚠️ Storage error: $e');
+        }
+        isLoggedIn = false;
+      }
 
       if (isLoggedIn) {
         try {
-          print('Fetching user details...');
+          if (kDebugMode) {
+            debugPrint('👤 Fetching user details...');
+          }
 
-          // Use background thread for Firebase operations
-          await ThreadingUtils.runFirebaseOperation(
-            () async => await _userProvider.fetchUserDetails(),
-            operationName: 'Fetch user details',
-          );
+          // Fetch user details directly on main thread without isolates
+          User? user = FirebaseAuth.instance.currentUser;
+          if (user != null) {
+            QuerySnapshot querySnapshot =
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .where('userId', isEqualTo: user.uid)
+                    .get();
 
-          print('User details fetched successfully');
-
-          // Yield control to prevent main thread blocking
-          await ThreadingUtils.yieldControl();
+            if (querySnapshot.docs.isNotEmpty) {
+              final userModel = UserModel.fromMap(
+                querySnapshot.docs.first.data() as Map<String, dynamic>,
+              );
+              _userProvider.updateUserDirectly(userModel);
+              if (kDebugMode) {
+                debugPrint('✅ User details fetched successfully');
+              }
+            }
+          }
 
           // Initialize subscription controller after user is loaded
           try {
-            final subscriptionController = Get.find<SubscriptionController>();
-            print('Subscription controller found and ready');
+            Get.find<SubscriptionController>();
+            if (kDebugMode) {
+              debugPrint('💳 Subscription controller found and ready');
+            }
           } catch (e) {
-            print('Subscription controller not ready: $e');
+            if (kDebugMode) {
+              debugPrint('⚠️ Subscription controller not ready: $e');
+            }
             // This is okay - controller will initialize on its own
           }
 
-          // Use UI operation for navigation
-          await ThreadingUtils.runUIOperation(() async {
-            Get.offAllNamed(Routes.dashboardScreen);
-          });
+          // Navigate to dashboard
+          if (kDebugMode) {
+            debugPrint('🏠 Navigating to dashboard...');
+          }
+          Get.offAllNamed(Routes.dashboardScreen);
         } catch (e) {
-          print('Error fetching user details: $e');
-          await ThreadingUtils.runUIOperation(() async {
-            setState(() {
-              _error = 'Failed to load user data. Please try again.';
-              _isLoading = false;
-            });
+          if (kDebugMode) {
+            debugPrint('❌ Error fetching user details: $e');
+          }
+          setState(() {
+            _error = 'Failed to load user data. Please try again.';
+            _isLoading = false;
           });
         }
       } else {
-        print(
-          'User not logged in, navigating to welcome screen in 3 seconds...',
-        );
+        if (kDebugMode) {
+          debugPrint(
+            '🆕 User not logged in, navigating to welcome screen in 2 seconds...',
+          );
+        }
 
-        // Use timer with threading utils
-        ThreadingUtils.createTimer(
-          'splash_navigation',
-          const Duration(seconds: 3),
-          () {
-            ThreadingUtils.runUIOperation(() async {
-              Get.offAllNamed(Routes.welcomeScreen);
-            });
-          },
-        );
+        // Use simple timer without threading utils
+        Future.delayed(const Duration(seconds: 2), () {
+          if (kDebugMode) {
+            debugPrint('🔄 Navigating to welcome screen...');
+          }
+          Get.offAllNamed(Routes.welcomeScreen);
+        });
       }
     } catch (e) {
-      print('Error in _checkSession: $e');
-      await ThreadingUtils.runUIOperation(() async {
-        setState(() {
-          _error = 'Something went wrong. Please try again.';
-          _isLoading = false;
-        });
+      if (kDebugMode) {
+        debugPrint('💥 Critical error in _checkSession: $e');
+      }
+      setState(() {
+        _error = 'Something went wrong. Please try again.';
+        _isLoading = false;
       });
     }
   }
 
   @override
   void dispose() {
-    // Clean up timers
-    ThreadingUtils.disposeTimer('splash_navigation');
     super.dispose();
   }
 }

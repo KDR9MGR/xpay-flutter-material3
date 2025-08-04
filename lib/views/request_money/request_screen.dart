@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:xpay/utils/utils.dart';
 import 'package:xpay/widgets/inputs/multiline_text_input_widget.dart';
 
-
 import '../../controller/request_controller.dart';
 import '../../utils/custom_color.dart';
 import '../../utils/custom_style.dart';
@@ -86,11 +85,7 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
             onPressed: () {
               Get.back();
             },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 20,
-            ),
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
           ),
         ),
       ),
@@ -106,7 +101,10 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, RequestMoneyController controller) {
+  ListView _bodyWidget(
+    BuildContext context,
+    RequestMoneyController controller,
+  ) {
     return ListView(
       shrinkWrap: true,
       children: [
@@ -121,7 +119,10 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
     );
   }
 
-  _infoInputWidget(BuildContext context, RequestMoneyController controller) {
+  Obx _infoInputWidget(
+    BuildContext context,
+    RequestMoneyController controller,
+  ) {
     return Obx(() {
       return Container(
         margin: const EdgeInsets.all(20),
@@ -165,7 +166,9 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: CustomColor.primaryColor.withValues(alpha: 0.3),
+                          color: CustomColor.primaryColor.withValues(
+                            alpha: 0.3,
+                          ),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -211,7 +214,9 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
                 ),
                 child: DropDownInputWidget(
                   items: controller.walletList,
@@ -232,14 +237,19 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
                 ),
                 child: SecondaryTextInputWidget(
                   controller: controller.requestToController,
-                  validator: MultiValidator([
-                    RequiredValidator(errorText: 'Enter an email address'),
-                    EmailValidator(errorText: 'Enter a valid email address')
-                  ]).call,
+                  validator:
+                      MultiValidator([
+                        RequiredValidator(errorText: 'Enter an email address'),
+                        EmailValidator(
+                          errorText: 'Enter a valid email address',
+                        ),
+                      ]).call,
                   hintText: 'Enter email address',
                   color: Colors.transparent,
                   suffixIcon: Ionicons.mail_outline,
@@ -274,15 +284,18 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
                 ),
                 child: AmountInputWidget(
                   hintText: '0.00',
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  validator: MultiValidator([
-                    RequiredValidator(errorText: 'Please enter an amount'),
-                    MinValueValidator(5, errorText: 'Minimum amount is 5')
-                  ]).call,
+                  validator:
+                      MultiValidator([
+                        RequiredValidator(errorText: 'Please enter an amount'),
+                        MinValueValidator(5, errorText: 'Minimum amount is 5'),
+                      ]).call,
                   controller: controller.amountController,
                   color: Colors.transparent,
                   suffixIcon: _amountButton(context, controller),
@@ -296,7 +309,9 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.03),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.05),
+                  ),
                 ),
                 child: Column(
                   children: [
@@ -374,7 +389,10 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
     );
   }
 
-  _amountButton(BuildContext context, RequestMoneyController controller) {
+  Container _amountButton(
+    BuildContext context,
+    RequestMoneyController controller,
+  ) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.20,
       decoration: BoxDecoration(
@@ -403,14 +421,14 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
               fontWeight: FontWeight.w700,
               fontSize: Dimensions.mediumTextSize,
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
   //  Button widget
-  _buttonWidget(RequestMoneyController controller) {
+  Container _buttonWidget(RequestMoneyController controller) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
@@ -434,25 +452,34 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
               try {
                 Utils.showLoadingDialog(context);
                 await _walletViewModel!.requestMoney(
-                    controller.requestToController.text.trim(),
-                    double.parse(controller.amountController.text.trim()),
-                    controller.walletName.value,
-                    controller.optionalNoteController.text.trim().isEmpty
-                        ? ''
-                        : controller.optionalNoteController.text.trim());
+                  controller.requestToController.text.trim(),
+                  double.parse(controller.amountController.text.trim()),
+                  controller.walletName.value,
+                  controller.optionalNoteController.text.trim().isEmpty
+                      ? ''
+                      : controller.optionalNoteController.text.trim(),
+                );
                 if (context.mounted) {
+                  // TODO: Add mounted check before using context in async function
                   Navigator.pop(context);
                   Utils.showDialogMessage(
-                      context, 'Success', 'Your request has been sent!');
+                    context,
+                    'Success',
+                    'Your request has been sent!',
+                  );
                   controller.requestToController.clear();
                   controller.amountController.clear();
                   controller.optionalNoteController.clear();
                 }
               } catch (error) {
                 if (context.mounted) {
+                  // TODO: Add mounted check before using context in async function
                   Navigator.pop(context);
                   Utils.showDialogMessage(
-                      context, 'Error', 'Error requesting money: $error');
+                    context,
+                    'Error',
+                    'Error requesting money: $error',
+                  );
                 }
               }
             }
@@ -463,7 +490,10 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
     );
   }
 
-  _walletInfoWidget(BuildContext context, RequestMoneyController controller) {
+  Obx _walletInfoWidget(
+    BuildContext context,
+    RequestMoneyController controller,
+  ) {
     return Obx(() {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -489,24 +519,29 @@ class _RequestMoneyScreenState extends State<RequestMoneyScreen>
         ),
         child: RequestMoneyWalletInfoWidget(
           wallet: controller.walletName.value,
-          merchant: controller.requestToController.text.isEmpty
-              ? 'adsent@gmail.com'
-              : controller.requestToController.text,
+          merchant:
+              controller.requestToController.text.isEmpty
+                  ? 'adsent@gmail.com'
+                  : controller.requestToController.text,
           transferAmount:
               '${controller.amountController.text.isNotEmpty ? controller.amountController.text : '100'} ${controller.walletName.value}',
           totalCharge:
               '${controller.calculateCharge(double.parse(controller.amountController.text.isNotEmpty ? controller.amountController.text : '100'))} ${controller.walletName.value}',
           youWillGet:
               '${double.parse(controller.amountController.text.isNotEmpty ? controller.amountController.text : '100') - controller.charge.value} ${controller.walletName.value}',
-          note: controller.optionalNoteController.text.isEmpty
-              ? Strings.addNoteHere.tr
-              : controller.optionalNoteController.text,
+          note:
+              controller.optionalNoteController.text.isEmpty
+                  ? Strings.addNoteHere.tr
+                  : controller.optionalNoteController.text,
         ),
       );
     });
   }
 
-  _noteWidget(BuildContext context, RequestMoneyController controller) {
+  Container _noteWidget(
+    BuildContext context,
+    RequestMoneyController controller,
+  ) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(24),

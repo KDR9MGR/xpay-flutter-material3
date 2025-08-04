@@ -20,23 +20,23 @@ class SendMoneyController extends GetxController {
     super.dispose();
   }
 
-  changeAnimatedHeight(value) {
+  void changeAnimatedHeight(value) {
     animatedHeight.value = value;
   }
 
-  navigateToAddAmountScreen() {
+  void navigateToAddAmountScreen() {
     Get.toNamed(Routes.addAmountSendMoneyScreen);
   }
 
-  navigateToPinScreen() {
+  void navigateToPinScreen() {
     Get.toNamed(Routes.pinScreen);
   }
 
-  navigateToReviewScreen() {
+  void navigateToReviewScreen() {
     Get.toNamed(Routes.reviewSendMoneyScreen);
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 }

@@ -14,53 +14,48 @@ class IndexScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          backgroundColor: CustomColor.screenBGColor,
-          appBar: PrimaryAppBar(
-            appbarSize: Dimensions.defaultAppBarHeight * 1.9,
-            title: Text(
-              Strings.inbox.tr,
-              style: CustomStyle.commonTextTitleWhite,
-            ),
-            appBar: AppBar(),
-            backgroundColor: CustomColor.primaryColor,
-            autoLeading: false,
-            elevation: 1,
-            action: [
-              Row(
-                children: [
-                  Image.asset(
-                    Strings.appbarLogoPath,
-                    // scale: 4,
-                  ),
-                  SizedBox(
-                    width: Dimensions.widthSize * 1.7,
-                  ),
-                ],
-              )
-            ],
-            // toolbarHeight: 100,
-            bottom: PreferredSize(
-              preferredSize: _tabBarWidget.preferredSize,
-              child: ColoredBox(
-                color: CustomColor.secondaryColor,
-                child: _tabBarWidget,
-              ),
-            ),
-            appbarColor: CustomColor.secondaryColor,
-          ),
-          body: TabBarView(
-            physics: const BouncingScrollPhysics(),
+    length: 2,
+    child: Scaffold(
+      backgroundColor: CustomColor.screenBGColor,
+      appBar: PrimaryAppBar(
+        appbarSize: Dimensions.defaultAppBarHeight * 1.9,
+        title: Text(Strings.inbox.tr, style: CustomStyle.commonTextTitleWhite),
+        appBar: AppBar(),
+        backgroundColor: CustomColor.primaryColor,
+        autoLeading: false,
+        elevation: 1,
+        action: [
+          Row(
             children: [
-              _notificationsSection(context),
-              _transactionsSection(context),
+              Image.asset(
+                Strings.appbarLogoPath,
+                // scale: 4,
+              ),
+              SizedBox(width: Dimensions.widthSize * 1.7),
             ],
+          ),
+        ],
+        // toolbarHeight: 100,
+        bottom: PreferredSize(
+          preferredSize: _tabBarWidget.preferredSize,
+          child: ColoredBox(
+            color: CustomColor.secondaryColor,
+            child: _tabBarWidget,
           ),
         ),
-      );
+        appbarColor: CustomColor.secondaryColor,
+      ),
+      body: TabBarView(
+        physics: const BouncingScrollPhysics(),
+        children: [
+          _notificationsSection(context),
+          _transactionsSection(context),
+        ],
+      ),
+    ),
+  );
 
-  _notificationsSection(BuildContext context) {
+  ListView _notificationsSection(BuildContext context) {
     return ListView(
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
@@ -74,7 +69,7 @@ class IndexScreen extends StatelessWidget {
     );
   }
 
-  _transactionsSection(BuildContext context) {
+  ListView _transactionsSection(BuildContext context) {
     return ListView(
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
@@ -89,39 +84,31 @@ class IndexScreen extends StatelessWidget {
   }
 
   // body widget containing all widget elements
-  _notificationBodyWidget(BuildContext context) {
+  Padding _notificationBodyWidget(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
         left: Dimensions.marginSize - 5,
         right: Dimensions.marginSize - 5,
         top: Dimensions.marginSize - 5,
       ),
-      child: Column(
-        children: [
-          _notificationCardWidget(context),
-        ],
-      ),
+      child: Column(children: [_notificationCardWidget(context)]),
     );
   }
 
   // tab bar widget
   TabBar get _tabBarWidget => TabBar(
-        labelColor: CustomColor.primaryColor,
-        labelStyle: CustomStyle.commonTextTitle,
-        unselectedLabelColor: Colors.white.withValues(alpha: 0.5),
-        unselectedLabelStyle: CustomStyle.commonTextTitle,
-        tabs: [
-          Tab(
-            child: Text(Strings.notifications.tr),
-          ),
-          Tab(
-            child: Text(Strings.transactions.tr),
-          ),
-        ],
-      );
+    labelColor: CustomColor.primaryColor,
+    labelStyle: CustomStyle.commonTextTitle,
+    unselectedLabelColor: Colors.white.withValues(alpha: 0.5),
+    unselectedLabelStyle: CustomStyle.commonTextTitle,
+    tabs: [
+      Tab(child: Text(Strings.notifications.tr)),
+      Tab(child: Text(Strings.transactions.tr)),
+    ],
+  );
 
   // notification widget card
-  _notificationCardWidget(BuildContext context) {
+  SizedBox _notificationCardWidget(BuildContext context) {
     List<NotificationCardWidget> notificationCardList = [
       const NotificationCardWidget(
         imagePath: 'assets/images/contact_icon.png',
@@ -137,15 +124,15 @@ class IndexScreen extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         itemCount: notificationCardList.length,
         itemBuilder: (context, index) => notificationCardList[index],
-        separatorBuilder: (BuildContext context, int index) => const Padding(
-          padding: EdgeInsets.only(bottom: 10),
-        ),
+        separatorBuilder:
+            (BuildContext context, int index) =>
+                const Padding(padding: EdgeInsets.only(bottom: 10)),
       ),
     );
   }
 
   // transaction tab section
-  _transactionsBodyWidget(BuildContext context) {
+  SizedBox _transactionsBodyWidget(BuildContext context) {
     List<TransactionsWidget> transactionList = [
       const TransactionsWidget(
         imagePath: Strings.payBillImagePath,
@@ -183,9 +170,9 @@ class IndexScreen extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         itemCount: transactionList.length,
         itemBuilder: (context, index) => transactionList[index],
-        separatorBuilder: (BuildContext context, int index) => const Padding(
-          padding: EdgeInsets.only(bottom: 0),
-        ),
+        separatorBuilder:
+            (BuildContext context, int index) =>
+                const Padding(padding: EdgeInsets.only(bottom: 0)),
       ),
     );
   }

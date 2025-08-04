@@ -49,17 +49,17 @@ class AddMoneyController extends GetxController
     super.dispose();
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
   // bank to spay navigation
 
-  navigateBankToXPayScreen() {
+  void navigateBankToXPayScreen() {
     Get.toNamed(Routes.bankToXPayAddMoneyScreen);
   }
 
-  navigateToConfirmAddMoneyScreen() {
+  void navigateToConfirmAddMoneyScreen() {
     Get.toNamed(Routes.confirmAddMoneyScreen);
   }
 }

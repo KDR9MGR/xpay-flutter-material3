@@ -51,29 +51,26 @@ class MySupportTickets extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, InvoiceController controller) {
+  ListView _bodyWidget(BuildContext context, InvoiceController controller) {
     return ListView(
       shrinkWrap: true,
-      children: [
-        _transactionsSection(context, controller),
-      ],
+      children: [_transactionsSection(context, controller)],
     );
   }
 
-  _transactionsSection(BuildContext context, InvoiceController controller) {
+  ListView _transactionsSection(
+    BuildContext context,
+    InvoiceController controller,
+  ) {
     return ListView(
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
-      children: [
-        SizedBox(
-          child: _transactionsBodyWidget(context),
-        ),
-      ],
+      children: [SizedBox(child: _transactionsBodyWidget(context))],
     );
   }
 
   // transaction tab section
-  _transactionsBodyWidget(BuildContext context) {
+  SizedBox _transactionsBodyWidget(BuildContext context) {
     List<MySupportTicketsItemWidget> voucherList = [
       const MySupportTicketsItemWidget(
         imagePath: Strings.payBillImagePath,

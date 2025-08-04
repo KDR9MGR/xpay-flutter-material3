@@ -51,33 +51,30 @@ class TwoFaSecurity extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context) {
+  Column _bodyWidget(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _myQrCodeWidget(context),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
         _buttonWidget(context),
       ],
     );
   }
 
-  _myQrCodeWidget(BuildContext context) {
+  Container _myQrCodeWidget(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-          color: CustomColor.secondaryColor,
-          borderRadius: BorderRadius.circular(Dimensions.radius * 2)),
+        color: CustomColor.secondaryColor,
+        borderRadius: BorderRadius.circular(Dimensions.radius * 2),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(Strings.myQrCodeImagePath),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          SizedBox(height: Dimensions.heightSize),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: CopyIdInputWidget(
@@ -93,7 +90,7 @@ class TwoFaSecurity extends StatelessWidget {
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context) {
+  Padding _buttonWidget(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: PrimaryButton(
@@ -106,7 +103,7 @@ class TwoFaSecurity extends StatelessWidget {
     );
   }
 
-  _copyIdButton(BuildContext context) {
+  Container _copyIdButton(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.20,
       decoration: BoxDecoration(
@@ -118,12 +115,7 @@ class TwoFaSecurity extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Icon(
-            Icons.content_copy,
-            color: Colors.white,
-          )
-        ],
+        children: const [Icon(Icons.content_copy, color: Colors.white)],
       ),
     );
   }

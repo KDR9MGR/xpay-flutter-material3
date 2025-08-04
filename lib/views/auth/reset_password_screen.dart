@@ -44,7 +44,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   // body widget containing all widget elements
-  _bodyWidget(BuildContext context) {
+  Padding _bodyWidget(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
         left: Dimensions.marginSize,
@@ -55,28 +55,22 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
         children: [
           _naveBarWidget(context),
           _resetPinWidget(context),
-          SizedBox(
-            height: Dimensions.heightSize * 2,
-          ),
+          SizedBox(height: Dimensions.heightSize * 2),
           _pinNumberInputsWidget(context),
-          SizedBox(
-            height: Dimensions.heightSize * 2,
-          ),
-          _buttonWidget(context)
+          SizedBox(height: Dimensions.heightSize * 2),
+          _buttonWidget(context),
         ],
       ),
     );
   }
 
   // navigation  bar widget
-  _naveBarWidget(BuildContext context) {
-    return const AuthNavBarWidget(
-      title: '',
-    );
+  AuthNavBarWidget _naveBarWidget(BuildContext context) {
+    return const AuthNavBarWidget(title: '');
   }
 
   // Login input and info
-  _pinNumberInputsWidget(BuildContext context) {
+  Container _pinNumberInputsWidget(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
       decoration: BoxDecoration(
@@ -88,10 +82,11 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   // login info
-  _resetPinWidget(BuildContext context) {
+  Padding _resetPinWidget(BuildContext context) {
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: Dimensions.defaultPaddingSize * 1.5),
+      padding: EdgeInsets.symmetric(
+        horizontal: Dimensions.defaultPaddingSize * 1.5,
+      ),
       child: Column(
         children: [
           Text(
@@ -99,9 +94,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
             style: CustomStyle.commonLargeTextTitleWhite,
             textAlign: TextAlign.center,
           ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          SizedBox(height: Dimensions.heightSize),
           Text(
             Strings.resetPasswordMessage.tr,
             style: TextStyle(
@@ -117,7 +110,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   // login inputs
-  _resetPasswordInputWidget(BuildContext context) {
+  Form _resetPasswordInputWidget(BuildContext context) {
     return Form(
       key: formKey,
       child: Column(
@@ -129,9 +122,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
             borderColor: CustomColor.primaryColor,
             color: CustomColor.secondaryColor,
           ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          SizedBox(height: Dimensions.heightSize),
           TextLabelWidget(text: Strings.confirmNewPassword.tr),
           TextFieldInputWidget(
             controller: confirmPasswordController,
@@ -145,7 +136,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   // reset pin button
-  _buttonWidget(BuildContext context) {
+  PrimaryButton _buttonWidget(BuildContext context) {
     return PrimaryButton(
       title: Strings.resetPassword.tr,
       onPressed: () {
@@ -157,7 +148,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   // successful message screen
-  _successfulResetPinScreen(BuildContext context) {
+  Future _successfulResetPinScreen(BuildContext context) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -189,36 +180,32 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           child: Icon(
                             Icons.close,
                             size: Dimensions.iconSizeDefault * 2,
-                            color:
-                                CustomColor.primaryTextColor.withValues(alpha: 0.5),
+                            color: CustomColor.primaryTextColor.withValues(
+                              alpha: 0.5,
+                            ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                     Padding(
-                      padding:
-                          EdgeInsets.only(left: Dimensions.defaultPaddingSize),
+                      padding: EdgeInsets.only(
+                        left: Dimensions.defaultPaddingSize,
+                      ),
                       child: Image.asset(Strings.successfulResetPinImagePath),
                     ),
-                    SizedBox(
-                      height: Dimensions.heightSize,
-                    ),
+                    SizedBox(height: Dimensions.heightSize),
                     Text(
                       Strings.passwordChangedText.tr,
                       textAlign: TextAlign.center,
                       style: CustomStyle.commonLargeTextTitleWhite,
                     ),
-                    SizedBox(
-                      height: Dimensions.heightSize,
-                    ),
+                    SizedBox(height: Dimensions.heightSize),
                     Text(
                       Strings.passwordChangedTextMessage.tr,
                       style: CustomStyle.commonTextSubTitleWhite,
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(
-                      height: Dimensions.heightSize * 2,
-                    ),
+                    SizedBox(height: Dimensions.heightSize * 2),
                     PrimaryButton(
                       title: Strings.okay.tr,
                       onPressed: () {
@@ -226,7 +213,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       },
                       borderColorName: CustomColor.primaryColor,
                       borderWidth: 0,
-                    )
+                    ),
                   ],
                 ),
               ),

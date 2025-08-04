@@ -1,11 +1,12 @@
 import 'dart:convert';
+import '/utils/app_logger.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/bank_account_model.dart';
 
 class BankAccountsController extends GetxController {
   static const String _bankAccountsKey = 'saved_bank_accounts';
-  
+
   final RxList<BankAccountModel> _bankAccounts = <BankAccountModel>[].obs;
   final RxBool _isLoading = false.obs;
 
@@ -24,13 +25,16 @@ class BankAccountsController extends GetxController {
       _isLoading.value = true;
       final prefs = await SharedPreferences.getInstance();
       final accountsJson = prefs.getString(_bankAccountsKey);
-      
+
       if (accountsJson != null) {
         final List<dynamic> accountsList = json.decode(accountsJson);
-        _bankAccounts.value = accountsList.map((accountJson) => BankAccountModel.fromJson(accountJson)).toList();
+        _bankAccounts.value =
+            accountsList
+                .map((accountJson) => BankAccountModel.fromJson(accountJson))
+                .toList();
       }
     } catch (e) {
-      print('Error loading bank accounts: $e');
+      AppLogger.log('Error loading bank accounts: $e');
       Get.snackbar('Error', 'Failed to load saved bank accounts');
     } finally {
       _isLoading.value = false;
@@ -41,10 +45,12 @@ class BankAccountsController extends GetxController {
   Future<void> _saveBankAccounts() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final accountsJson = json.encode(_bankAccounts.map((account) => account.toJson()).toList());
+      final accountsJson = json.encode(
+        _bankAccounts.map((account) => account.toJson()).toList(),
+      );
       await prefs.setString(_bankAccountsKey, accountsJson);
     } catch (e) {
-      print('Error saving bank accounts: $e');
+      AppLogger.log('Error saving bank accounts: $e');
       throw Exception('Failed to save bank accounts');
     }
   }
@@ -61,12 +67,20 @@ class BankAccountsController extends GetxController {
       _isLoading.value = true;
 
       // Validate bank account data
-      if (!_validateBankAccountData(bankName, accountHolderName, accountNumber, routingNumber, accountType)) {
+      if (!_validateBankAccountData(
+        bankName,
+        accountHolderName,
+        accountNumber,
+        routingNumber,
+        accountType,
+      )) {
         return false;
       }
 
       // Check if account already exists
-      if (_bankAccounts.any((account) => account.accountNumber == accountNumber.trim())) {
+      if (_bankAccounts.any(
+        (account) => account.accountNumber == accountNumber.trim(),
+      )) {
         Get.snackbar('Error', 'This bank account is already saved');
         return false;
       }
@@ -85,11 +99,11 @@ class BankAccountsController extends GetxController {
 
       _bankAccounts.add(newAccount);
       await _saveBankAccounts();
-      
+
       Get.snackbar('Success', 'Bank account added successfully');
       return true;
     } catch (e) {
-      print('Error adding bank account: $e');
+      AppLogger.log('Error adding bank account: $e');
       Get.snackbar('Error', 'Failed to add bank account');
       return false;
     } finally {
@@ -101,8 +115,10 @@ class BankAccountsController extends GetxController {
   Future<bool> removeBankAccount(String accountId) async {
     try {
       _isLoading.value = true;
-      
-      final accountIndex = _bankAccounts.indexWhere((account) => account.id == accountId);
+
+      final accountIndex = _bankAccounts.indexWhere(
+        (account) => account.id == accountId,
+      );
       if (accountIndex == -1) {
         Get.snackbar('Error', 'Bank account not found');
         return false;
@@ -120,7 +136,7 @@ class BankAccountsController extends GetxController {
       Get.snackbar('Success', 'Bank account removed successfully');
       return true;
     } catch (e) {
-      print('Error removing bank account: $e');
+      AppLogger.log('Error removing bank account: $e');
       Get.snackbar('Error', 'Failed to remove bank account');
       return false;
     } finally {
@@ -132,26 +148,30 @@ class BankAccountsController extends GetxController {
   Future<bool> setDefaultBankAccount(String accountId) async {
     try {
       _isLoading.value = true;
-      
+
       // Remove default from all accounts
       for (int i = 0; i < _bankAccounts.length; i++) {
         _bankAccounts[i] = _bankAccounts[i].copyWith(isDefault: false);
       }
 
       // Set new default
-      final accountIndex = _bankAccounts.indexWhere((account) => account.id == accountId);
+      final accountIndex = _bankAccounts.indexWhere(
+        (account) => account.id == accountId,
+      );
       if (accountIndex == -1) {
         Get.snackbar('Error', 'Bank account not found');
         return false;
       }
 
-      _bankAccounts[accountIndex] = _bankAccounts[accountIndex].copyWith(isDefault: true);
+      _bankAccounts[accountIndex] = _bankAccounts[accountIndex].copyWith(
+        isDefault: true,
+      );
       await _saveBankAccounts();
-      
+
       Get.snackbar('Success', 'Default bank account updated');
       return true;
     } catch (e) {
-      print('Error setting default bank account: $e');
+      AppLogger.log('Error setting default bank account: $e');
       Get.snackbar('Error', 'Failed to update default bank account');
       return false;
     } finally {
@@ -169,7 +189,13 @@ class BankAccountsController extends GetxController {
   }
 
   // Validate bank account data
-  bool _validateBankAccountData(String bankName, String accountHolderName, String accountNumber, String routingNumber, String accountType) {
+  bool _validateBankAccountData(
+    String bankName,
+    String accountHolderName,
+    String accountNumber,
+    String routingNumber,
+    String accountType,
+  ) {
     // Validate bank name
     if (bankName.trim().isEmpty) {
       Get.snackbar('Error', 'Please enter bank name');
@@ -225,8 +251,8 @@ class BankAccountsController extends GetxController {
       await _saveBankAccounts();
       Get.snackbar('Success', 'All bank accounts cleared');
     } catch (e) {
-      print('Error clearing bank accounts: $e');
+      AppLogger.log('Error clearing bank accounts: $e');
       Get.snackbar('Error', 'Failed to clear bank accounts');
     }
   }
-} 
+}

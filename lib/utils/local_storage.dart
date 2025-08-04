@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-const String language = "language";
-const String smallLanguage = "smallLanguage";
-const String capitalLanguage = "capitalLanguage";
+const String language = 'language';
+const String smallLanguage = 'smallLanguage';
+const String capitalLanguage = 'capitalLanguage';
 
 class LocalStorage {
   static Future<void> saveLanguage({

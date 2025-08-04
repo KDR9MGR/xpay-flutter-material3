@@ -1,12 +1,20 @@
 import 'dart:io';
+import '/utils/app_logger.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '/utils/app_logger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '/utils/app_logger.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import '/utils/app_logger.dart';
 import 'package:flutter/material.dart';
+import '/utils/app_logger.dart';
 import 'package:xpay/controller/settings_controller.dart';
+import '/utils/app_logger.dart';
 import 'package:xpay/data/user_model.dart';
+import '/utils/app_logger.dart';
 import 'package:xpay/utils/threading_utils.dart';
+import '/utils/app_logger.dart';
 
 class UserProvider with ChangeNotifier {
   UserModel? _user;
@@ -40,7 +48,7 @@ class UserProvider with ChangeNotifier {
         });
       }
     } catch (e) {
-      print('Error fetching user details: $e');
+      AppLogger.log('Error fetching user details: $e');
     }
   }
 
@@ -57,7 +65,7 @@ class UserProvider with ChangeNotifier {
         await fetchUserDetails();
       }
     } catch (e) {
-      print('Error updating user details: $e');
+      AppLogger.log('Error updating user details: $e');
     }
   }
 
@@ -80,7 +88,7 @@ class UserProvider with ChangeNotifier {
       }, operationName: 'Upload profile photo');
     } catch (e) {
       // Handle any errors
-      print('Failed to upload profile photo: $e');
+      AppLogger.log('Failed to upload profile photo: $e');
       return null;
     }
   }
@@ -118,7 +126,7 @@ class UserProvider with ChangeNotifier {
         throw Exception(e.message);
       }
     } else {
-      throw Exception("User not found or email not available.");
+      throw Exception('User not found or email not available.');
     }
   }
 }

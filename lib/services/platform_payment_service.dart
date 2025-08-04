@@ -1,4 +1,5 @@
 import 'dart:io';
+import '/utils/app_logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -6,25 +7,25 @@ import '../config/moov_config.dart';
 
 class PlatformPaymentService {
   static const MethodChannel _channel = MethodChannel('platform_payment');
-  
+
   // Initialize platform payment services
   static Future<void> init() async {
     try {
-      print('Initializing Platform Payment Service...');
-      
+      AppLogger.log('Initializing Platform Payment Service...');
+
       if (Platform.isAndroid) {
         await _initializeGooglePay();
-        print('Google Pay initialization completed');
+        AppLogger.log('Google Pay initialization completed');
       } else if (Platform.isIOS) {
         await _initializeApplePay();
-        print('Apple Pay initialization completed');
+        AppLogger.log('Apple Pay initialization completed');
       } else {
-        print('Platform not supported for native payments');
+        AppLogger.log('Platform not supported for native payments');
       }
-      
-      print('Platform payment service initialized successfully');
+
+      AppLogger.log('Platform payment service initialized successfully');
     } catch (e) {
-      print('Error initializing platform payment service: $e');
+      AppLogger.log('Error initializing platform payment service: $e');
       // Don't throw error - allow app to continue without native payments
     }
   }
@@ -32,14 +33,14 @@ class PlatformPaymentService {
   // Initialize Google Pay
   static Future<void> _initializeGooglePay() async {
     try {
-      print('Initializing Google Pay...');
+      AppLogger.log('Initializing Google Pay...');
       await _channel.invokeMethod('initializeGooglePay', {
         'environment': MoovConfig.googlePayConfig['environment'],
         'merchantInfo': MoovConfig.googlePayConfig['merchantInfo'],
       });
-      print('Google Pay initialized successfully');
+      AppLogger.log('Google Pay initialized successfully');
     } catch (e) {
-      print('Error initializing Google Pay: $e');
+      AppLogger.log('Error initializing Google Pay: $e');
       // Don't throw - Google Pay might not be available
     }
   }
@@ -47,15 +48,15 @@ class PlatformPaymentService {
   // Initialize Apple Pay
   static Future<void> _initializeApplePay() async {
     try {
-      print('Initializing Apple Pay...');
+      AppLogger.log('Initializing Apple Pay...');
       await _channel.invokeMethod('initializeApplePay', {
         'merchantIdentifier': MoovConfig.applePayConfig['merchantIdentifier'],
         'countryCode': MoovConfig.applePayConfig['countryCode'],
         'currencyCode': MoovConfig.applePayConfig['currencyCode'],
       });
-      print('Apple Pay initialized successfully');
+      AppLogger.log('Apple Pay initialized successfully');
     } catch (e) {
-      print('Error initializing Apple Pay: $e');
+      AppLogger.log('Error initializing Apple Pay: $e');
       // Don't throw - Apple Pay might not be available
     }
   }
@@ -63,12 +64,14 @@ class PlatformPaymentService {
   // Check if Google Pay is available
   static Future<bool> isGooglePayAvailable() async {
     if (!Platform.isAndroid) return false;
-    
+
     try {
-      final bool isAvailable = await _channel.invokeMethod('isGooglePayAvailable');
+      final bool isAvailable = await _channel.invokeMethod(
+        'isGooglePayAvailable',
+      );
       return isAvailable;
     } catch (e) {
-      print('Error checking Google Pay availability: $e');
+      AppLogger.log('Error checking Google Pay availability: $e');
       return false;
     }
   }
@@ -76,12 +79,14 @@ class PlatformPaymentService {
   // Check if Apple Pay is available
   static Future<bool> isApplePayAvailable() async {
     if (!Platform.isIOS) return false;
-    
+
     try {
-      final bool isAvailable = await _channel.invokeMethod('isApplePayAvailable');
+      final bool isAvailable = await _channel.invokeMethod(
+        'isApplePayAvailable',
+      );
       return isAvailable;
     } catch (e) {
-      print('Error checking Apple Pay availability: $e');
+      AppLogger.log('Error checking Apple Pay availability: $e');
       return false;
     }
   }
@@ -101,7 +106,8 @@ class PlatformPaymentService {
         'paymentRequest': {
           'apiVersion': MoovConfig.googlePayConfig['apiVersion'],
           'apiVersionMinor': MoovConfig.googlePayConfig['apiVersionMinor'],
-          'allowedPaymentMethods': MoovConfig.googlePayConfig['allowedPaymentMethods'],
+          'allowedPaymentMethods':
+              MoovConfig.googlePayConfig['allowedPaymentMethods'],
           'transactionInfo': {
             'totalPrice': amount.toString(),
             'totalPriceStatus': 'FINAL',
@@ -109,16 +115,13 @@ class PlatformPaymentService {
             'transactionId': subscriptionId,
           },
           'merchantInfo': MoovConfig.googlePayConfig['merchantInfo'],
-        }
+        },
       });
 
       return Map<String, dynamic>.from(result);
     } catch (e) {
-      print('Error processing Google Pay subscription: $e');
-      return {
-        'success': false,
-        'error': e.toString(),
-      };
+      AppLogger.log('Error processing Google Pay subscription: $e');
+      return {'success': false, 'error': e.toString()};
     }
   }
 
@@ -140,24 +143,22 @@ class PlatformPaymentService {
           'countryCode': MoovConfig.applePayConfig['countryCode'],
           'currencyCode': currency,
           'supportedNetworks': MoovConfig.applePayConfig['supportedNetworks'],
-          'merchantCapabilities': MoovConfig.applePayConfig['merchantCapabilities'],
+          'merchantCapabilities':
+              MoovConfig.applePayConfig['merchantCapabilities'],
           'paymentSummaryItems': [
             {
               'label': 'Super Payments Monthly',
               'amount': amount.toString(),
               'type': 'final',
-            }
+            },
           ],
-        }
+        },
       });
 
       return Map<String, dynamic>.from(result);
     } catch (e) {
-      print('Error processing Apple Pay subscription: $e');
-      return {
-        'success': false,
-        'error': e.toString(),
-      };
+      AppLogger.log('Error processing Apple Pay subscription: $e');
+      return {'success': false, 'error': e.toString()};
     }
   }
 
@@ -203,17 +204,11 @@ class PlatformPaymentService {
           return null;
         }
       }
-      
-      return {
-        'success': false,
-        'error': 'Unsupported platform',
-      };
+
+      return {'success': false, 'error': 'Unsupported platform'};
     } catch (e) {
-      print('Error showing payment sheet: $e');
-      return {
-        'success': false,
-        'error': e.toString(),
-      };
+      AppLogger.log('Error showing payment sheet: $e');
+      return {'success': false, 'error': e.toString()};
     }
   }
 
@@ -236,7 +231,7 @@ class PlatformPaymentService {
         currency: currency,
       );
     }
-    
+
     return Container();
   }
 
@@ -254,9 +249,7 @@ class PlatformPaymentService {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           elevation: 2,
         ),
         child: Row(
@@ -283,10 +276,7 @@ class PlatformPaymentService {
             SizedBox(width: 12),
             Text(
               'Pay with Google Pay',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -308,30 +298,21 @@ class PlatformPaymentService {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           elevation: 2,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.apple,
-              size: 24,
-              color: Colors.white,
-            ),
+            Icon(Icons.apple, size: 24, color: Colors.white),
             SizedBox(width: 8),
             Text(
               'Pay with Apple Pay',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
         ),
       ),
     );
   }
-} 
+}

@@ -7,15 +7,15 @@ class RequestToMeController extends GetxController {
   RxString walletName = ''.obs;
   RxString currencyName = ''.obs;
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
-  navigateToRequestToMeWalletInfoScreen() {
+  void navigateToRequestToMeWalletInfoScreen() {
     Get.toNamed(Routes.requestToMeWalletInfoScreen);
   }
 
-  navigateToConfirmRequestToMeScreen() {
+  void navigateToConfirmRequestToMeScreen() {
     Get.toNamed(Routes.confirmRequestToMeScreen);
   }
 }

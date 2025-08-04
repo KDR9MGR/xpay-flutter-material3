@@ -25,7 +25,7 @@ class CongratulationsScreen extends StatelessWidget {
   }
 
   // body widget containing all widget elements
-  _bodyWidget(BuildContext context, AuthController controller) {
+  Padding _bodyWidget(BuildContext context, AuthController controller) {
     return Padding(
       padding: EdgeInsets.only(
         left: Dimensions.marginSize,
@@ -34,14 +34,10 @@ class CongratulationsScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          SizedBox(
-            height: Dimensions.heightSize * 4,
-          ),
+          SizedBox(height: Dimensions.heightSize * 4),
           _congratulationImage(context),
           _congratulationInfoWidget(context),
-          SizedBox(
-            height: Dimensions.heightSize * 3,
-          ),
+          SizedBox(height: Dimensions.heightSize * 3),
           _buttonWidget(context, controller),
         ],
       ),
@@ -49,22 +45,19 @@ class CongratulationsScreen extends StatelessWidget {
   }
 
   // nid and passport info
-  _congratulationInfoWidget(BuildContext context) {
+  Padding _congratulationInfoWidget(BuildContext context) {
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: Dimensions.defaultPaddingSize * 2),
+      padding: EdgeInsets.symmetric(
+        horizontal: Dimensions.defaultPaddingSize * 2,
+      ),
       child: Column(
         children: [
-          SizedBox(
-            height: Dimensions.heightSize * 3,
-          ),
+          SizedBox(height: Dimensions.heightSize * 3),
           Text(
             Strings.verifyAccount.tr,
             style: CustomStyle.commonLargeTextTitleWhite,
           ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          SizedBox(height: Dimensions.heightSize),
           Text(
             Strings.nidPassportMessage.tr,
             style: TextStyle(
@@ -79,12 +72,12 @@ class CongratulationsScreen extends StatelessWidget {
     );
   }
 
-  _congratulationImage(BuildContext context) {
+  Image _congratulationImage(BuildContext context) {
     return Image.asset(Strings.congratulationScreenImagePath);
   }
 
   // okay Button
-  _buttonWidget(BuildContext context, AuthController controller) {
+  PrimaryButton _buttonWidget(BuildContext context, AuthController controller) {
     return PrimaryButton(
       title: Strings.okay.tr,
       onPressed: () {

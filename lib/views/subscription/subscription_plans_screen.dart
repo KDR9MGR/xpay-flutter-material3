@@ -13,32 +13,38 @@ class SubscriptionPlansScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<SubscriptionController>(
-      builder: (controller) => Scaffold(
-        backgroundColor: CustomColor.screenBGColor,
-        appBar: AppBar(
-          title: Text(
-            'Go Premium',
-            style: CustomStyle.commonTextTitleWhite,
-          ),
-          backgroundColor: CustomColor.primaryColor,
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () => Get.back(),
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: CustomColor.primaryTextColor,
+      builder:
+          (controller) => Scaffold(
+            backgroundColor: CustomColor.screenBGColor,
+            appBar: AppBar(
+              title: Text(
+                'Go Premium',
+                style: CustomStyle.commonTextTitleWhite,
+              ),
+              backgroundColor: CustomColor.primaryColor,
+              elevation: 0,
+              leading: IconButton(
+                onPressed: () => Get.back(),
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: CustomColor.primaryTextColor,
+                ),
+              ),
+            ),
+            body: Obx(
+              () =>
+                  controller.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : _bodyWidget(context, controller),
             ),
           ),
-        ),
-        body: Obx(() => controller.isLoading 
-          ? const Center(child: CircularProgressIndicator())
-          : _bodyWidget(context, controller)
-        ),
-      ),
     );
   }
 
-  _bodyWidget(BuildContext context, SubscriptionController controller) {
+  SingleChildScrollView _bodyWidget(
+    BuildContext context,
+    SubscriptionController controller,
+  ) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
       child: Column(
@@ -55,7 +61,7 @@ class SubscriptionPlansScreen extends StatelessWidget {
     );
   }
 
-  _headerWidget() {
+  Container _headerWidget() {
     return Container(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize * 1.2),
       decoration: BoxDecoration(
@@ -97,19 +103,16 @@ class SubscriptionPlansScreen extends StatelessWidget {
     );
   }
 
-  _premiumPlanWidget(SubscriptionController controller) {
+  Widget _premiumPlanWidget(SubscriptionController controller) {
     final planData = controller.singlePlan;
     if (planData == null) return const SizedBox();
-    
+
     return Container(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize * 0.8),
       decoration: BoxDecoration(
         color: CustomColor.surfaceColor,
         borderRadius: BorderRadius.circular(Dimensions.radius * 2),
-        border: Border.all(
-          color: CustomColor.primaryColor,
-          width: 2,
-        ),
+        border: Border.all(color: CustomColor.primaryColor, width: 2),
         boxShadow: [
           BoxShadow(
             color: CustomColor.primaryColor.withValues(alpha: 0.1),
@@ -149,7 +152,9 @@ class SubscriptionPlansScreen extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: CustomColor.primaryColor,
-                            borderRadius: BorderRadius.circular(Dimensions.radius),
+                            borderRadius: BorderRadius.circular(
+                              Dimensions.radius,
+                            ),
                           ),
                           child: Text(
                             'POPULAR',
@@ -169,11 +174,12 @@ class SubscriptionPlansScreen extends StatelessWidget {
                         Flexible(
                           child: Text(
                             '\$${planData['price']}',
-                            style: CustomStyle.commonLargeTextTitleWhite.copyWith(
-                              fontSize: 28.sp,
-                              color: CustomColor.primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: CustomStyle.commonLargeTextTitleWhite
+                                .copyWith(
+                                  fontSize: 28.sp,
+                                  color: CustomColor.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -188,16 +194,12 @@ class SubscriptionPlansScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
-                Icons.verified,
-                size: 32.r,
-                color: CustomColor.primaryColor,
-              ),
+              Icon(Icons.verified, size: 32.r, color: CustomColor.primaryColor),
             ],
           ),
-          
+
           SizedBox(height: Dimensions.heightSize * 1.5),
-          
+
           // Value proposition
           Container(
             padding: EdgeInsets.all(Dimensions.defaultPaddingSize * 0.8),
@@ -234,10 +236,10 @@ class SubscriptionPlansScreen extends StatelessWidget {
     );
   }
 
-  _featuresListWidget() {
+  Widget _featuresListWidget() {
     final planData = StripeConfig.subscriptionPlans['premium_monthly'];
     if (planData == null) return const SizedBox();
-    
+
     return Container(
       padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
       decoration: BoxDecoration(
@@ -297,7 +299,7 @@ class SubscriptionPlansScreen extends StatelessWidget {
     );
   }
 
-  _subscribeButtonWidget(SubscriptionController controller) {
+  Column _subscribeButtonWidget(SubscriptionController controller) {
     return Column(
       children: [
         // Google Pay button (Android)
@@ -321,11 +323,12 @@ class SubscriptionPlansScreen extends StatelessWidget {
                     'assets/images/google_pay_logo.png',
                     height: 24.h,
                     width: 24.w,
-                    errorBuilder: (context, error, stackTrace) => Icon(
-                      Icons.payment,
-                      color: Colors.white,
-                      size: 24.r,
-                    ),
+                    errorBuilder:
+                        (context, error, stackTrace) => Icon(
+                          Icons.payment,
+                          color: Colors.white,
+                          size: 24.r,
+                        ),
                   ),
                   SizedBox(width: Dimensions.widthSize),
                   Text(
@@ -341,7 +344,7 @@ class SubscriptionPlansScreen extends StatelessWidget {
           ),
           SizedBox(height: Dimensions.heightSize),
         ],
-        
+
         // Apple Pay button (iOS)
         if (controller.applePayAvailable) ...[
           SizedBox(
@@ -359,11 +362,7 @@ class SubscriptionPlansScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.apple,
-                    color: Colors.white,
-                    size: 24.r,
-                  ),
+                  Icon(Icons.apple, color: Colors.white, size: 24.r),
                   SizedBox(width: Dimensions.widthSize),
                   Text(
                     'Pay with Apple Pay',
@@ -378,24 +377,21 @@ class SubscriptionPlansScreen extends StatelessWidget {
           ),
           SizedBox(height: Dimensions.heightSize),
         ],
-        
+
         // No payment method available message
-        if (!controller.googlePayAvailable && !controller.applePayAvailable) ...[
+        if (!controller.googlePayAvailable &&
+            !controller.applePayAvailable) ...[
           Container(
             width: double.infinity,
             padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
             decoration: BoxDecoration(
-              color: Colors.orange.withOpacity(0.1),
+              color: Colors.orange.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(Dimensions.radius),
               border: Border.all(color: Colors.orange),
             ),
             child: Column(
               children: [
-                Icon(
-                  Icons.payment_outlined,
-                  color: Colors.orange,
-                  size: 32.r,
-                ),
+                Icon(Icons.payment_outlined, color: Colors.orange, size: 32.r),
                 SizedBox(height: Dimensions.heightSize),
                 Text(
                   'Payment Not Available',
@@ -413,7 +409,7 @@ class SubscriptionPlansScreen extends StatelessWidget {
             ),
           ),
         ],
-        
+
         SizedBox(height: Dimensions.heightSize),
         Text(
           'Secure payments powered by Moov.io',
@@ -426,4 +422,4 @@ class SubscriptionPlansScreen extends StatelessWidget {
       ],
     );
   }
-} 
+}

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
+import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 
 import '../../utils/custom_color.dart';
 import '../../utils/custom_style.dart';
@@ -20,33 +20,15 @@ class TransferMoneyScanQrCodeScreen extends StatefulWidget {
 
 class TransferMoneyScanQrCodeScreenState
     extends State<TransferMoneyScanQrCodeScreen> {
-  final qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? controller;
+  bool isDetected = false;
 
-  Barcode? barcode;
-
-  @override
-  void dispose() {
-    // QR controller disposal is now handled automatically by the library
-    super.dispose();
-  }
-
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
-  @override
-  void reassemble() async {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      await controller?.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller?.resumeCamera();
-    }
-  }
-
-  void readQr() async {
-    if (barcode != null) {
-      await controller?.pauseCamera();
-      // Navigate or process the QR code data
+  void onBarcodeDetected(String value) {
+    if (!isDetected) {
+      setState(() {
+        isDetected = true;
+      });
+      // Process the QR code data
+      // print('QR Code detected: $value');
     }
   }
 
@@ -86,7 +68,7 @@ class TransferMoneyScanQrCodeScreenState
   }
 
   // body widget containing all widget elements
-  _bodyWidget(BuildContext context) {
+  Center _bodyWidget(BuildContext context) {
     return Center(
       child: Stack(
         children: [
@@ -103,7 +85,7 @@ class TransferMoneyScanQrCodeScreenState
   }
 
   // QR code scan with qr code image
-  _scanQrCodeWidget(BuildContext context) {
+  SizedBox _scanQrCodeWidget(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -112,11 +94,12 @@ class TransferMoneyScanQrCodeScreenState
   }
 
   // bottom qr code message
-  _qrCodeBottomMessageWidget(BuildContext context) {
+  InkWell _qrCodeBottomMessageWidget(BuildContext context) {
     return InkWell(
       onTap: () {
-        controller?.resumeCamera();
-        setState(() {});
+        setState(() {
+          isDetected = false;
+        });
       },
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -152,29 +135,16 @@ class TransferMoneyScanQrCodeScreenState
     );
   }
 
-  _buildQrViewWidget(BuildContext context) {
-    return QRView(
-      key: qrKey,
-      onQRViewCreated: onQRViewCreated,
-      overlay: QrScannerOverlayShape(
-        cutOutSize: MediaQuery.of(context).size.width * 0.6,
-        borderWidth: 8,
-        borderLength: 20,
-        borderRadius: 10,
-        borderColor: CustomColor.primaryColor,
-      ),
-    );
-  }
-
-  void onQRViewCreated(QRViewController controller) {
-    setState(() => this.controller = controller);
-    // this.controller = controller;
-    controller.scannedDataStream.listen(
-      (barcode) => setState(() {
-        this.barcode = barcode;
-        // print(this.barcode!.code);
-        readQr();
-      }),
+  Widget _buildQrViewWidget(BuildContext context) {
+    return AiBarcodeScanner(
+      onScan: onBarcodeDetected,
+      showOverlay: true,
+      overlayColor: Colors.black.withOpacity(0.5),
+      borderColor: CustomColor.primaryColor,
+      borderWidth: 2.0,
+      borderLength: 30.0,
+      borderRadius: 10.0,
+      cutOutSize: 250.0,
     );
   }
 }

@@ -18,8 +18,10 @@ class ImagePickerWidget extends StatelessWidget {
 
   Future pickImage(imageSource) async {
     try {
-      final image =
-          await ImagePicker().pickImage(source: imageSource, imageQuality: 100);
+      final image = await ImagePicker().pickImage(
+        source: imageSource,
+        imageQuality: 100,
+      );
       if (image == null) return;
 
       final File imageFile = File(image.path);
@@ -47,22 +49,19 @@ class ImagePickerWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       fit: BoxFit.contain,
-                      image: controller.isImagePathSet.value == true
-                          ? FileImage(
-                              File(
-                                controller.imagePath.value,
-                              ),
-                            )
-                          : const AssetImage(Strings.profileAvatarPath)
-                              as ImageProvider,
+                      image:
+                          controller.isImagePathSet.value == true
+                              ? FileImage(File(controller.imagePath.value))
+                              : const AssetImage(Strings.profileAvatarPath)
+                                  as ImageProvider,
                     ),
                   ),
                   child: InkWell(
                     onTap: () {
                       showModalBottomSheet(
                         context: context,
-                        builder: (context) =>
-                            _imagePickerBottomSheetWidget(context),
+                        builder:
+                            (context) => _imagePickerBottomSheetWidget(context),
                       );
                     },
                   ),
@@ -78,7 +77,7 @@ class ImagePickerWidget extends StatelessWidget {
                     size: Dimensions.iconSizeDefault,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -86,7 +85,7 @@ class ImagePickerWidget extends StatelessWidget {
     });
   }
 
-  _imagePickerBottomSheetWidget(BuildContext context) {
+  Container _imagePickerBottomSheetWidget(BuildContext context) {
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.15,
@@ -97,26 +96,28 @@ class ImagePickerWidget extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
             child: IconButton(
-                onPressed: () {
-                  pickImage(ImageSource.gallery);
-                },
-                icon: const Icon(
-                  Icons.image,
-                  color: CustomColor.primaryColor,
-                  size: 50,
-                )),
+              onPressed: () {
+                pickImage(ImageSource.gallery);
+              },
+              icon: const Icon(
+                Icons.image,
+                color: CustomColor.primaryColor,
+                size: 50,
+              ),
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(Dimensions.defaultPaddingSize),
             child: IconButton(
-                onPressed: () {
-                  pickImage(ImageSource.camera);
-                },
-                icon: const Icon(
-                  Icons.camera,
-                  color: CustomColor.primaryColor,
-                  size: 50,
-                )),
+              onPressed: () {
+                pickImage(ImageSource.camera);
+              },
+              icon: const Icon(
+                Icons.camera,
+                color: CustomColor.primaryColor,
+                size: 50,
+              ),
+            ),
           ),
         ],
       ),

@@ -1,5 +1,5 @@
 class Spanish {
-  static const String appName = "xPay";
+  static const String appName = 'xPay';
   static const String appVersion = '1.0';
 
   // onboard screen

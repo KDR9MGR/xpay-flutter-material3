@@ -18,15 +18,15 @@ class SupportController extends GetxController {
     super.dispose();
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
-  navigateToCreateSupportTicketScreen() {
+  void navigateToCreateSupportTicketScreen() {
     Get.toNamed(Routes.createSupportTicketScreen);
   }
 
-  navigateToMySupportTickets() {
+  void navigateToMySupportTickets() {
     Get.toNamed(Routes.mySupportTickets);
   }
 }

@@ -21,9 +21,9 @@ class SettingsController extends GetxController {
   final newPasswordController = TextEditingController();
   final confirmController = TextEditingController();
 
-  var selectedLanguage = "".obs;
+  var selectedLanguage = ''.obs;
 
-  onChangeLanguage(var language) {
+  void onChangeLanguage(var language) {
     selectedLanguage.value = language;
   }
 
@@ -46,23 +46,23 @@ class SettingsController extends GetxController {
     super.dispose();
   }
 
-  navigateToDashboardScreen() {
+  void navigateToDashboardScreen() {
     Get.toNamed(Routes.navigationScreen);
   }
 
-  navigateToUpdateProfileScreen() {
+  void navigateToUpdateProfileScreen() {
     Get.toNamed(Routes.updateProfileScreen);
   }
 
-  navigateToChangePasswordScreen() {
+  void navigateToChangePasswordScreen() {
     Get.toNamed(Routes.changePasswordScreen);
   }
 
-  navigateToTwoFaSecurity() {
+  void navigateToTwoFaSecurity() {
     Get.toNamed(Routes.twoFaSecurity);
   }
 
-  navigateToChangeLanguageScreen() {
+  void navigateToChangeLanguageScreen() {
     Get.toNamed(Routes.changeLanguageScreen);
   }
 

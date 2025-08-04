@@ -68,24 +68,20 @@ class InvoiceUpdateScreen extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, InvoiceController controller) {
+  ListView _bodyWidget(BuildContext context, InvoiceController controller) {
     return ListView(
       shrinkWrap: true,
       children: [
         _infoInputWidget(context, controller),
         _invoiceInfoInputWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
         _buttonWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize * 2,
-        ),
+        SizedBox(height: Dimensions.heightSize * 2),
       ],
     );
   }
 
-  _infoInputWidget(BuildContext context, InvoiceController controller) {
+  Obx _infoInputWidget(BuildContext context, InvoiceController controller) {
     return Obx(() {
       return Container(
         padding: const EdgeInsets.all(20),
@@ -102,45 +98,31 @@ class InvoiceUpdateScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextLabelWidget(text: Strings.invoiceTo.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               SecondaryTextInputWidget(
                 controller: controller.invoiceToController,
                 hintText: Strings.invoiceTo.tr,
                 color: CustomColor.secondaryColor,
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               TextLabelWidget(text: Strings.email.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               SecondaryTextInputWidget(
                 controller: controller.emailController,
                 hintText: Strings.emailInvoice.tr,
                 color: CustomColor.secondaryColor,
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               TextLabelWidget(text: Strings.address.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               SecondaryTextInputWidget(
                 controller: controller.addressController,
                 hintText: Strings.addressHint.tr,
                 color: CustomColor.secondaryColor,
               ),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               TextLabelWidget(text: Strings.yourWallet.tr),
-              SizedBox(
-                height: Dimensions.heightSize,
-              ),
+              SizedBox(height: Dimensions.heightSize),
               DropDownInputWidget(
                 items: controller.walletList,
                 color: CustomColor.primaryColor.withValues(alpha: 0.1),
@@ -157,13 +139,17 @@ class InvoiceUpdateScreen extends StatelessWidget {
     });
   }
 
-  _invoiceInfoInputWidget(BuildContext context, InvoiceController controller) {
+  Container _invoiceInfoInputWidget(
+    BuildContext context,
+    InvoiceController controller,
+  ) {
     return Container(
       margin: const EdgeInsets.only(top: 20, left: 10, right: 10),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-          color: CustomColor.secondaryColor,
-          borderRadius: BorderRadius.circular(Dimensions.radius * 2)),
+        color: CustomColor.secondaryColor,
+        borderRadius: BorderRadius.circular(Dimensions.radius * 2),
+      ),
       child: Column(
         children: [
           Row(
@@ -188,30 +174,22 @@ class InvoiceUpdateScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            height: Dimensions.heightSize,
-          ),
+          SizedBox(height: Dimensions.heightSize),
           Form(
             key: invoiceFormKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextLabelWidget(text: Strings.itemName.tr),
-                SizedBox(
-                  height: Dimensions.heightSize,
-                ),
+                SizedBox(height: Dimensions.heightSize),
                 SecondaryTextInputWidget(
                   controller: controller.itemNameController,
                   hintText: Strings.itemNameHint.tr,
                   color: CustomColor.secondaryColor,
                 ),
-                SizedBox(
-                  height: Dimensions.heightSize,
-                ),
+                SizedBox(height: Dimensions.heightSize),
                 TextLabelWidget(text: Strings.amount.tr),
-                SizedBox(
-                  height: Dimensions.heightSize,
-                ),
+                SizedBox(height: Dimensions.heightSize),
                 AmountInputWidget(
                   hintText: '0.00',
                   controller: controller.amountController,
@@ -226,7 +204,7 @@ class InvoiceUpdateScreen extends StatelessWidget {
     );
   }
 
-  _amountButton(BuildContext context, InvoiceController controller) {
+  Obx _amountButton(BuildContext context, InvoiceController controller) {
     return Obx(() {
       return Container(
         width: MediaQuery.of(context).size.width * 0.20,
@@ -247,7 +225,7 @@ class InvoiceUpdateScreen extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 fontSize: Dimensions.mediumTextSize,
               ),
-            )
+            ),
           ],
         ),
       );
@@ -255,7 +233,7 @@ class InvoiceUpdateScreen extends StatelessWidget {
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context, InvoiceController controller) {
+  Padding _buttonWidget(BuildContext context, InvoiceController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: PrimaryButton(
@@ -270,7 +248,10 @@ class InvoiceUpdateScreen extends StatelessWidget {
   }
 
   // invoice update widget
-  _invoiceUpdateOption(BuildContext context, InvoiceController controller) {
+  Future _invoiceUpdateOption(
+    BuildContext context,
+    InvoiceController controller,
+  ) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -281,9 +262,7 @@ class InvoiceUpdateScreen extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: CustomColor.secondaryColor,
-                borderRadius: BorderRadius.circular(
-                  Dimensions.radius * 2,
-                ),
+                borderRadius: BorderRadius.circular(Dimensions.radius * 2),
               ),
               margin: const EdgeInsets.only(top: 85, right: 20),
               padding: const EdgeInsets.only(top: 25),
@@ -308,9 +287,7 @@ class InvoiceUpdateScreen extends StatelessWidget {
                     title: Strings.downloadInvoice.tr,
                     onTap: () {},
                   ),
-                  SizedBox(
-                    height: Dimensions.heightSize,
-                  ),
+                  SizedBox(height: Dimensions.heightSize),
                   GestureDetector(
                     onTap: () {},
                     child: Padding(
@@ -334,16 +311,14 @@ class InvoiceUpdateScreen extends StatelessWidget {
     );
   }
 
-  _optionItemWidget({
+  Column _optionItemWidget({
     required String title,
     required VoidCallback onTap,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: Dimensions.heightSize,
-        ),
+        SizedBox(height: Dimensions.heightSize),
         GestureDetector(
           onTap: onTap,
           child: Padding(
@@ -358,9 +333,7 @@ class InvoiceUpdateScreen extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          height: Dimensions.heightSize,
-        ),
+        SizedBox(height: Dimensions.heightSize),
         Divider(
           thickness: 1.5,
           color: CustomColor.screenBGColor.withValues(alpha: 0.8),

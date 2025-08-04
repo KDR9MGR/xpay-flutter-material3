@@ -11,7 +11,7 @@ class NavigationController extends GetxController {
     update();
   }
 
-  navigateToTransferMoneyScreen() {
+  void navigateToTransferMoneyScreen() {
     Get.toNamed(Routes.transferMoneyScreen);
   }
 }

@@ -52,20 +52,21 @@ class CreateSupportTicketScreen extends StatelessWidget {
   }
 
   // body widget contain all the widgets
-  _bodyWidget(BuildContext context, SupportController controller) {
+  ListView _bodyWidget(BuildContext context, SupportController controller) {
     return ListView(
       shrinkWrap: true,
       children: [
         _ticketInfoInputWidget(context, controller),
         _buttonWidget(context, controller),
-        SizedBox(
-          height: Dimensions.heightSize,
-        ),
+        SizedBox(height: Dimensions.heightSize),
       ],
     );
   }
 
-  _ticketInfoInputWidget(BuildContext context, SupportController controller) {
+  Container _ticketInfoInputWidget(
+    BuildContext context,
+    SupportController controller,
+  ) {
     return Container(
       margin: const EdgeInsets.all(20),
       padding: const EdgeInsets.all(20),
@@ -84,9 +85,7 @@ class CreateSupportTicketScreen extends StatelessWidget {
               borderColor: CustomColor.primaryColor,
               color: CustomColor.secondaryColor,
             ),
-            SizedBox(
-              height: Dimensions.heightSize,
-            ),
+            SizedBox(height: Dimensions.heightSize),
             TextLabelWidget(text: Strings.email.tr),
             TextFieldInputWidget(
               controller: controller.emailController,
@@ -94,9 +93,7 @@ class CreateSupportTicketScreen extends StatelessWidget {
               borderColor: CustomColor.primaryColor,
               color: CustomColor.secondaryColor,
             ),
-            SizedBox(
-              height: Dimensions.heightSize,
-            ),
+            SizedBox(height: Dimensions.heightSize),
             TextLabelWidget(text: Strings.subject.tr),
             TextFieldInputWidget(
               controller: controller.subjectController,
@@ -104,9 +101,7 @@ class CreateSupportTicketScreen extends StatelessWidget {
               borderColor: CustomColor.primaryColor,
               color: CustomColor.secondaryColor,
             ),
-            SizedBox(
-              height: Dimensions.heightSize,
-            ),
+            SizedBox(height: Dimensions.heightSize),
             TextLabelWidget(text: Strings.message.tr),
             TextFieldInputWidget(
               controller: controller.messageController,
@@ -122,7 +117,7 @@ class CreateSupportTicketScreen extends StatelessWidget {
   }
 
   //  Button widget
-  _buttonWidget(BuildContext context, SupportController controller) {
+  Padding _buttonWidget(BuildContext context, SupportController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: PrimaryButton(
@@ -150,7 +145,10 @@ class CreateSupportTicketScreen extends StatelessWidget {
     );
   }
 
-  _attachWidget(BuildContext context, SupportController controller) {
+  GestureDetector _attachWidget(
+    BuildContext context,
+    SupportController controller,
+  ) {
     return GestureDetector(
       onTap: () {
         // Show attachment options
@@ -200,7 +198,10 @@ class CreateSupportTicketScreen extends StatelessWidget {
                       label: 'Files',
                       onTap: () {
                         Get.back();
-                        Get.snackbar('Info', 'File picker feature coming soon!');
+                        Get.snackbar(
+                          'Info',
+                          'File picker feature coming soon!',
+                        );
                       },
                     ),
                   ],
@@ -215,8 +216,9 @@ class CreateSupportTicketScreen extends StatelessWidget {
         margin: const EdgeInsets.only(top: 10),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Dimensions.radius * 2),
-            border: Border.all(color: CustomColor.primaryColor, width: 1.5)),
+          borderRadius: BorderRadius.circular(Dimensions.radius * 2),
+          border: Border.all(color: CustomColor.primaryColor, width: 1.5),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -227,7 +229,7 @@ class CreateSupportTicketScreen extends StatelessWidget {
             Text(
               Strings.attachments.tr,
               style: TextStyle(color: Colors.white.withValues(alpha: 0.4)),
-            )
+            ),
           ],
         ),
       ),
@@ -253,11 +255,7 @@ class CreateSupportTicketScreen extends StatelessWidget {
                 color: CustomColor.primaryColor.withValues(alpha: 0.3),
               ),
             ),
-            child: Icon(
-              icon,
-              color: CustomColor.primaryColor,
-              size: 30,
-            ),
+            child: Icon(icon, color: CustomColor.primaryColor, size: 30),
           ),
           const SizedBox(height: 8),
           Text(
