@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../data/user_model.dart';
 import '../../routes/routes.dart';
 import '../../utils/storage_service.dart';
 import '../auth/user_provider.dart';
 import '../../controller/subscription_controller.dart';
+import '../../data/user_model.dart';
 
 import '../../utils/custom_color.dart';
 import '../../utils/strings.dart';
@@ -166,6 +166,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    if (kDebugMode) {
+      debugPrint('🎬 SplashScreen: initState called');
+    }
     _userProvider = Provider.of<UserProvider>(context, listen: false);
     _checkSession();
   }
@@ -173,9 +176,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void _checkSession() async {
     try {
       if (kDebugMode) {
-        debugPrint('🚀 Splash Screen: Starting session check...');
-        debugPrint('🎯 Debug Mode: $kDebugMode');
-        debugPrint('📱 Platform: iOS');
+        debugPrint('🚀 Splash Screen: Starting immediate navigation...');
       }
 
       setState(() {
@@ -183,91 +184,15 @@ class _SplashScreenState extends State<SplashScreen> {
         _error = null;
       });
 
-      // Add a small delay to show splash screen
+      // Immediate navigation for testing
       await Future.delayed(const Duration(milliseconds: 500));
 
-      // Storage operations must run on main thread
-      bool isLoggedIn = false;
-      try {
-        isLoggedIn = _storageService.getValue(Strings.isLoggedIn) ?? false;
-        if (kDebugMode) {
-          debugPrint('📱 Storage check - Is logged in: $isLoggedIn');
-        }
-      } catch (e) {
-        if (kDebugMode) {
-          debugPrint('⚠️ Storage error: $e');
-        }
-        isLoggedIn = false;
+      if (kDebugMode) {
+        debugPrint('🔄 Navigating to welcome screen immediately...');
       }
-
-      if (isLoggedIn) {
-        try {
-          if (kDebugMode) {
-            debugPrint('👤 Fetching user details...');
-          }
-
-          // Fetch user details directly on main thread without isolates
-          User? user = FirebaseAuth.instance.currentUser;
-          if (user != null) {
-            QuerySnapshot querySnapshot =
-                await FirebaseFirestore.instance
-                    .collection('users')
-                    .where('userId', isEqualTo: user.uid)
-                    .get();
-
-            if (querySnapshot.docs.isNotEmpty) {
-              final userModel = UserModel.fromMap(
-                querySnapshot.docs.first.data() as Map<String, dynamic>,
-              );
-              _userProvider.updateUserDirectly(userModel);
-              if (kDebugMode) {
-                debugPrint('✅ User details fetched successfully');
-              }
-            }
-          }
-
-          // Initialize subscription controller after user is loaded
-          try {
-            Get.find<SubscriptionController>();
-            if (kDebugMode) {
-              debugPrint('💳 Subscription controller found and ready');
-            }
-          } catch (e) {
-            if (kDebugMode) {
-              debugPrint('⚠️ Subscription controller not ready: $e');
-            }
-            // This is okay - controller will initialize on its own
-          }
-
-          // Navigate to dashboard
-          if (kDebugMode) {
-            debugPrint('🏠 Navigating to dashboard...');
-          }
-          Get.offAllNamed(Routes.dashboardScreen);
-        } catch (e) {
-          if (kDebugMode) {
-            debugPrint('❌ Error fetching user details: $e');
-          }
-          setState(() {
-            _error = 'Failed to load user data. Please try again.';
-            _isLoading = false;
-          });
-        }
-      } else {
-        if (kDebugMode) {
-          debugPrint(
-            '🆕 User not logged in, navigating to welcome screen in 2 seconds...',
-          );
-        }
-
-        // Use simple timer without threading utils
-        Future.delayed(const Duration(seconds: 2), () {
-          if (kDebugMode) {
-            debugPrint('🔄 Navigating to welcome screen...');
-          }
-          Get.offAllNamed(Routes.welcomeScreen);
-        });
-      }
+      
+      // Use pushReplacement instead of offAllNamed for testing
+      Navigator.of(context).pushReplacementNamed(Routes.welcomeScreen);
     } catch (e) {
       if (kDebugMode) {
         debugPrint('💥 Critical error in _checkSession: $e');

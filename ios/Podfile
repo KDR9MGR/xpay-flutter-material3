@@ -67,19 +67,7 @@ post_install do |installer|
         config.build_settings['ENABLE_TESTABILITY'] = 'NO'
       end
       
-      # Fix WebKit library linking issues - use only weak linking
-      config.build_settings['OTHER_LDFLAGS'] ||= []
-      config.build_settings['OTHER_LDFLAGS'] << '-weak_framework WebKit'
-      
-      if target.name == 'Runner'
-        # Remove problematic Swift WebKit dependency
-        config.build_settings['OTHER_SWIFT_FLAGS'] ||= []
-        config.build_settings['OTHER_SWIFT_FLAGS'] << '-Xfrontend'
-        config.build_settings['OTHER_SWIFT_FLAGS'] << '-disable-implicit-string-processing-module-import'
-        
-        # Embed Swift standard libraries
-        config.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
-      end
+      # WebKit framework linking removed (flutter_inappwebview not used)
       
       # Fix library search paths
       config.build_settings['LIBRARY_SEARCH_PATHS'] ||= []
@@ -101,5 +89,7 @@ post_install do |installer|
         end
       end
     end
+    
+    # flutter_inappwebview configuration removed (not used)
   end
 end

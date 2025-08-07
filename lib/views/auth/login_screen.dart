@@ -5,20 +5,12 @@ import '/utils/app_logger.dart';
 import 'package:get/get.dart';
 import '/utils/app_logger.dart';
 import 'package:provider/provider.dart';
-import '/utils/app_logger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '/utils/app_logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/utils/app_logger.dart';
 import 'package:xpay/controller/auth_controller.dart';
-import '/utils/app_logger.dart';
 import 'package:xpay/data/user_model.dart';
-import '/utils/app_logger.dart';
 import 'package:xpay/routes/routes.dart';
-import '/utils/app_logger.dart';
 import 'package:xpay/utils/storage_service.dart';
-import '/utils/app_logger.dart';
-import '/utils/app_logger.dart';
 import 'package:xpay/views/auth/login_vm.dart';
 import '/utils/app_logger.dart';
 import 'package:xpay/views/auth/user_provider.dart';
@@ -31,19 +23,12 @@ import 'package:xpay/widgets/inputs/text_label_widget.dart';
 import '/utils/app_logger.dart';
 
 import '../../utils/custom_color.dart';
-import '/utils/app_logger.dart';
 import '../../utils/custom_style.dart';
-import '/utils/app_logger.dart';
 import '../../utils/dimensions.dart';
-import '/utils/app_logger.dart';
 import '../../utils/strings.dart';
-import '/utils/app_logger.dart';
 import '../../utils/utils.dart';
-import '/utils/app_logger.dart';
 import '../../widgets/auth_nav_bar.dart';
-import '/utils/app_logger.dart';
 import '../../widgets/inputs/pin_and_password_input_widget.dart';
-import '/utils/app_logger.dart';
 
 // Static authentication function that can be safely used in isolates
 class IsolateAuthHelper {

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
@@ -137,16 +135,13 @@ class MakePaymentScanQrCodeScreenState
 
   Widget _buildQrViewWidget(BuildContext context) {
     return AiBarcodeScanner(
-      onScan: onBarcodeDetected,
-      showOverlay: true,
-      overlayColor: Colors.black.withOpacity(0.5),
-      borderColor: CustomColor.primaryColor,
-      borderWidth: 2.0,
-      borderLength: 30.0,
-      borderRadius: 10.0,
-      cutOutSize: 250.0,
+      onDetect: (BarcodeCapture capture) {
+        final String? value = capture.barcodes.first.rawValue;
+        if (value != null) {
+          onBarcodeDetected(value);
+        }
+      },
     );
   }
 
-}
 }

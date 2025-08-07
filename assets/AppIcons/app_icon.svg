@@ -1,0 +1,28 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#7B68EE;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9B59B6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#gradient)"/>
+  
+  <!-- Main D shape -->
+  <path d="M180 120 L180 392 L300 392 C360 392 400 352 400 292 L400 220 C400 160 360 120 300 120 Z M220 160 L300 160 C336 160 360 184 360 220 L360 292 C360 328 336 352 300 352 L220 352 Z" fill="white"/>
+  
+  <!-- Horizontal lines inside D -->
+  <rect x="220" y="180" width="80" height="8" fill="url(#gradient)"/>
+  <rect x="220" y="210" width="100" height="8" fill="url(#gradient)"/>
+  <rect x="220" y="240" width="120" height="8" fill="url(#gradient)"/>
+  <rect x="220" y="270" width="100" height="8" fill="url(#gradient)"/>
+  <rect x="220" y="300" width="80" height="8" fill="url(#gradient)"/>
+  
+  <!-- DP text -->
+  <text x="256" y="450" font-family="Arial, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="url(#gradient)">DP</text>
+  
+  <!-- DIGITAL PAYMENTS text -->
+  <text x="256" y="480" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#666" letter-spacing="2px">DIGITAL PAYMENTS</text>
+</svg>

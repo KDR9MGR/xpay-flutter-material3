@@ -1,14 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/utils/app_logger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '/utils/app_logger.dart';
 import 'package:flutter/foundation.dart';
-import '/utils/app_logger.dart';
 import 'package:xpay/data/user_model.dart';
-import '/utils/app_logger.dart';
 
 import '../../base_vm.dart';
-import '/utils/app_logger.dart';
 
 class LoginViewModel extends BaseViewModel {
   FirebaseAuth? _auth;

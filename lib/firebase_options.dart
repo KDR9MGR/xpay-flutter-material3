@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1086070277189',
     projectId: 'digital-payments-52cac',
     storageBucket: 'digital-payments-52cac.appspot.com',
-    iosBundleId: 'com.getdigitalpayments',
+    iosBundleId: 'com.digital.payments',
   );
 
 }

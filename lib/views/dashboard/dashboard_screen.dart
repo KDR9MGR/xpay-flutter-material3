@@ -149,11 +149,10 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                                   width: 2,
                                 ),
                               ),
-                              child: (userProvider.user!.profilePhoto!.isNotEmpty &&
-                                      userProvider.user!.profilePhoto != null)
+                              child: (userProvider.user?.profilePhoto?.isNotEmpty == true)
                                   ? CircleAvatar(
                                       radius: 30,
-                                      backgroundImage: NetworkImage(userProvider.user!.profilePhoto!))
+                                      backgroundImage: NetworkImage(userProvider.user?.profilePhoto ?? ''))
                                   : CircleAvatar(
                                       radius: 30,
                                       backgroundColor: Colors.white.withValues(alpha: 0.1),
@@ -194,7 +193,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                               ),
                               SizedBox(height: 4),
                               Text(
-                                userProvider.user!.firstName,
+                                userProvider.user?.firstName ?? 'User',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -627,12 +626,10 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                     ),
                   ],
                 ),
-                                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(22),
-                    child: YouTubeVideoWidget(
-                      height: videoHeight,
-                      borderRadius: BorderRadius.circular(22),
-                    ),
+                                  child: YouTubeVideoWidget(
+                    height: videoHeight,
+                    borderRadius: 22,
+                    videoId: 'TVIxF-SZFlo', // People using Cell Phone - Free Footage
                   ),
               );
             },

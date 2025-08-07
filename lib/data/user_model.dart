@@ -59,19 +59,22 @@ class UserModel {
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
+    // Enhanced null safety to prevent EXC_BAD_ACCESS crashes
     return UserModel(
-        userId: map['userId'],
-        firstName: map['first_name'],
-        lastName: map['last_name'],
-        country: map['country'],
-        emailAddress: map['email_address'],
-        mobile: map['mobile'],
-        password: map['password'],
-        accountType: map['account_type'],
+        userId: map['userId'] ?? '',
+        firstName: map['first_name'] ?? '',
+        lastName: map['last_name'] ?? '',
+        country: map['country'] ?? '',
+        emailAddress: map['email_address'] ?? '',
+        mobile: map['mobile'] ?? '',
+        password: map['password'] ?? '',
+        accountType: map['account_type'] ?? 'personal',
         companyName: map['company_name'],
         representativeFirstName: map['representative_first_name'],
         representativeLastName: map['representative_last_name'],
-        walletBalances: Map<String, dynamic>.from(map['wallet_balances']),
+        walletBalances: map['wallet_balances'] != null 
+            ? Map<String, dynamic>.from(map['wallet_balances']) 
+            : <String, dynamic>{},
         address: map['address'],
         state: map['state'],
         city: map['city'],

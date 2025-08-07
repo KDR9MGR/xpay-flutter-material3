@@ -1,258 +1,148 @@
 import 'dart:async';
-import '/utils/app_logger.dart';
 import 'package:firebase_core/firebase_core.dart';
-import '/utils/app_logger.dart';
 import 'package:flutter/material.dart';
-import '/utils/app_logger.dart';
 import 'package:flutter/services.dart';
-import '/utils/app_logger.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '/utils/app_logger.dart';
 import 'package:get/get.dart';
-import '/utils/app_logger.dart';
 import 'package:get_storage/get_storage.dart';
-import '/utils/app_logger.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '/utils/app_logger.dart';
 import 'package:provider/provider.dart';
 import 'package:xpay/firebase_options.dart';
 import 'package:xpay/routes/routes.dart';
 import 'package:xpay/utils/language/local_strings.dart';
 import 'package:xpay/utils/threading_utils.dart';
-import '/utils/app_logger.dart';
 import 'package:xpay/views/auth/login_vm.dart';
-import '/utils/app_logger.dart';
 import 'package:xpay/views/auth/wallet_view_model.dart';
+import '/utils/app_logger.dart';
 import 'controller/auth_controller.dart';
 import 'controller/subscription_controller.dart';
-import 'services/stripe_service.dart';
-import 'services/moov_service.dart';
-import 'services/platform_payment_service.dart';
 
 import 'utils/custom_color.dart';
 import 'utils/strings.dart';
 import 'views/auth/user_provider.dart';
 
 void main() async {
+  print('🚀 App starting...');
   // Add crash prevention wrapper
   runZonedGuarded(
     () async {
       try {
         WidgetsFlutterBinding.ensureInitialized();
 
-        // Initialize Firebase first on background thread with crash protection
-        // Initialize Firebase on main thread to avoid isolate issues
+        // Initialize Firebase (temporarily disabled for debugging)
         try {
-          await Firebase.initializeApp(
-            options: DefaultFirebaseOptions.currentPlatform,
-          );
-          AppLogger.log('Firebase initialized successfully');
+          // await Firebase.initializeApp(
+          //   options: DefaultFirebaseOptions.currentPlatform,
+          // );
+          print('✅ Firebase initialization skipped for debugging');
         } catch (e) {
-          AppLogger.log('Firebase initialization error: $e');
-          // Continue without Firebase if it fails
+          print('❌ Firebase initialization failed: $e');
         }
 
-        // Lock Device Orientation on main thread with crash protection
-        await ThreadingUtils.runUIOperation(() async {
-          try {
-            await SystemChrome.setPreferredOrientations([
-              DeviceOrientation.portraitUp,
-              DeviceOrientation.portraitDown,
-            ]);
-          } catch (e) {
-            AppLogger.log('Device orientation error: $e');
-            // Continue without orientation lock if it fails
-          }
-        });
+        // Lock Device Orientation
+        try {
+          await SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+          ]);
+        } catch (e) {
+          AppLogger.log('Device orientation error: $e');
+        }
 
-        // Initialize storage on background thread with crash protection
-        // Initialize storage on main thread
+        // Initialize storage
         try {
           await GetStorage.init();
           AppLogger.log('Storage initialized successfully');
         } catch (e) {
           AppLogger.log('Storage initialization error: $e');
-          // Continue without storage if it fails
         }
 
-        // Initialize Platform Payment Service (Primary for subscriptions) on background thread
-        bool platformPaymentInitialized = false;
+        // Initialize services (optional - app can work without them)
+        // Temporarily commenting out service initializations to test for hanging
+        /*
         try {
-          await ThreadingUtils.runFirebaseOperation(() async {
-            try {
-              await PlatformPaymentService.init();
-              platformPaymentInitialized = true;
-              AppLogger.log(
-                'Platform Payment Service initialized successfully',
-              );
-            } catch (e) {
-              AppLogger.log(
-                'Platform Payment Service initialization error: $e',
-              );
-            }
-          }, operationName: 'Platform Payment Service initialization');
+          await PlatformPaymentService.init();
+          AppLogger.log('Platform Payment Service initialized');
         } catch (e) {
-          AppLogger.log('Error initializing Platform Payment Service: $e');
+          AppLogger.log('Platform Payment Service error: $e');
         }
 
-        // Initialize Moov (Primary backend) on background thread
-        bool moovInitialized = false;
         try {
-          await ThreadingUtils.runFirebaseOperation(() async {
-            try {
-              await MoovService.init();
-              moovInitialized = true;
-              AppLogger.log('Moov initialized successfully');
-            } catch (e) {
-              AppLogger.log('Moov initialization error: $e');
-            }
-          }, operationName: 'Moov initialization');
+          await MoovService.init();
+          AppLogger.log('Moov initialized');
         } catch (e) {
-          AppLogger.log('Error initializing Moov: $e');
+          AppLogger.log('Moov error: $e');
         }
 
-        // Initialize Stripe (Fallback only) on background thread
-        bool stripeInitialized = false;
         try {
-          await ThreadingUtils.runFirebaseOperation(() async {
-            try {
-              await StripeService.init();
-              stripeInitialized = true;
-              print('Stripe initialized successfully (fallback)');
-            } catch (e) {
-              AppLogger.log('Stripe initialization error: $e');
-            }
-          }, operationName: 'Stripe initialization');
+          await StripeService.init();
+          AppLogger.log('Stripe initialized');
         } catch (e) {
-          AppLogger.log('Error initializing Stripe: $e');
+          AppLogger.log('Stripe error: $e');
         }
+        */
+        AppLogger.log('Skipping service initializations for testing');
 
-        // Check if at least one payment service is available
-        if (!platformPaymentInitialized &&
-            !moovInitialized &&
-            !stripeInitialized) {
-          AppLogger.log(
-            'Warning: No payment services initialized successfully',
-          );
-        }
-
-        // Initialize controllers on main thread with crash protection
-        await ThreadingUtils.runUIOperation(() async {
-          try {
-            Get.put(AuthController());
-          } catch (e) {
-            AppLogger.log('Auth controller initialization error: $e');
-          }
-        });
-
-        // Initialize subscription controller with error handling on background thread
+        // Initialize controllers
         try {
-          await ThreadingUtils.runFirebaseOperation(() async {
-            try {
-              Get.put(SubscriptionController());
-              AppLogger.log('Subscription controller initialized');
-            } catch (e) {
-              AppLogger.log('Subscription controller initialization error: $e');
-            }
-          }, operationName: 'Subscription controller initialization');
+          Get.put(AuthController());
         } catch (e) {
-          AppLogger.log(
-            'Warning: Subscription controller initialization failed: $e',
-          );
-          // App can still work without subscription controller
+          AppLogger.log('Auth controller error: $e');
         }
 
-        // Yield control to prevent main thread blocking
-        await ThreadingUtils.yieldControl();
+        try {
+          Get.put(SubscriptionController());
+          AppLogger.log('Subscription controller initialized');
+        } catch (e) {
+          AppLogger.log('Subscription controller error: $e');
+        }
 
-        // Run the app on main thread with crash protection
-        await ThreadingUtils.runUIOperation(() async {
-          try {
-            runApp(
-              MultiProvider(
-                providers: [
-                  // Only create LoginViewModel after Firebase is initialized
-                  ChangeNotifierProvider<LoginViewModel>(
-                    create: (context) {
-                      try {
-                        return LoginViewModel();
-                      } catch (e) {
-                        AppLogger.log('LoginViewModel creation error: $e');
-                        // Return a fallback or handle the error
-                        return LoginViewModel();
-                      }
-                    },
-                  ),
-                  ChangeNotifierProvider(create: (_) => UserProvider()),
-                  ChangeNotifierProvider(create: (_) => WalletViewModel()),
-                ],
-                child: const MyApp(),
+        // Run the app
+        print('🎯 About to run app...');
+        runApp(
+          MultiProvider(
+            providers: [
+              // Simplified providers for debugging
+              ChangeNotifierProvider(create: (_) => UserProvider()),
+              ChangeNotifierProvider<LoginViewModel>(
+                create: (context) => LoginViewModel(),
               ),
-            );
-          } catch (e) {
-            AppLogger.log('App initialization error: $e');
-            // Run minimal error app
-            runApp(
-              MaterialApp(
-                home: Scaffold(
-                  body: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline, size: 64, color: Colors.red),
-                        SizedBox(height: 16),
-                        Text(
-                          'App Initialization Error',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Text('$e', textAlign: TextAlign.center),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }
-        });
+              ChangeNotifierProvider(create: (_) => WalletViewModel()),
+            ],
+            child: const MyApp(),
+          ),
+        );
+        print('✅ App started successfully');
       } catch (e) {
-        AppLogger.log('Critical error during app initialization: $e');
-        // Run a minimal app that shows the error on main thread
-        await ThreadingUtils.runUIOperation(() async {
-          runApp(
-            MaterialApp(
-              home: Scaffold(
-                body: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.error_outline, size: 64, color: Colors.red),
-                      SizedBox(height: 16),
-                      Text(
-                        'Critical App Error',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+        AppLogger.log('App initialization error: $e');
+        // Run minimal error app
+        runApp(
+          MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error_outline, size: 64, color: Colors.red),
+                    SizedBox(height: 16),
+                    Text(
+                      'App Initialization Error',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
-                      SizedBox(height: 8),
-                      Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Text('$e', textAlign: TextAlign.center),
-                      ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 8),
+                    Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Text('$e', textAlign: TextAlign.center),
+                    ),
+                  ],
                 ),
               ),
             ),
-          );
-        });
+          ),
+        );
       }
     },
     (error, stack) {
@@ -338,10 +228,10 @@ class MyApp extends StatelessWidget {
             locale: const Locale('en', 'US'),
             fallbackLocale: const Locale('en', 'US'),
             onInit: () {
-              // Initialize any app-wide threading resources
-            },
+        // Threading utilities don't need explicit initialization
+      },
             onDispose: () {
-              // Clean up threading resources when app is disposed
+              // Clean up threading utilities
               ThreadingUtils.dispose();
             },
           ),

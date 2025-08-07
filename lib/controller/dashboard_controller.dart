@@ -1,14 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import '/utils/app_logger.dart';
 import 'package:flutter/material.dart';
-import '/utils/app_logger.dart';
 import 'package:get/get.dart';
-import '/utils/app_logger.dart';
 import 'package:get_storage/get_storage.dart';
-import '/utils/app_logger.dart';
 
 import '../routes/routes.dart';
-import '/utils/app_logger.dart';
 
 List<String> languageList = ['English ', 'Spanish', 'Chinese', 'Hindi'];
 

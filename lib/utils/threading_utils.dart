@@ -20,26 +20,11 @@ class ThreadingUtils {
     }
 
     try {
-      if (Platform.isIOS || Platform.isAndroid) {
-        return await compute(_runOnMainThread, function);
-      } else {
-        return await function();
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('ThreadingUtils.runOnMainThread error: $e');
-      }
-      rethrow;
-    }
-  }
-
-  /// Helper function for compute with memory safety
-  static Future<T> _runOnMainThread<T>(Future<T> Function() function) async {
-    try {
+      // Simply run the function directly - compute() was causing issues
       return await function();
     } catch (e) {
       if (kDebugMode) {
-        print('ThreadingUtils._runOnMainThread error: $e');
+        print('ThreadingUtils.runOnMainThread error: $e');
       }
       rethrow;
     }

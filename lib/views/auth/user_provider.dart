@@ -2,19 +2,12 @@ import 'dart:io';
 import '/utils/app_logger.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/utils/app_logger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '/utils/app_logger.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import '/utils/app_logger.dart';
 import 'package:flutter/material.dart';
-import '/utils/app_logger.dart';
 import 'package:xpay/controller/settings_controller.dart';
-import '/utils/app_logger.dart';
 import 'package:xpay/data/user_model.dart';
-import '/utils/app_logger.dart';
 import 'package:xpay/utils/threading_utils.dart';
-import '/utils/app_logger.dart';
 
 class UserProvider with ChangeNotifier {
   UserModel? _user;
@@ -93,10 +86,12 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  // Method to update user directly without isolates
-  void updateUserDirectly(UserModel userModel) {
-    _user = userModel;
-    notifyListeners();
+  // Method to update user directly without isolates with null safety
+  void updateUserDirectly(UserModel? userModel) {
+    if (userModel != null) {
+      _user = userModel;
+      notifyListeners();
+    }
   }
 
   Future<void> changePassword(SettingsController controller) async {

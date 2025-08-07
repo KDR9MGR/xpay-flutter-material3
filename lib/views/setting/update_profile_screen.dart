@@ -407,11 +407,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         radius: 60,
         backgroundImage: FileImage(settingsController.userPhoto!),
       );
-    } else if (_userProvider.user?.profilePhoto != null &&
-        _userProvider.user!.profilePhoto!.isNotEmpty) {
+    } else if (_userProvider.user?.profilePhoto?.isNotEmpty == true) {
       return CircleAvatar(
         radius: 60,
-        backgroundImage: NetworkImage(_userProvider.user!.profilePhoto!),
+        backgroundImage: NetworkImage(_userProvider.user?.profilePhoto ?? ''),
       );
     } else {
       return CircleAvatar(
